@@ -8,6 +8,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Button;
 
 namespace Volpe_Ragusa.csharp
 {
@@ -16,6 +17,8 @@ namespace Volpe_Ragusa.csharp
         public Registrazione()
         {
             InitializeComponent();
+            // Registra l'evento CheckedChanged per la CheckBox
+            checkBoxMuscoli.CheckedChanged += checkBoxMuscoli_CheckedChanged;
         }
 
         private void buttonRegistrazione_Click(object sender, EventArgs e)
@@ -25,6 +28,8 @@ namespace Volpe_Ragusa.csharp
             string email = textBoxEmail.Text;
             string password = textBoxPassword.Text;
             string conferma_password = textBoxConfermaPassword.Text;
+
+            List<string> muscoli = getMuscoliSelezionati();
             //fai un eccezione su questo
             int eta = int.Parse(textBoxEta.Text);
 
@@ -36,7 +41,22 @@ namespace Volpe_Ragusa.csharp
 
         private void checkBoxMuscoli_CheckedChanged(object sender, EventArgs e)
         {
-            //fai uscire la lista dei gruppi muscolari
+            // Controlla se la CheckBox è selezionata
+            if (checkBoxMuscoli.Checked)
+            {
+                // Seleziona l'elemento predefinito nella ListBox
+                ListBoxMuscoli.SelectedIndex = 0;
+
+                // Mostra la ListBox
+                ListBoxMuscoli.Visible = true;
+                labelMuscoli.Visible = true;
+            }
+            else
+            {
+                // Nasconde la ListBox
+                ListBoxMuscoli.Visible = false;
+                labelMuscoli.Visible = false;
+            }
         }
 
         private void textBoxEta_TextChanged(object sender, EventArgs e)
@@ -67,6 +87,21 @@ namespace Volpe_Ragusa.csharp
         {
             // Verifica se ogni carattere nella stringa è una lettera
             return inputString.All(char.IsLetter);
+        }
+
+        private List<string> getMuscoliSelezionati()
+        {
+            List<string> muscoli = new List<string>();
+            for (int i = 0; i < ListBoxMuscoli.Items.Count; i++)
+            {
+                // Verifica se l'elemento è selezionato
+                if (ListBoxMuscoli.GetItemChecked(i))
+                {
+                    // Aggiungi l'elemento alla lista degli elementi selezionati
+                    muscoli.Add(ListBoxMuscoli.Items[i].ToString());
+                }
+            }
+            return muscoli;
         }
     }
 }

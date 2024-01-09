@@ -42,6 +42,8 @@
             textBoxEta = new TextBox();
             checkBoxMuscoli = new CheckBox();
             buttonRegistrazione = new Button();
+            ListBoxMuscoli = new CheckedListBox();
+            labelMuscoli = new Label();
             SuspendLayout();
             // 
             // label1
@@ -169,11 +171,31 @@
             buttonRegistrazione.UseVisualStyleBackColor = true;
             buttonRegistrazione.Click += buttonRegistrazione_Click;
             // 
+            // ListBoxMuscoli
+            // 
+            ListBoxMuscoli.FormattingEnabled = true;
+            ListBoxMuscoli.Items.AddRange(new object[] { "Braccia", "Gambe", "Petto", "Addominali", "Spalle", "Schiena", "Glutei" });
+            ListBoxMuscoli.Location = new Point(164, 406);
+            ListBoxMuscoli.Name = "ListBoxMuscoli";
+            ListBoxMuscoli.Size = new Size(180, 144);
+            ListBoxMuscoli.TabIndex = 14;
+            // 
+            // labelMuscoli
+            // 
+            labelMuscoli.AutoSize = true;
+            labelMuscoli.Location = new Point(164, 378);
+            labelMuscoli.Name = "labelMuscoli";
+            labelMuscoli.Size = new Size(124, 25);
+            labelMuscoli.TabIndex = 15;
+            labelMuscoli.Text = "Selezionali qui";
+            // 
             // Registrazione
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 584);
+            Controls.Add(labelMuscoli);
+            Controls.Add(ListBoxMuscoli);
             Controls.Add(buttonRegistrazione);
             Controls.Add(checkBoxMuscoli);
             Controls.Add(textBoxEta);
@@ -210,5 +232,7 @@
         private TextBox textBoxEta;
         private CheckBox checkBoxMuscoli;
         private Button buttonRegistrazione;
+        private CheckedListBox ListBoxMuscoli;
+        private Label labelMuscoli;
     }
 }
