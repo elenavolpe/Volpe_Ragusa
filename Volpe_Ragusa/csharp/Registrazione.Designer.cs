@@ -44,6 +44,7 @@
             buttonRegistrazione = new Button();
             ListBoxMuscoli = new CheckedListBox();
             labelMuscoli = new Label();
+            linkLabelLogin = new LinkLabel();
             SuspendLayout();
             // 
             // label1
@@ -189,11 +190,23 @@
             labelMuscoli.TabIndex = 15;
             labelMuscoli.Text = "Selezionali qui";
             // 
+            // linkLabelLogin
+            // 
+            linkLabelLogin.AutoSize = true;
+            linkLabelLogin.Location = new Point(505, 435);
+            linkLabelLogin.Name = "linkLabelLogin";
+            linkLabelLogin.Size = new Size(153, 25);
+            linkLabelLogin.TabIndex = 16;
+            linkLabelLogin.TabStop = true;
+            linkLabelLogin.Text = "Sei già registrato?";
+            linkLabelLogin.LinkClicked += linkLabelLogin_LinkClicked;
+            // 
             // Registrazione
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 584);
+            Controls.Add(linkLabelLogin);
             Controls.Add(labelMuscoli);
             Controls.Add(ListBoxMuscoli);
             Controls.Add(buttonRegistrazione);
@@ -234,5 +247,6 @@
         private Button buttonRegistrazione;
         private CheckedListBox ListBoxMuscoli;
         private Label labelMuscoli;
+        private LinkLabel linkLabelLogin;
     }
 }

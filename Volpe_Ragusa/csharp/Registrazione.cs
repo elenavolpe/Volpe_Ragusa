@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Button;
+using Volpe_Ragusa.csharp;
 
 namespace Volpe_Ragusa.csharp
 {
@@ -102,6 +103,12 @@ namespace Volpe_Ragusa.csharp
                 }
             }
             return muscoli;
+        }
+
+        private void linkLabelLogin_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Form1 login = new Form1();
+            login.Show();
         }
     }
 }

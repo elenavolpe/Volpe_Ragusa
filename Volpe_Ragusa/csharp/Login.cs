@@ -1,3 +1,5 @@
+using Volpe_Ragusa.csharp;
+
 namespace Volpe_Ragusa
 {
     public partial class Form1 : Form
@@ -29,7 +31,8 @@ namespace Volpe_Ragusa
 
         private void linkRegistrazione_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            //riporta alla pagina di registrazione
+            Registrazione registrazione = new Registrazione();
+            registrazione.Show();
         }
     }
 }
