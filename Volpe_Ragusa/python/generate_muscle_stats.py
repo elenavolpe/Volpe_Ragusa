@@ -10,7 +10,9 @@ import matplotlib.pyplot as plt
 
 # Temporaneo: dati di esempio per test
 data = {
-    'Muscoli': [['Petto', 'Tricipiti'], ['Spalle'], ['Petto', 'Spalle', 'Tricipiti'], ['Spalle', 'Tricipiti', 'Petto'], ['Quadricipiti', 'Glutei'], ['Glutei', 'Lombari'], ['Quadricipit'], ['Bicipiti Femorali', 'Glutei'], ['Schiena', 'Bicipiti'], ['Schiena', 'Bicipiti'], ['Schiena', 'Bicipiti', 'Dorsali'], ['Bicipiti', 'Avambracci']] # Muscoli coinvolti accoppiati in sequenza ad ogni esercizio della scheda
+    'Muscoli': [['Petto', 'Tricipiti'], ['Spalle'], ['Petto', 'Spalle', 'Tricipiti'], ['Spalle', 'Tricipiti', 'Petto'], 
+                ['Quadricipiti', 'Glutei'], ['Glutei', 'Lombari'], ['Quadricipiti'], ['Bicipiti Femorali', 'Glutei'], 
+                ['Schiena', 'Bicipiti'], ['Schiena', 'Bicipiti'], ['Schiena', 'Bicipiti', 'Dorsali'], ['Bicipiti', 'Avambracci']] # Muscoli coinvolti accoppiati in sequenza ad ogni esercizio della scheda
     #12 esercizi di esempio
 }
 
