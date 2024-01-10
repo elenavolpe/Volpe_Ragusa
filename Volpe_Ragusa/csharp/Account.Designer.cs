@@ -37,6 +37,7 @@
             buttonHome = new Button();
             buttonScheda = new Button();
             buttonLogout = new Button();
+            buttonImpostazioni = new Button();
             SuspendLayout();
             // 
             // labelBenvenuto
@@ -115,7 +116,7 @@
             // 
             // buttonLogout
             // 
-            buttonLogout.Location = new Point(644, 226);
+            buttonLogout.Location = new Point(644, 281);
             buttonLogout.Name = "buttonLogout";
             buttonLogout.Size = new Size(144, 34);
             buttonLogout.TabIndex = 8;
@@ -123,11 +124,22 @@
             buttonLogout.UseVisualStyleBackColor = true;
             buttonLogout.Click += buttonLogout_Click;
             // 
+            // buttonImpostazioni
+            // 
+            buttonImpostazioni.Location = new Point(644, 227);
+            buttonImpostazioni.Name = "buttonImpostazioni";
+            buttonImpostazioni.Size = new Size(144, 34);
+            buttonImpostazioni.TabIndex = 9;
+            buttonImpostazioni.Text = "Impostazioni";
+            buttonImpostazioni.UseVisualStyleBackColor = true;
+            buttonImpostazioni.Click += buttonImpostazioni_Click;
+            // 
             // Account
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(buttonImpostazioni);
             Controls.Add(buttonLogout);
             Controls.Add(buttonScheda);
             Controls.Add(buttonHome);
@@ -154,5 +166,6 @@
         private Button buttonHome;
         private Button buttonScheda;
         private Button buttonLogout;
+        private Button buttonImpostazioni;
     }
 }

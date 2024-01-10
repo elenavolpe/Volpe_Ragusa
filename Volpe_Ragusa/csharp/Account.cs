@@ -25,7 +25,8 @@ namespace Volpe_Ragusa.csharp
 
         private void buttonScheda_Click(object sender, EventArgs e)
         {
-            //vai nella scheda utente
+            Scheda scheda= new Scheda();
+            scheda.Show();
         }
 
         private void buttonLogout_Click(object sender, EventArgs e)
@@ -33,6 +34,11 @@ namespace Volpe_Ragusa.csharp
             //esci dalla sessione e vai al login
             Form1 login = new Form1();
             login.Show();
+        }
+
+        private void buttonImpostazioni_Click(object sender, EventArgs e)
+        {
+            //vai nelle impostazioni
         }
     }
 }
