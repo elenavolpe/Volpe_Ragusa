@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Button;
 using Volpe_Ragusa.csharp;
+using Newtonsoft.Json;
+using System.Net;
 
 namespace Volpe_Ragusa.csharp
 {
@@ -36,7 +38,39 @@ namespace Volpe_Ragusa.csharp
 
             if (IsOnlyCharacters(nome) && nome != "" && IsOnlyCharacters(cognome) && cognome != "" && IsValidEmail(email) && password != "" && conferma_password == password && eta > 0)
             {
-                //invia le cose a python per la registrazione
+                using (WebClient client = new WebClient())
+                {
+                    try
+                    {
+                        // URL del server Python
+                        string pythonServerUrl = "http://localhost:5000"; //TO_DO da sistemare
+                        // Creare un oggetto con i dati da inviare come JSON
+                        var dataToSend = new
+                        {
+                            nome= nome,
+                            cognome= cognome,
+                            email = email,
+                            password = password,
+                            eta= eta
+                            //TO_DO da capire come inserire la lista di muscoli, forse meglio valori con true 
+                            //false, in tal caso cambiare anche come si prendono da getMuscoliSelezionati()
+                        };
+                        string jsonData = JsonConvert.SerializeObject(dataToSend);
+                        // Creare il contenuto della richiesta POST
+                        StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+                        // Impostare l'intestazione Content-Type
+                        client.Headers[HttpRequestHeader.ContentType] = "application/json";
+                        // Invio di una richiesta POST
+                        string response = client.UploadString($"{pythonServerUrl}/endpoint", "POST", jsonData);
+                        // Leggi la risposta
+                        Console.WriteLine($"Risposta dal server Python: {response}");
+                    }
+                    catch (WebException ex)
+                    {
+                        // Gestisci eventuali errori durante la richiesta HTTP
+                        Console.WriteLine($"Errore durante la richiesta HTTP: {ex.Message}");
+                    }
+                }
             }
         }
 
