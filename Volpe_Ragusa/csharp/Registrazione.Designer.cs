@@ -175,7 +175,7 @@
             // ListBoxMuscoli
             // 
             ListBoxMuscoli.FormattingEnabled = true;
-            ListBoxMuscoli.Items.AddRange(new object[] { "Braccia", "Gambe", "Petto", "Addominali", "Spalle", "Schiena", "Glutei" });
+            ListBoxMuscoli.Items.AddRange(new object[] { "Braccia", "Gambe", "Petto", "Addominali", "Spalle", "Schiena", "Glutei", "Dorsali" });
             ListBoxMuscoli.Location = new Point(164, 406);
             ListBoxMuscoli.Name = "ListBoxMuscoli";
             ListBoxMuscoli.Size = new Size(180, 144);

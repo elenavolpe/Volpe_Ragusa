@@ -51,9 +51,8 @@ namespace Volpe_Ragusa.csharp
                             cognome= cognome,
                             email = email,
                             password = password,
-                            eta= eta
-                            //TO_DO da capire come inserire la lista di muscoli, forse meglio valori con true 
-                            //false, in tal caso cambiare anche come si prendono da getMuscoliSelezionati()
+                            eta= eta,
+                            muscoli= muscoli
                         };
                         string jsonData = JsonConvert.SerializeObject(dataToSend);
                         // Creare il contenuto della richiesta POST
