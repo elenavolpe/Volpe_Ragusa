@@ -5,17 +5,6 @@ import os
 
 app = Flask(__name__)
 
-
-# TO-DO: recuperare dati muscoli da C#
-
-# Temporaneo: dati di esempio per test
-data = {
-    'Muscoli': [['Petto', 'Tricipiti'], ['Spalle'], ['Petto', 'Spalle', 'Tricipiti'], ['Spalle', 'Tricipiti', 'Petto'], 
-                ['Quadricipiti', 'Glutei'], ['Glutei', 'Lombari'], ['Quadricipiti'], ['Bicipiti Femorali', 'Glutei'], 
-                ['Schiena', 'Bicipiti'], ['Schiena', 'Bicipiti'], ['Schiena', 'Bicipiti', 'Dorsali'], ['Bicipiti', 'Avambracci']] # Muscoli coinvolti accoppiati in sequenza ad ogni esercizio della scheda
-    #12 esercizi di esempio
-}
-
 def generate_muscle_stats(data):
     # Creazione dataframe per permettere di usare i metodi di Pandas
     df = pd.DataFrame(data)

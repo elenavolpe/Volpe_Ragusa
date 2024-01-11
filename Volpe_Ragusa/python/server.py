@@ -1,5 +1,16 @@
-from flask import Flask, request
+from flask import Flask, request, send_file
 import user_manager
+from generate_muscle_stats import generate_muscle_stats
+
+# TO-DO: recuperare dati muscoli da C#
+
+# Temporaneo: dati di esempio per test
+data = {
+    'Muscoli': [['Petto', 'Tricipiti'], ['Spalle'], ['Petto', 'Spalle', 'Tricipiti'], ['Spalle', 'Tricipiti', 'Petto'], 
+                ['Quadricipiti', 'Glutei'], ['Glutei', 'Lombari'], ['Quadricipiti'], ['Bicipiti Femorali', 'Glutei'], 
+                ['Schiena', 'Bicipiti'], ['Schiena', 'Bicipiti'], ['Schiena', 'Bicipiti', 'Dorsali'], ['Bicipiti', 'Avambracci']] # Muscoli coinvolti accoppiati in sequenza ad ogni esercizio della scheda
+    #12 esercizi di esempio
+}
 
 app = Flask(__name__)
 
