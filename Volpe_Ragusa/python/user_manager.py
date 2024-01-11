@@ -13,12 +13,12 @@ def login(account):
     else:
         return "Errore formato email e/o password non validi"
 
-# In questo caso account deve essere un dizionario con i campi 'email', 'password', 'name', 'surname' e 'username'
+# In questo caso account deve essere un dizionario con i campi 'email', 'password', 'name', 'surname'
 def signin(account):
     if type(account) is not dict:
         raise TypeError(f"Errore signin: account deve essere un dizionario, invece è di tipo {type(account)}")
     
-    if is_valid_email(account['email']) and is_valid_password(account['password'] and is_valid_username(account['username'])):
+    if is_valid_email(account['email']) and is_valid_password(account['password']) and account['name'] != '' and account['surname'] != '':
         try:
             r = connect_go_server('signin', account)
         except TypeError as e:

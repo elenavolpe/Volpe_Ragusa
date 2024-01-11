@@ -19,15 +19,6 @@ def is_valid_password(password):
     
     return bool(match)
 
-def is_valid_username(username):
-    # Pattern regex per validare l'username
-    pattern = r'^[a-zA-Z0-9_.-]{3,}$' # Minimo 3 caratteri alfanumerici minuscoli, maiuscoli, underscore, punto o trattino
-    
-    # Cerco correpondenza tra l'username e il pattern
-    match = re.search(pattern, username)
-    
-    return bool(match)
-
 def connect_go_server(endpoint, pl):
     if type(pl) is not dict:
         raise TypeError("Il payload deve essere un dizionario")
