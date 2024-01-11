@@ -40,3 +40,5 @@ def generate_muscle_stats(data):
     return image_path
 
     # plt.show()
+    
+    # Cambiare metoodo da creazione di un file a trasmissione tramite Restful APIs
