@@ -1,4 +1,4 @@
-from utils import connect_go_server, is_valid_email, is_valid_password, is_valid_username
+from utils import connect_go_server, is_valid_email, is_valid_password
 
 # (account) deve essere dizionario con i campi 'email' e 'password'
 def login(account):

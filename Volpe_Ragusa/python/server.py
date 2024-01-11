@@ -31,8 +31,8 @@ def login():
 # Route per ottenere l'immagine delle statistiche dei muscoli allenati
 @app.route('/get_muscle_stats', methods=['GET'])
 def get_image():
-    image_path = generate_muscle_stats(data)
-    return send_file(image_path, mimetype='image/png')
+    image = generate_muscle_stats(data)
+    return send_file(image, mimetype='image/png')
 
 
 if __name__ == '__main__':
