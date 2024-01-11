@@ -3,7 +3,7 @@ import requests
 
 def is_valid_email(email):
     # Pattern regex per validare l'email
-    pattern = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
+    pattern = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]{2,}+$'
     
     # Cerco correpondenza tra l'email e il pattern
     match = re.search(pattern, email)
