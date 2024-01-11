@@ -1,9 +1,9 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-# from flask import Flask, send_file
-# import os
+from flask import Flask, send_file
+import os
 
-# app = Flask(__name__)
+app = Flask(__name__)
 
 
 # TO-DO: recuperare dati muscoli da C#
@@ -37,27 +37,29 @@ def generate_muscle_stats(data):
     # Invece di mostrare il grafico, lo salva in un file così da poterlo visualizzare nella UI in C#
 
     # Creo una directory se non esiste per salvare l'immagine
-    # image_directory = 'downloadable'
-    #     if not os.path.exists(image_directory):
-    #         os.makedirs(image_directory)
+    image_directory = 'downloadable'
+    if not os.path.exists(image_directory):
+        os.makedirs(image_directory)
 
     # Se invece vogliamo che il file lo trasmetta tramite Restful APIs, python è un server e usiamo Flask con la Route /get_muscle_stats
     
     # Salva l'immagine in un file nella directory creata
-    # image_path = os.path.join(image_directory, 'muscle_stats.png')
-    # plt.savefig(image_path)
-    # return image_path
-
-    plt.show()
-
+    image_path = os.path.join(image_directory, 'muscle_stats.png')
+    plt.savefig(image_path)
     # Stampa dei risultati
     print("Percentuali dei muscoli allenati:\n", muscle_percentage)
+    return image_path
+
+    # plt.show()
+
 
 # Route per ottenere l'immagine
-# @app.route('/get_muscle_stats', methods=['GET'])
-# def get_image():
-#     image_path = generate_muscle_stats(data)
-#     return send_file(image_path, mimetype='image/png')
+@app.route('/get_muscle_stats', methods=['GET'])
+def get_image():
+    image_path = generate_muscle_stats(data)
+    return send_file(image_path, mimetype='image/png')
 
-# if __name__ == '__main__':
-#     app.run(host='0.0.0.0', port=5000, debug=True) # Avvio il server Flask
+if __name__ == '__main__':
+     app.run(host='0.0.0.0', port=5000, threaded=True) # Avvio il server Flask
+
+# TO-DO: fare script server.py che avvia solo lui il server Flask
