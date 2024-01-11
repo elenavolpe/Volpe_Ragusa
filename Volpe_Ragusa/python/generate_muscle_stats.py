@@ -51,15 +51,3 @@ def generate_muscle_stats(data):
     return image_path
 
     # plt.show()
-
-
-# Route per ottenere l'immagine
-@app.route('/get_muscle_stats', methods=['GET'])
-def get_image():
-    image_path = generate_muscle_stats(data)
-    return send_file(image_path, mimetype='image/png')
-
-if __name__ == '__main__':
-     app.run(host='0.0.0.0', port=5000, threaded=True) # Avvio il server Flask
-
-# TO-DO: fare script server.py che avvia solo lui il server Flask
