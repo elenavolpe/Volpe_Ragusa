@@ -1,6 +1,5 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-import os
 from io import BytesIO
 
 def generate_muscle_stats(data):
