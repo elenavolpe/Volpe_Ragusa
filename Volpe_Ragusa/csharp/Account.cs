@@ -41,7 +41,8 @@ namespace Volpe_Ragusa.csharp
 
         private void buttonImpostazioni_Click(object sender, EventArgs e)
         {
-            //vai nelle impostazioni
+            Impostazioni impostazioni = new Impostazioni(email);
+            impostazioni.Show();
         }
     }
 }
