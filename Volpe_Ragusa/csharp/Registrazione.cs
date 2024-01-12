@@ -63,6 +63,10 @@ namespace Volpe_Ragusa.csharp
                         string response = client.UploadString($"{pythonServerUrl}/endpoint", "POST", jsonData);
                         // Leggi la risposta
                         Console.WriteLine($"Risposta dal server Python: {response}");
+                        
+                        //se va bene vado a login
+                        Form1 login= new Form1();
+                        login.Show();
                     }
                     catch (WebException ex)
                     {
