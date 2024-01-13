@@ -363,7 +363,9 @@ MigrationBackup/
 FodyWeavers.xsd
 
 # Ignora .venv
-Volpe_Ragusa/python/.venv/
+/Volpe_Ragusa/python/.venv/
 
 # Ignora files per docker
-Volpe_Ragusa/go/mysql-init-scripts
+/Volpe_Ragusa/go/mysql-init-scripts/
+/Volpe_Ragusa/go/.env
+/Volpe_Ragusa/go/docker-compose.yml
