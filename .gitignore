@@ -364,3 +364,7 @@ FodyWeavers.xsd
 
 # Ignora .venv
 .venv/
+
+/go/.env
+/go/mysql-init-scripts/
+/go/docker-compose.yml
