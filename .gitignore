@@ -363,4 +363,6 @@ MigrationBackup/
 FodyWeavers.xsd
 
 # Ignora .venv
-.venv/
+Volpe_Ragusa/python/.venv/
+
+# Ignora files per docker
