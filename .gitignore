@@ -366,3 +366,4 @@ FodyWeavers.xsd
 Volpe_Ragusa/python/.venv/
 
 # Ignora files per docker
+Volpe_Ragusa/go/mysql-init-scripts
