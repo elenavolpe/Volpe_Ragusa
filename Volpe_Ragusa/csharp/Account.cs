@@ -13,9 +13,12 @@ namespace Volpe_Ragusa.csharp
 {
     public partial class Account : Form
     {
-        public Account()
+        string email;
+        public Account(string email)
         {
             InitializeComponent();
+            this.email = email;
+            //dovrei chiamare uno script python per farmi tornare il nome data l'email
         }
 
         private void buttonHome_Click(object sender, EventArgs e)
@@ -38,7 +41,8 @@ namespace Volpe_Ragusa.csharp
 
         private void buttonImpostazioni_Click(object sender, EventArgs e)
         {
-            //vai nelle impostazioni
+            Impostazioni impostazioni = new Impostazioni(email);
+            impostazioni.Show();
         }
     }
 }
