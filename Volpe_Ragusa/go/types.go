@@ -1,6 +1,6 @@
 package main
 
 type Exercise struct {
-	Name string
+	Name        string
 	Description string
 }

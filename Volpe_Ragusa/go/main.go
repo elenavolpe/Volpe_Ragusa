@@ -1,9 +1,11 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 )
 
 func main() {
@@ -56,6 +58,121 @@ func main() {
 		s = <-usr
 		w.Write([]byte(s))
 	})
+
+	mux.HandleFunc("/addExercise", func(w http.ResponseWriter, r *http.Request) {
+		name := r.FormValue("name")
+		description := r.FormValue("description")
+		done := make(chan bool)
+		var s string
+		go addExercise(name, description, done)
+		if <-done {
+			s = "Success"
+		} else {
+			s = "Failure"
+		}
+		w.Write([]byte(s))
+	})
+
+	mux.HandleFunc("/deleteExercise", func(w http.ResponseWriter, r *http.Request) {
+		name := r.FormValue("name")
+		done := make(chan bool)
+		var s string
+		go deleteExercise(name, done)
+		if <-done {
+			s = "Success"
+		} else {
+			s = "Failure"
+		}
+		w.Write([]byte(s))
+	})
+
+	mux.HandleFunc("/editExercise", func(w http.ResponseWriter, r *http.Request) {
+		oldName := r.FormValue("oldName")
+		newName := r.FormValue("newName")
+		newDescription := r.FormValue("newDescription")
+		done := make(chan bool)
+		var s string
+		go editExercise(oldName, newName, newDescription, done)
+		if <-done {
+			s = "Success"
+		} else {
+			s = "Failure"
+		}
+		w.Write([]byte(s))
+	})
+
+	mux.HandleFunc("/getExercises", func(w http.ResponseWriter, r *http.Request) {
+		exercises := make(chan []Exercise)
+		go getExercises(exercises)
+		w.Header().Set("Content-Type", "application/json")
+		err := json.NewEncoder(w).Encode(<-exercises)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+	})
+
+	mux.HandleFunc("/getMostPopularExercises", func(w http.ResponseWriter, r *http.Request) {
+		limitParam := r.FormValue("limit")
+		limitValue, err := strconv.Atoi(limitParam)
+		if err != nil {
+			http.Error(w, "Invalid limit parameter", http.StatusBadRequest)
+			return
+		}
+		exercises := make(chan []Exercise)
+		go getMostPopularExercises(limitValue, exercises)
+		w.Header().Set("Content-Type", "application/json")
+		err = json.NewEncoder(w).Encode(<-exercises)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+	})
+
+	mux.HandleFunc("/getMostRecentExercises", func(w http.ResponseWriter, r *http.Request) {
+		limitParam := r.FormValue("limit")
+		limitValue, err := strconv.Atoi(limitParam)
+		if err != nil {
+			http.Error(w, "Invalid limit parameter", http.StatusBadRequest)
+			return
+		}
+		exercises := make(chan []Exercise)
+		go getMostRecentExercises(limitValue, exercises)
+		w.Header().Set("Content-Type", "application/json")
+		err = json.NewEncoder(w).Encode(<-exercises)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+	})
+
+	// Endpoints per le funzionalità di gestione degli esercizi nelle schede di allenamento già esistenti
+	// mux.HandleFunc("/addExerciseWorkoutPlan", func(w http.ResponseWriter, r *http.Request) {
+	// 	workoutPlanName := r.FormValue("workoutPlanName")
+	// 	exerciseName := r.FormValue("exerciseName")
+	// 	sets := r.FormValue("sets")
+	// 	reps := r.FormValue("reps")
+	// 	done := make(chan bool)
+	// 	var s string
+	// 	go addExerciseWorkoutPlan(workoutPlanName, exerciseName, sets, reps, done)
+	// 	if <-done {
+	// 		s = "Success"
+	// 	} else {
+	// 		s = "Failure"
+	// 	}
+	// 	w.Write([]byte(s))
+	// })
+
+	// mux.HandleFunc("/deleteExerciseWorkoutPlan", func(w http.ResponseWriter, r *http.Request) {
+	// 	workoutPlanName := r.FormValue("workoutPlanName")
+	// 	exerciseName := r.FormValue("exerciseName")
+	// 	done := make(chan bool)
+	// 	var s string
+	// 	go deleteExerciseWorkoutPlan(workoutPlanName, exerciseName, done)
+	// 	if <-done {
+	// 		s = "Success"
+	// 	} else {
+	// 		s = "Failure"
+	// 	}
+	// 	w.Write([]byte(s))
+	// })
 
 	// Porta del server
 	port := 8080
