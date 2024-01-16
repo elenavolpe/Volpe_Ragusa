@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -41,7 +43,43 @@ namespace Volpe_Ragusa.csharp
             List<string> newmuscoli= getMuscoliSelezionati();
             //devi vedere se la vecchia password corrisponde
 
-            //invia nuove modifiche a python
+            using (WebClient client = new WebClient())
+            {
+                try
+                {
+                    // URL del server Python
+                    string pythonServerUrl = "http://localhost:5000/modifica_profilo";
+                    //lato server se si vuole cambiare una nuova password, devi verificare che
+                    //la vecchia password è giusta
+                    var dataToSend = new
+                    {
+                        nome = newName,
+                        email = email,
+                        newpassword = newPassword,
+                        password = password,
+                        eta = eta,
+                        muscoli = newmuscoli
+                    };
+                    string jsonData = JsonConvert.SerializeObject(dataToSend);
+                    // Creare il contenuto della richiesta POST
+                    StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+                    // Impostare l'intestazione Content-Type
+                    client.Headers[HttpRequestHeader.ContentType] = "application/json";
+                    // Invio di una richiesta POST
+                    string response = client.UploadString($"{pythonServerUrl}/endpoint", "POST", jsonData);
+                    // Leggi la risposta
+                    Console.WriteLine($"Risposta dal server Python: {response}");
+
+                    //se va bene vado a login
+                    Form1 login = new Form1();
+                    login.Show();
+                }
+                catch (WebException ex)
+                {
+                    // Gestisci eventuali errori durante la richiesta HTTP
+                    Console.WriteLine($"Errore durante la richiesta HTTP: {ex.Message}");
+                }
+            }
 
             Account account= new Account(email);
             account.Show();
