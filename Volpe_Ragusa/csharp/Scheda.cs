@@ -12,9 +12,11 @@ namespace Volpe_Ragusa.csharp
 {
     public partial class Scheda : Form
     {
-        public Scheda()
+        string email;
+        public Scheda(string email)
         {
             InitializeComponent();
+            this.email = email;
         }
 
         //è sbagliato, non è al click

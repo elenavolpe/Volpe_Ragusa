@@ -70,9 +70,9 @@ namespace Volpe_Ragusa.csharp
                     // Leggi la risposta
                     Console.WriteLine($"Risposta dal server Python: {response}");
 
-                    //se va bene vado a login
-                    Form1 login = new Form1();
-                    login.Show();
+                    //se va bene vado ad account
+                    Account account1 = new Account(email);
+                    account1.Show();
                 }
                 catch (WebException ex)
                 {
