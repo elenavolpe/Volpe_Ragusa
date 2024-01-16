@@ -23,12 +23,13 @@ namespace Volpe_Ragusa.csharp
 
         private void buttonHome_Click(object sender, EventArgs e)
         {
-            //vai nella home
+            Home home = new Home(email);
+            home.Show();
         }
 
         private void buttonScheda_Click(object sender, EventArgs e)
         {
-            Scheda scheda= new Scheda();
+            Scheda scheda= new Scheda(email);
             scheda.Show();
         }
 
