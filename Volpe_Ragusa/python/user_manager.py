@@ -30,6 +30,7 @@ def modifica_profilo(account):
     if type(account) is not dict:
         return f"Errore signin: account deve essere un dizionario, invece è di tipo {type(account)}"
     
+    #TO_DO potremmo prima fare autenticare il cliente?
     modify={}
     for key in account: #TO_DO non saprei come ritorna i muscoli
         if account['key']!="":
@@ -55,9 +56,13 @@ def modifica_profilo(account):
         except TypeError as e:
             return f"Errore: {e}"
         
-def get_exercize(account):
-    try:
-        r = connect_go_server('getWorkoutPlan', account['email'])
-        #devo ritornarli
-    except TypeError as e:
-        return f"Errore: {e}"
+def get_exercise(account):
+    #TO_DO forse invece di fare questo possiamo chiedere a go di autenticarlo?
+    if is_valid_email(account['email']):
+        try:
+            r = connect_go_server('getWorkoutPlan', account['email'])
+            #devo ritornarli
+        except TypeError as e:
+            return f"Errore: {e}"
+    else:
+        return "email utente non valida"

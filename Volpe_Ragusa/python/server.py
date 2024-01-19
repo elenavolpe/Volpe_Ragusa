@@ -1,5 +1,6 @@
 from flask import Flask, request, send_file
 import user_manager
+import exercise_manager
 from generate_muscle_stats import generate_muscle_stats
 
 # TO-DO: recuperare dati muscoli da C#
@@ -45,25 +46,25 @@ def modify_profile():
 def get_scheda():
     if request.method == 'POST':
         account = request.get_json()
-        return user_manager.get_exercize(account)
+        return user_manager.get_exercise(account)
     
 #ritorna tutti gli esercizi, da mettere nella home
 @app.route('/get_esercizi', methods=['POST'])
-def get_scheda():
+def get_esercizi():
     if request.method == 'POST':
-        return
+        return exercise_manager.get_exercises()
 
 #ritorna gli esercizi più quotati
 @app.route('/get_esercizi_preferiti', methods=['POST'])
-def get_scheda():
+def get_preferiti():
     if request.method == 'POST':
-        return
+        return exercise_manager.get_preferred()
     
 #ritorna, se ci sono, esercizi aggiunti di recente (potremmo fare negli ultimi 2 giorni?)
 @app.route('/get_esercizi_recenti', methods=['POST'])
-def get_scheda():
+def get_recenti():
     if request.method == 'POST':
-        return
+        return  exercise_manager.get_recent()
 
 if __name__ == '__main__':
      app.run(host='0.0.0.0', port=5000, threaded=True) # Avvio il server Flask
