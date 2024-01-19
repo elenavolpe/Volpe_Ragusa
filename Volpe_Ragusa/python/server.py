@@ -34,6 +34,12 @@ def get_image():
     image = generate_muscle_stats(data)
     return send_file(image, mimetype='image/png')
 
+@app.route('/modifica_profilo', methods=['POST'])
+def modify_profile():
+    if request.method == 'POST':
+        account = request.get_json()
+        return user_manager.modifica_profilo(account)
+
 
 if __name__ == '__main__':
      app.run(host='0.0.0.0', port=5000, threaded=True) # Avvio il server Flask

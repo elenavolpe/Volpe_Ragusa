@@ -39,7 +39,7 @@ namespace Volpe_Ragusa.csharp
             string newPassword=textBoxNewPassword.Text;
             string password=textBoxPassword.Text;
             //fai un eccezione su questo
-            int eta=int.Parse(textBoxNewEta.Text);
+            string eta= textBoxNewEta.Text;
             List<string> newmuscoli= getMuscoliSelezionati();
             //devi vedere se la vecchia password corrisponde
 
