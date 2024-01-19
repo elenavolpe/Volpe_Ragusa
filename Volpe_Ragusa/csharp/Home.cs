@@ -48,7 +48,7 @@ namespace Volpe_Ragusa.csharp
                 try
                 {
                     // URL del server Python
-                    string url = "http://localhost:5000/get_esercizi"; //TO_DO da sistemare
+                    string url = "http://localhost:5000/get_esercizi";
                     // Creazione dei dati da inviare come parte della richiesta POST
                     NameValueCollection postData = new NameValueCollection
                     {
@@ -88,7 +88,7 @@ namespace Volpe_Ragusa.csharp
                 try
                 {
                     // URL del server Python
-                    string url = "http://localhost:5000/get_esercizi_preferiti"; //TO_DO da sistemare
+                    string url = "http://localhost:5000/get_esercizi_preferiti";
                     // Creazione dei dati da inviare come parte della richiesta POST
                     NameValueCollection postData = new NameValueCollection
                     {
@@ -128,7 +128,7 @@ namespace Volpe_Ragusa.csharp
                 try
                 {
                     // URL del server Python
-                    string url = "http://localhost:5000/get_esercizi_recenti"; //TO_DO da sistemare
+                    string url = "http://localhost:5000/get_esercizi_recenti";
                     // Creazione dei dati da inviare come parte della richiesta POST
                     NameValueCollection postData = new NameValueCollection
                     {

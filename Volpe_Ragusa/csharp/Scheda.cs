@@ -37,7 +37,7 @@ namespace Volpe_Ragusa.csharp
                 try
                 {
                     // URL del server Python
-                    string url = "http://localhost:5000/get_scheda"; //TO_DO da sistemare
+                    string url = "http://localhost:5000/get_scheda";
                     // Creazione dei dati da inviare come parte della richiesta POST
                     NameValueCollection postData = new NameValueCollection
                     {

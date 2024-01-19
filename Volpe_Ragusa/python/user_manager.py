@@ -54,3 +54,10 @@ def modifica_profilo(account):
             r = connect_go_server('modifyprofile', modify)
         except TypeError as e:
             return f"Errore: {e}"
+        
+def get_exercize(account):
+    try:
+        r = connect_go_server('getWorkoutPlan', account['email'])
+        #devo ritornarli
+    except TypeError as e:
+        return f"Errore: {e}"

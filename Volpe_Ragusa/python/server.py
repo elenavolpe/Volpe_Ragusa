@@ -39,7 +39,31 @@ def modify_profile():
     if request.method == 'POST':
         account = request.get_json()
         return user_manager.modifica_profilo(account)
+    
+#ritorna la scheda utente
+@app.route('/get_scheda', methods=['POST'])
+def get_scheda():
+    if request.method == 'POST':
+        account = request.get_json()
+        return user_manager.get_exercize(account)
+    
+#ritorna tutti gli esercizi, da mettere nella home
+@app.route('/get_esercizi', methods=['POST'])
+def get_scheda():
+    if request.method == 'POST':
+        return
 
+#ritorna gli esercizi più quotati
+@app.route('/get_esercizi_preferiti', methods=['POST'])
+def get_scheda():
+    if request.method == 'POST':
+        return
+    
+#ritorna, se ci sono, esercizi aggiunti di recente (potremmo fare negli ultimi 2 giorni?)
+@app.route('/get_esercizi_recenti', methods=['POST'])
+def get_scheda():
+    if request.method == 'POST':
+        return
 
 if __name__ == '__main__':
      app.run(host='0.0.0.0', port=5000, threaded=True) # Avvio il server Flask
