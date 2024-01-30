@@ -24,12 +24,14 @@ namespace Volpe_Ragusa.csharp
         private void buttonHome_Click(object sender, EventArgs e)
         {
             Home home = new Home(email);
+            this.Close();
             home.Show();
         }
 
         private void buttonScheda_Click(object sender, EventArgs e)
         {
             Scheda scheda= new Scheda(email);
+            this.Close();
             scheda.Show();
         }
 
@@ -37,12 +39,14 @@ namespace Volpe_Ragusa.csharp
         {
             //esci dalla sessione e vai al login
             Form1 login = new Form1();
+            this.Close();
             login.Show();
         }
 
         private void buttonImpostazioni_Click(object sender, EventArgs e)
         {
             Impostazioni impostazioni = new Impostazioni(email);
+            this.Close();
             impostazioni.Show();
         }
     }
