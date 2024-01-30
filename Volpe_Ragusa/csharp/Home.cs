@@ -20,6 +20,29 @@ namespace Volpe_Ragusa.csharp
         {
             InitializeComponent();
             this.email = email;
+            string nome=get_name(email);
+            label1.Text="Ciao "+nome+", benvenuto in MyFitPlan";
+        }
+
+        private string get_name(string email)
+        {
+            string url = "http://localhost:5000/get_name";
+            string name="nome";
+            using (WebClient client = new WebClient()){
+                try{
+                    NameValueCollection postData = new NameValueCollection
+                    {
+                        { "email", this.email }
+                    };
+                    byte[] responseBytes = client.UploadValues(url, "POST", postData);
+                    name = Encoding.UTF8.GetString(responseBytes);
+                }
+                catch (WebException ex)
+                {
+                    Console.WriteLine($"Errore durante la richiesta HTTP: {ex.Message}");
+                }
+            }
+            return name;
         }
 
         private void button1_Click(object sender, EventArgs e)

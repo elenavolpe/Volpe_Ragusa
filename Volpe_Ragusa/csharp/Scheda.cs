@@ -21,6 +21,29 @@ namespace Volpe_Ragusa.csharp
         {
             InitializeComponent();
             this.email = email;
+            string nome=get_name(email);
+            labelHeader.Text="Ecco la tua scheda "+nome;
+        }
+
+        private string get_name(string email)
+        {
+            string url = "http://localhost:5000/get_name";
+            string name="nome";
+            using (WebClient client = new WebClient()){
+                try{
+                    NameValueCollection postData = new NameValueCollection
+                    {
+                        { "email", this.email }
+                    };
+                    byte[] responseBytes = client.UploadValues(url, "POST", postData);
+                    name = Encoding.UTF8.GetString(responseBytes);
+                }
+                catch (WebException ex)
+                {
+                    Console.WriteLine($"Errore durante la richiesta HTTP: {ex.Message}");
+                }
+            }
+            return name;
         }
 
         //è sbagliato, non è al click

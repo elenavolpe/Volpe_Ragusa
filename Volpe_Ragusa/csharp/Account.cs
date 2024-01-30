@@ -1,10 +1,13 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -18,7 +21,29 @@ namespace Volpe_Ragusa.csharp
         {
             InitializeComponent();
             this.email = email;
-            //dovrei chiamare uno script python per farmi tornare il nome data l'email
+            string nome=get_name(email);
+            labelBenvenuto.Text="Benvenuto nel tuo profilo "+nome;
+        }
+
+        private string get_name(string email)
+        {
+            string url = "http://localhost:5000/get_name";
+            string name="nome";
+            using (WebClient client = new WebClient()){
+                try{
+                    NameValueCollection postData = new NameValueCollection
+                    {
+                        { "email", this.email }
+                    };
+                    byte[] responseBytes = client.UploadValues(url, "POST", postData);
+                    name = Encoding.UTF8.GetString(responseBytes);
+                }
+                catch (WebException ex)
+                {
+                    Console.WriteLine($"Errore durante la richiesta HTTP: {ex.Message}");
+                }
+            }
+            return name;
         }
 
         private void buttonHome_Click(object sender, EventArgs e)
