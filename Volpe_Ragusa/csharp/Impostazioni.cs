@@ -30,6 +30,7 @@ namespace Volpe_Ragusa.csharp
         private void buttonAccount_Click(object sender, EventArgs e)
         {
             Account account = new Account(email);
+            this.Close();
             account.Show();
         }
 
@@ -72,6 +73,7 @@ namespace Volpe_Ragusa.csharp
 
                     //se va bene vado ad account
                     Account account1 = new Account(email);
+                    this.Close();
                     account1.Show();
                 }
                 catch (WebException ex)
@@ -82,6 +84,7 @@ namespace Volpe_Ragusa.csharp
             }
 
             Account account= new Account(email);
+            this.Close();
             account.Show();
         }
 

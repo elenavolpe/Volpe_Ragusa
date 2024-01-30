@@ -25,18 +25,21 @@ namespace Volpe_Ragusa.csharp
         private void button1_Click(object sender, EventArgs e)
         {
             Account account = new Account(email);
+            this.Close();
             account.Show();
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
             Scheda scheda = new Scheda(email);
+            this.Close();
             scheda.Show();
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
             Form1 login=new Form1();
+            this.Close();
             login.Show();
         }
 

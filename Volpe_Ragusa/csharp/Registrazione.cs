@@ -66,6 +66,7 @@ namespace Volpe_Ragusa.csharp
                         
                         //se va bene vado a login
                         Form1 login= new Form1();
+                        this.Close();
                         login.Show();
                     }
                     catch (WebException ex)
@@ -145,6 +146,7 @@ namespace Volpe_Ragusa.csharp
         private void linkLabelLogin_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             Form1 login = new Form1();
+            this.Close();
             login.Show();
         }
     }

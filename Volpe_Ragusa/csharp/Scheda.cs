@@ -68,5 +68,19 @@ namespace Volpe_Ragusa.csharp
                 }
             }
         }
+
+        private void buttonAccount_Click(object sender, EventArgs e)
+        {
+            Account account = new Account(email);
+            this.Close();
+            account.Show();
+        }
+
+        private void buttonHome_Click(object sender, EventArgs e)
+        {
+            Home home = new Home(email);
+            this.Close();
+            home.Show();
+        }
     }
 }

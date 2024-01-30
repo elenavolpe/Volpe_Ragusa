@@ -56,6 +56,7 @@ namespace Volpe_Ragusa
                         
                         //se la risposta è positiva posso passare direttamente a home o account come parametro nome e email
                         Account account = new Account(email);
+                        this.Close();
                         account.Show();
                     }
                     catch (WebException ex)
@@ -70,6 +71,7 @@ namespace Volpe_Ragusa
         private void linkRegistrazione_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             Registrazione registrazione = new Registrazione();
+            this.Close();
             registrazione.Show();
         }
     }
