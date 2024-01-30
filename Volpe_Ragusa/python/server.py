@@ -65,6 +65,12 @@ def get_preferiti():
 def get_recenti():
     if request.method == 'POST':
         return  exercise_manager.get_recent()
+    
+@app.route('/get_name', methods=['POST'])
+def get_recenti():
+    if request.method == 'POST':
+        email = request.get_json()
+        return  user_manager.get_name()
 
 if __name__ == '__main__':
      app.run(host='0.0.0.0', port=5000, threaded=True) # Avvio il server Flask

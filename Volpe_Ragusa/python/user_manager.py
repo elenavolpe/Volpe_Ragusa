@@ -56,6 +56,15 @@ def modifica_profilo(account):
         except TypeError as e:
             return f"Errore: {e}"
         
+def get_name(email):
+    if email['email']!="":
+        try:
+            r = connect_go_server('getName', email['email'])
+            #devo ritornare il nome
+        except TypeError as e:
+            return f"Errore: {e}"
+
+        
 def get_exercise(account):
     #TO_DO forse invece di fare questo possiamo chiedere a go di autenticarlo?
     if is_valid_email(account['email']):
