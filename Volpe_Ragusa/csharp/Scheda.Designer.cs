@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             labelHeader = new Label();
+            buttonAccount = new Button();
+            buttonHome = new Button();
             SuspendLayout();
             // 
             // labelHeader
@@ -41,11 +43,33 @@
             labelHeader.Text = "Ecco la tua scheda nome";
             labelHeader.Click += labelHeader_Click;
             // 
+            // buttonAccount
+            // 
+            buttonAccount.Location = new Point(676, 141);
+            buttonAccount.Name = "buttonAccount";
+            buttonAccount.Size = new Size(112, 34);
+            buttonAccount.TabIndex = 1;
+            buttonAccount.Text = "Account";
+            buttonAccount.UseVisualStyleBackColor = true;
+            buttonAccount.Click += buttonAccount_Click;
+            // 
+            // buttonHome
+            // 
+            buttonHome.Location = new Point(676, 193);
+            buttonHome.Name = "buttonHome";
+            buttonHome.Size = new Size(112, 34);
+            buttonHome.TabIndex = 2;
+            buttonHome.Text = "Home";
+            buttonHome.UseVisualStyleBackColor = true;
+            buttonHome.Click += buttonHome_Click;
+            // 
             // Scheda
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(buttonHome);
+            Controls.Add(buttonAccount);
             Controls.Add(labelHeader);
             Name = "Scheda";
             Text = "Scheda";
@@ -56,5 +80,7 @@
         #endregion
 
         private Label labelHeader;
+        private Button buttonAccount;
+        private Button buttonHome;
     }
 }
