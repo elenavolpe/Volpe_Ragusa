@@ -64,6 +64,11 @@ public class Utente
     public void setAddress(string email)
     {
         this.email=email;
-        this.name=get_name(email);
+        if(email==""){
+            this.name="";
+        }
+        else{
+            this.name=get_name(email);
+        }
     }
 }

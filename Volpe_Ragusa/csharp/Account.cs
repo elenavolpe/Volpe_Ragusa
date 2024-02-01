@@ -52,6 +52,8 @@ namespace Volpe_Ragusa.csharp
         private void buttonLogout_Click(object sender, EventArgs e)
         {
             //esci dalla sessione e vai al login
+            Utente utente = Utente.Istanza;
+            utente.setAddress("");
             Form1 login = new Form1();
             this.Close();
             login.Show();
