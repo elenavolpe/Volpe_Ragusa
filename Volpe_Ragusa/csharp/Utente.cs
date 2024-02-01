@@ -11,6 +11,7 @@ public class Utente
     //public string cognome { get; set; }
 
     public string email;
+    //TO_DO in caso aggiungi tutte le altre informazioni
 
     // Il costruttore è privato per evitare l'istanziazione diretta della classe
     private Utente()
