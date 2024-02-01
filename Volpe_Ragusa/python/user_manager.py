@@ -74,3 +74,14 @@ def get_exercise(account):
             return f"Errore: {e}"
     else:
         return "email utente non valida"
+    
+def get_muscoli_preferiti(email):
+    if is_valid_email(email):
+        try:
+            #TO_DO implementare questa funziona in go
+            r = connect_go_server('getPreferredMuscles', email)
+            #devo ritornarli
+        except TypeError as e:
+            return f"Errore: {e}"
+    else:
+        return "email utente non valida"
