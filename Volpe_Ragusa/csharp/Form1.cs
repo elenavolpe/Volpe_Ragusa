@@ -54,8 +54,11 @@ namespace Volpe_Ragusa
                         // Leggi la risposta
                         Console.WriteLine($"Risposta dal server Python: {response}");
                         
-                        //se la risposta è positiva posso passare direttamente a home o account come parametro nome e email
-                        Account account = new Account(email);
+                        //se la risposta ï¿½ positiva posso passare direttamente a home o account come parametro nome e email
+                        Utente utente=Utente.Istanza;
+                        utente.setAddress(email);
+                        //Account account = new Account(email);
+                        Account account = new Account();
                         this.Close();
                         account.Show();
                     }

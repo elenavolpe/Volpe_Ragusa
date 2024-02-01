@@ -17,34 +17,13 @@ namespace Volpe_Ragusa.csharp
     {
         //forse dovrei aggiungere dei modificatori
         string email;
-        public Impostazioni(string email)
+        public Impostazioni()
         {
             InitializeComponent();
-            this.email = email;
-            string nome=get_name(email);
-            labelIntro.Text="Ciao "+nome+", qui puoi modificare il tuo profilo";
-        }
-
-        //forse conviene metterla in una libreria dato che viene usata spesso
-        private string get_name(string email)
-        {
-            string url = "http://localhost:5000/get_name";
-            string name="nome";
-            using (WebClient client = new WebClient()){
-                try{
-                    NameValueCollection postData = new NameValueCollection
-                    {
-                        { "email", this.email }
-                    };
-                    byte[] responseBytes = client.UploadValues(url, "POST", postData);
-                    name = Encoding.UTF8.GetString(responseBytes);
-                }
-                catch (WebException ex)
-                {
-                    Console.WriteLine($"Errore durante la richiesta HTTP: {ex.Message}");
-                }
-            }
-            return name;
+            Utente utente=Utente.Istanza;
+            this.email = utente.email;
+            //string nome=get_name(email);
+            labelIntro.Text="Ciao "+utente.name+", qui puoi modificare il tuo profilo";
         }
 
         private void labelIntro_Click(object sender, EventArgs e)
@@ -54,7 +33,7 @@ namespace Volpe_Ragusa.csharp
 
         private void buttonAccount_Click(object sender, EventArgs e)
         {
-            Account account = new Account(email);
+            Account account = new Account();
             this.Close();
             account.Show();
         }
@@ -97,7 +76,7 @@ namespace Volpe_Ragusa.csharp
                     Console.WriteLine($"Risposta dal server Python: {response}");
 
                     //se va bene vado ad account
-                    Account account1 = new Account(email);
+                    Account account1 = new Account();
                     this.Close();
                     account1.Show();
                 }
@@ -108,7 +87,7 @@ namespace Volpe_Ragusa.csharp
                 }
             }
 
-            Account account= new Account(email);
+            Account account= new Account();
             this.Close();
             account.Show();
         }

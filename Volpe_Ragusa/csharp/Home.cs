@@ -16,46 +16,35 @@ namespace Volpe_Ragusa.csharp
     public partial class Home : Form
     {
         string email;
-        public Home(string email)
+        /*public Home(string email)
         {
             InitializeComponent();
             this.email = email;
             string nome=get_name(email);
             label1.Text="Ciao "+nome+", benvenuto in MyFitPlan";
             //TO_DO inserire qui tutti i caricamenti
-        }
+        }*/
 
-        private string get_name(string email)
+        public Home()
         {
-            string url = "http://localhost:5000/get_name";
-            string name="nome";
-            using (WebClient client = new WebClient()){
-                try{
-                    NameValueCollection postData = new NameValueCollection
-                    {
-                        { "email", this.email }
-                    };
-                    byte[] responseBytes = client.UploadValues(url, "POST", postData);
-                    name = Encoding.UTF8.GetString(responseBytes);
-                }
-                catch (WebException ex)
-                {
-                    Console.WriteLine($"Errore durante la richiesta HTTP: {ex.Message}");
-                }
-            }
-            return name;
+            InitializeComponent();
+            Utente utente=Utente.Istanza;
+            this.email = utente.email;
+            //string nome=get_name(email);
+            label1.Text="Ciao "+utente.name+", benvenuto in MyFitPlan";
+            //TO_DO inserire qui tutti i caricamenti
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Account account = new Account(email);
+            Account account = new Account();
             this.Close();
             account.Show();
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            Scheda scheda = new Scheda(email);
+            Scheda scheda = new Scheda();
             this.Close();
             scheda.Show();
         }

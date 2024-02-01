@@ -17,34 +17,14 @@ namespace Volpe_Ragusa.csharp
     public partial class Scheda : Form
     {
         string email;
-        public Scheda(string email)
+        public Scheda()
         {
             InitializeComponent();
-            this.email = email;
-            string nome=get_name(email);
-            labelHeader.Text="Ecco la tua scheda "+nome;
+            Utente utente=Utente.Istanza;
+            this.email = utente.email;
+            //string nome=get_name(email);
+            labelHeader.Text="Ecco la tua scheda "+utente.name;
             //TO_DO inserire qui tutti i caricamenti
-        }
-
-        private string get_name(string email)
-        {
-            string url = "http://localhost:5000/get_name";
-            string name="nome";
-            using (WebClient client = new WebClient()){
-                try{
-                    NameValueCollection postData = new NameValueCollection
-                    {
-                        { "email", this.email }
-                    };
-                    byte[] responseBytes = client.UploadValues(url, "POST", postData);
-                    name = Encoding.UTF8.GetString(responseBytes);
-                }
-                catch (WebException ex)
-                {
-                    Console.WriteLine($"Errore durante la richiesta HTTP: {ex.Message}");
-                }
-            }
-            return name;
         }
 
         //è sbagliato, non è al click
@@ -95,14 +75,14 @@ namespace Volpe_Ragusa.csharp
 
         private void buttonAccount_Click(object sender, EventArgs e)
         {
-            Account account = new Account(email);
+            Account account = new Account();
             this.Close();
             account.Show();
         }
 
         private void buttonHome_Click(object sender, EventArgs e)
         {
-            Home home = new Home(email);
+            Home home = new Home();
             this.Close();
             home.Show();
         }

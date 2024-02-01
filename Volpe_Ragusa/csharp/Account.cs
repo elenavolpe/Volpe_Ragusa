@@ -17,46 +17,34 @@ namespace Volpe_Ragusa.csharp
     public partial class Account : Form
     {
         string email;
-        public Account(string email)
+        /*public Account(string email)
         {
             InitializeComponent();
             this.email = email;
             string nome=get_name(email);
             labelBenvenuto.Text="Benvenuto nel tuo profilo "+nome;
             //TO_DO inserire qui tutti i caricamenti
-        }
+        }*/
 
-        private string get_name(string email)
+        public Account()
         {
-            string url = "http://localhost:5000/get_name";
-            string name="nome";
-            using (WebClient client = new WebClient()){
-                try{
-                    NameValueCollection postData = new NameValueCollection
-                    {
-                        { "email", this.email }
-                    };
-                    byte[] responseBytes = client.UploadValues(url, "POST", postData);
-                    name = Encoding.UTF8.GetString(responseBytes);
-                }
-                catch (WebException ex)
-                {
-                    Console.WriteLine($"Errore durante la richiesta HTTP: {ex.Message}");
-                }
-            }
-            return name;
+            InitializeComponent();
+            Utente utente=Utente.Istanza;
+            this.email=utente.email;
+            labelBenvenuto.Text="Benvenuto nel tuo profilo "+utente.name;
+            //TO_DO inserire qui tutti i caricamenti
         }
 
         private void buttonHome_Click(object sender, EventArgs e)
         {
-            Home home = new Home(email);
+            Home home = new Home();
             this.Close();
             home.Show();
         }
 
         private void buttonScheda_Click(object sender, EventArgs e)
         {
-            Scheda scheda= new Scheda(email);
+            Scheda scheda= new Scheda();
             this.Close();
             scheda.Show();
         }
@@ -71,7 +59,7 @@ namespace Volpe_Ragusa.csharp
 
         private void buttonImpostazioni_Click(object sender, EventArgs e)
         {
-            Impostazioni impostazioni = new Impostazioni(email);
+            Impostazioni impostazioni = new Impostazioni();
             this.Close();
             impostazioni.Show();
         }
