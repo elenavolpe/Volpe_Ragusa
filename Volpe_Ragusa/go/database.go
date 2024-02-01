@@ -28,6 +28,7 @@ func ConnectDB(username, password, host, port, dbName string) (*sql.DB, error) {
 }
 
 func deleteAccount(email string, done chan<- bool) {
+	//admin per collegarsi a mysql
 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
 	if err != nil {
 		log.Fatal(err)

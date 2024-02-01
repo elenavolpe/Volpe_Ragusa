@@ -23,6 +23,7 @@ namespace Volpe_Ragusa.csharp
             this.email = email;
             string nome=get_name(email);
             labelHeader.Text="Ecco la tua scheda "+nome;
+            //TO_DO inserire qui tutti i caricamenti
         }
 
         private string get_name(string email)

@@ -67,10 +67,22 @@ def get_recenti():
         return  exercise_manager.get_recent()
     
 @app.route('/get_name', methods=['POST'])
-def get_recenti():
+def get_nome():
     if request.method == 'POST':
         email = request.get_json()
         return  user_manager.get_name()
+    
+@app.route('/get_consigliati', methods=['POST'])
+def get_esercizi_consigliati():
+    if request.method == 'POST':
+        email = request.get_json()
+        return  exercise_manager.get_consigliati(email)
+    
+@app.route('/get_grafico_muscoli', methods=['POST'])
+def get_muscoli():
+    if request.method == 'POST':
+        email = request.get_json()
+        return  exercise_manager.get_grafico_muscoli(email)
 
 if __name__ == '__main__':
      app.run(host='0.0.0.0', port=5000, threaded=True) # Avvio il server Flask

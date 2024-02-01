@@ -22,6 +22,7 @@ namespace Volpe_Ragusa.csharp
             this.email = email;
             string nome=get_name(email);
             label1.Text="Ciao "+nome+", benvenuto in MyFitPlan";
+            //TO_DO inserire qui tutti i caricamenti
         }
 
         private string get_name(string email)
