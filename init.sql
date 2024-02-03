@@ -11,8 +11,8 @@ CREATE TABLE IF NOT EXISTS users (
     surname VARCHAR(255) NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
     pass VARCHAR(255) NOT NULL
-    workout_name VARCHAR(255) NOT NULL,
-    workout_description VARCHAR(255) NOT NULL,
+    workout_name VARCHAR(255) DEFAULT NULL,
+    workout_description VARCHAR(255) DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

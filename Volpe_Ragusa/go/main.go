@@ -29,16 +29,18 @@ func main() {
 		surname := r.FormValue("surname")
 		email := r.FormValue("email")
 		password := r.FormValue("password")
+		wp_name := r.FormValue("workout_name")
+		wp_desc := r.FormValue("workout_description")
 		usr := make(chan string) // Sarà la mail dell'utente se la registrazione è andata a buon fine, altrimenti "failure"
 		var s string
-		go signup(name, surname, email, password, usr)
+		go signup(name, surname, email, password, wp_name, wp_desc, usr)
 		s = <-usr
 		w.Write([]byte(s))
 	})
 
 	mux.HandleFunc("/deleteAccount", func(w http.ResponseWriter, r *http.Request) {
 		email := r.FormValue("email")
-		done := make(chan bool) // Sarà la mail dell'utente se la registrazione è andata a buon fine, altrimenti "failure"
+		done := make(chan bool)
 		var s string
 		go deleteAccount(email, done)
 		if <-done {
@@ -151,55 +153,8 @@ func main() {
 		}
 	})
 
-	mux.HandleFunc("/addWorkout", func(w http.ResponseWriter, r *http.Request) {
-		w_name := r.FormValue("w_name")
-		w_desc := r.FormValue("w_desc")
-		email := r.FormValue("email")
-		done := make(chan bool)
-		var s string
-		go addWorkoutplan(w_name, w_desc, email, done)
-		if <-done {
-			s = "success"
-		} else {
-			s = "failure"
-		}
-		w.Write([]byte(s))
-	})
-
-	mux.HandleFunc("/editWorkout", func(w http.ResponseWriter, r *http.Request) {
-		curr_name := r.FormValue("curr_name")
-		new_name := r.FormValue("new_name")
-		new_desc := r.FormValue("new_desc")
-		email := r.FormValue("email")
-		done := make(chan bool)
-		var s string
-		go editWorkoutplan(curr_name, new_name, new_desc, email, done)
-		if <-done {
-			s = "success"
-		} else {
-			s = "failure"
-		}
-		w.Write([]byte(s))
-	})
-
-	mux.HandleFunc("/deleteWorkout", func(w http.ResponseWriter, r *http.Request) {
-		name := r.FormValue("name")
-		desc := r.FormValue("desc")
-		email := r.FormValue("email")
-		done := make(chan bool)
-		var s string
-		go deleteWorkoutplan(name, desc, email, done)
-		if <-done {
-			s = "success"
-		} else {
-			s = "failure"
-		}
-		w.Write([]byte(s))
-	})
-
+	// Endpoints per le funzionalità di gestione degli esercizi nelle schede di allenamento
 	mux.HandleFunc("/addExerciseWorkout", func(w http.ResponseWriter, r *http.Request) {
-		wp_name := r.FormValue("wp_name")
-		wp_desc := r.FormValue("wp_desc")
 		email := r.FormValue("email")
 		ex_name := r.FormValue("ex_name")
 		sets := r.FormValue("sets")
@@ -223,7 +178,7 @@ func main() {
 		}
 		done := make(chan bool)
 		var s string
-		go addExerciseWorkoutplan(wp_name, wp_desc, email, ex_name, ex_sets, ex_reps, done)
+		go addExerciseWorkoutplan(email, ex_name, ex_sets, ex_reps, done)
 		if <-done {
 			s = "success"
 		} else {
@@ -233,8 +188,6 @@ func main() {
 	})
 
 	mux.HandleFunc("/editExerciseWorkout", func(w http.ResponseWriter, r *http.Request) {
-		wp_name := r.FormValue("wp_name")
-		wp_desc := r.FormValue("wp_desc")
 		email := r.FormValue("email")
 		ex_name := r.FormValue("ex_name")
 		sets := r.FormValue("sets")
@@ -258,7 +211,7 @@ func main() {
 		}
 		done := make(chan bool)
 		var s string
-		go editExerciseWorkoutplan(wp_name, wp_desc, email, ex_name, ex_sets, ex_reps, done)
+		go editExerciseWorkoutplan(email, ex_name, ex_sets, ex_reps, done)
 		if <-done {
 			s = "success"
 		} else {
@@ -268,13 +221,11 @@ func main() {
 	})
 
 	mux.HandleFunc("/deleteExerciseWorkout", func(w http.ResponseWriter, r *http.Request) {
-		wp_name := r.FormValue("wp_name")
-		wp_desc := r.FormValue("wp_desc")
 		email := r.FormValue("email")
 		ex_name := r.FormValue("ex_name")
 		done := make(chan bool)
 		var s string
-		go deleteExerciseWorkoutplan(wp_name, wp_desc, email, ex_name, done)
+		go deleteExerciseWorkoutplan(email, ex_name, done)
 		if <-done {
 			s = "success"
 		} else {
@@ -282,37 +233,6 @@ func main() {
 		}
 		w.Write([]byte(s))
 	})
-
-	// Endpoints per le funzionalità di gestione degli esercizi nelle schede di allenamento già esistenti
-	// mux.HandleFunc("/addExerciseWorkoutPlan", func(w http.ResponseWriter, r *http.Request) {
-	// 	workoutPlanName := r.FormValue("workoutPlanName")
-	// 	exerciseName := r.FormValue("exerciseName")
-	// 	sets := r.FormValue("sets")
-	// 	reps := r.FormValue("reps")
-	// 	done := make(chan bool)
-	// 	var s string
-	// 	go addExerciseWorkoutPlan(workoutPlanName, exerciseName, sets, reps, done)
-	// 	if <-done {
-	// 		s = "Success"
-	// 	} else {
-	// 		s = "Failure"
-	// 	}
-	// 	w.Write([]byte(s))
-	// })
-
-	// mux.HandleFunc("/deleteExerciseWorkoutPlan", func(w http.ResponseWriter, r *http.Request) {
-	// 	workoutPlanName := r.FormValue("workoutPlanName")
-	// 	exerciseName := r.FormValue("exerciseName")
-	// 	done := make(chan bool)
-	// 	var s string
-	// 	go deleteExerciseWorkoutPlan(workoutPlanName, exerciseName, done)
-	// 	if <-done {
-	// 		s = "Success"
-	// 	} else {
-	// 		s = "Failure"
-	// 	}
-	// 	w.Write([]byte(s))
-	// })
 
 	// Porta del server
 	port := 8080

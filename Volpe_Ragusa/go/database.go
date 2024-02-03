@@ -35,28 +35,53 @@ func deleteAccount(email string, done chan<- bool) {
 	}
 	defer db.Close()
 
-	deleteQuery := "DELETE FROM users WHERE email = ?"
-	_, err = db.Exec(deleteQuery, email)
+	uid := getUID(email)
+	if uid == -1 {
+		done <- false
+		return
+	}
+
+	tx, err := db.Begin()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Prima di cancellare l'utente, bisogna cancellare i dati relativi alla sua scheda
+	deleteQuery := "DELETE FROM workoutplan_exercises WHERE userid = ?"
+	_, err = tx.Exec(deleteQuery, uid)
+	if err != nil {
+		done <- false
+		tx.Rollback()
+		return
+	}
+
+	deleteQuery = "DELETE FROM users WHERE email = ?"
+	_, err = tx.Exec(deleteQuery, email)
+	if err != nil {
+		done <- false
+		tx.Rollback()
+		return
+	}
+
+	err = tx.Commit()
 	if err != nil {
 		done <- false
 		return
 	}
-	fmt.Println("Data deleted successfully!")
-
-	// Aggiungere poi queries per cancellare i dati relativi all'utente dalle altre tabelle
+	fmt.Println("All user data deleted successfully!")
 
 	done <- true
 }
 
-func signup(name, surname, email, password string, usr chan<- string) {
+func signup(name, surname, email, password, wp_name, wp_desc string, usr chan<- string) {
 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer db.Close()
 
-	signupQuery := "INSERT INTO users (name, surname, email, pass) VALUES (?, ?, ?, ?)"
-	_, err = db.Exec(signupQuery, name, surname, email, password)
+	signupQuery := "INSERT INTO users (name, surname, email, pass, workout_name, workout_description) VALUES (?, ?, ?, ?, ?, ?)"
+	_, err = db.Exec(signupQuery, name, surname, email, password, wp_name, wp_desc)
 	if err != nil {
 		usr <- "failure"
 		return
@@ -299,107 +324,6 @@ func getMostRecentExercises(limit_value int, exercises chan<- []Exercise) {
 }
 
 // Funzioni per la gestione delle schede di allenamento (creazione, modifica, eliminazione)
-func addWorkoutplan(name, description, user_email string, done chan<- bool) {
-	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer db.Close()
-
-	uid := getUID(user_email)
-	if uid == -1 {
-		done <- false
-		return
-	}
-
-	addQuery := "INSERT INTO workoutplans (name, description, userid) VALUES (?, ?, ?)"
-	_, err = db.Exec(addQuery, name, description, uid)
-	if err != nil {
-		done <- false
-		return
-	}
-	fmt.Println("Workout Plan added successfully!")
-
-	done <- true
-}
-
-func editWorkoutplan(old_name, new_name, new_description, user_email string, done chan<- bool) {
-	if new_name == "" && new_description == "" {
-		done <- false
-		return
-	}
-
-	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer db.Close()
-
-	uid := getUID(user_email)
-	if uid == -1 {
-		done <- false
-		return
-	}
-
-	// Inizio transazione db
-	tx, err := db.Begin()
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	if new_description != "" {
-		editQuery := "UPDATE workoutplans SET description = ? WHERE name = ?"
-		_, err = tx.Exec(editQuery, new_description, old_name)
-		if err != nil {
-			done <- false
-			tx.Rollback()
-			return
-		}
-		fmt.Println("Workout plan description edited successfully!")
-	}
-	if new_name != "" {
-		editQuery := "UPDATE workoutplans SET name = ? WHERE name = ?"
-		_, err = tx.Exec(editQuery, new_name, old_name)
-		if err != nil {
-			done <- false
-			tx.Rollback()
-			return
-		}
-		fmt.Println("Workout plan name edited successfully!")
-	}
-
-	err = tx.Commit()
-	if err != nil {
-		done <- false
-		return
-	}
-	fmt.Println("Transaction completed successfully!")
-
-	done <- true
-}
-
-func getWorkoutplanID(name, description, user_email string) (wp_id int) {
-	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer db.Close()
-
-	uid := getUID(user_email)
-	if uid == -1 {
-		return -1
-	}
-
-	getQuery := "SELECT id from workoutplans WHERE name = ? AND description = ? AND userid = ?"
-	err = db.QueryRow(getQuery, name, description, uid).Scan(&wp_id)
-	if err != nil {
-		return -1
-	}
-	fmt.Println("Workout plan ID found successfully!")
-
-	return
-}
-
 func deleteWorkoutplanExercises(wp_id, ex_id int) (done bool) {
 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
 	if err != nil {
@@ -420,7 +344,8 @@ func deleteWorkoutplanExercises(wp_id, ex_id int) (done bool) {
 	return err == nil
 }
 
-func deleteWorkoutplan(name, description, user_email string, done chan<- bool) {
+// Funzioni per la gestione dei dati relativi alle schede di allenamento
+func addExerciseWorkoutplan(user_email, ex_name string, ex_sets, ex_reps int, done chan<- bool) {
 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
 	if err != nil {
 		log.Fatal(err)
@@ -433,50 +358,14 @@ func deleteWorkoutplan(name, description, user_email string, done chan<- bool) {
 		return
 	}
 
-	wp_id := getWorkoutplanID(name, description, user_email)
-	if wp_id == -1 {
-		done <- false
-		return
-	}
-
-	if deleteWorkoutplanExercises(wp_id, -1) { // Prima di eliminare la scheda di allenamento, eliminare tutti gli esercizi associati
-		deleteQuery := "DELETE FROM workoutplans WHERE id = ?"
-		_, err = db.Exec(deleteQuery, wp_id)
-		if err != nil {
-			done <- false
-			return
-		}
-		fmt.Println("Workout plan deleted successfully!")
-	} else {
-		done <- false
-		return
-	}
-
-	done <- true
-}
-
-// Funzioni per la gestione dei dati relativi alle schede di allenamento
-func addExerciseWorkoutplan(wp_name, wp_desc, user_email, ex_name string, ex_sets, ex_reps int, done chan<- bool) {
-	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer db.Close()
-
-	wp_id := getWorkoutplanID(wp_name, wp_desc, user_email)
-	if wp_id == -1 {
-		done <- false
-		return
-	}
-
 	ex_id := getExerciseID(ex_name)
 	if ex_id == -1 {
 		done <- false
 		return
 	}
 
-	addQuery := "INSERT INTO workoutplan_exercises (workoutplanid, exerciseid, sets, reps) VALUES (?, ?, ?, ?)"
-	_, err = db.Exec(addQuery, wp_id, ex_id, ex_sets, ex_reps)
+	addQuery := "INSERT INTO workoutplan_exercises (userid, exerciseid, sets, reps) VALUES (?, ?, ?, ?)"
+	_, err = db.Exec(addQuery, uid, ex_id, ex_sets, ex_reps)
 	if err != nil {
 		done <- false
 		return
@@ -486,7 +375,7 @@ func addExerciseWorkoutplan(wp_name, wp_desc, user_email, ex_name string, ex_set
 	done <- true
 }
 
-func editExerciseWorkoutplan(wp_name, wp_desc, user_email, ex_name string, new_ex_sets, new_ex_reps int, done chan<- bool) {
+func editExerciseWorkoutplan(user_email, ex_name string, new_ex_sets, new_ex_reps int, done chan<- bool) {
 	if new_ex_sets == -1 && new_ex_reps == -1 {
 		done <- false
 		return
@@ -498,8 +387,8 @@ func editExerciseWorkoutplan(wp_name, wp_desc, user_email, ex_name string, new_e
 	}
 	defer db.Close()
 
-	wp_id := getWorkoutplanID(wp_name, wp_desc, user_email)
-	if wp_id == -1 {
+	uid := getUID(user_email)
+	if uid == -1 {
 		done <- false
 		return
 	}
@@ -516,8 +405,8 @@ func editExerciseWorkoutplan(wp_name, wp_desc, user_email, ex_name string, new_e
 	}
 
 	if new_ex_sets != -1 {
-		editQuery := "UPDATE workoutplan_exercises SET sets = ?  WHERE workoutplanid = ? AND exerciseid = ?"
-		_, err = tx.Exec(editQuery, wp_id, ex_id, new_ex_sets)
+		editQuery := "UPDATE workoutplan_exercises SET sets = ?  WHERE userid = ? AND exerciseid = ?"
+		_, err = tx.Exec(editQuery, uid, ex_id, new_ex_sets)
 		if err != nil {
 			done <- false
 			tx.Rollback()
@@ -527,8 +416,8 @@ func editExerciseWorkoutplan(wp_name, wp_desc, user_email, ex_name string, new_e
 	}
 
 	if new_ex_reps != -1 {
-		editQuery := "UPDATE workoutplan_exercises SET reps = ?  WHERE workoutplanid = ? AND exerciseid = ?"
-		_, err = tx.Exec(editQuery, wp_id, ex_id, new_ex_reps)
+		editQuery := "UPDATE workoutplan_exercises SET reps = ?  WHERE userid = ? AND exerciseid = ?"
+		_, err = tx.Exec(editQuery, uid, ex_id, new_ex_reps)
 		if err != nil {
 			done <- false
 			tx.Rollback()
@@ -547,15 +436,15 @@ func editExerciseWorkoutplan(wp_name, wp_desc, user_email, ex_name string, new_e
 	done <- true
 }
 
-func deleteExerciseWorkoutplan(wp_name, wp_desc, user_email, ex_name string, done chan<- bool) {
+func deleteExerciseWorkoutplan(user_email, ex_name string, done chan<- bool) {
 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer db.Close()
 
-	wp_id := getWorkoutplanID(wp_name, wp_desc, user_email)
-	if wp_id == -1 {
+	uid := getUID(user_email)
+	if uid == -1 {
 		done <- false
 		return
 	}
@@ -566,8 +455,8 @@ func deleteExerciseWorkoutplan(wp_name, wp_desc, user_email, ex_name string, don
 		return
 	}
 
-	deleteQuery := "DELETE FROM workoutplan_exercises WHERE wp_id = ? AND ex_id = ?"
-	_, err = db.Exec(deleteQuery, wp_id, ex_id)
+	deleteQuery := "DELETE FROM workoutplan_exercises WHERE uid = ? AND ex_id = ?"
+	_, err = db.Exec(deleteQuery, uid, ex_id)
 	if err != nil {
 		done <- false
 		return
@@ -576,43 +465,3 @@ func deleteExerciseWorkoutplan(wp_name, wp_desc, user_email, ex_name string, don
 
 	done <- true
 }
-
-// ANCORA DA FARE!!!
-// Funzioni per la gestione dei dati relativi alle schede di allenamento già esistenti (Non sono per nulla corrette, era un vecchio abbozzo...)
-// func addExerciseWorkoutplan(workoutplanName, exerciseName, sets, reps string, done chan<- bool) {
-// 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
-// 	if err != nil {
-// 		done <- false
-//		return
-// 	}
-// 	defer db.Close()
-
-// 	addExerciseWorkoutplanQuery := "INSERT INTO workoutplan_exercise (workout_plan_name, exercise_name, sets, reps) VALUES (?, ?, ?, ?)"
-// 	_, err = db.Exec(addExerciseWorkoutplanQuery, workoutplanName, exerciseName, sets, reps)
-// 	if err != nil {
-// 		done <- false
-//		return
-// 	}
-// 	fmt.Println("Exercise added successfully!")
-
-// 	done <- true
-// }
-
-// func deleteExerciseWorkoutplan(workoutplanName, exerciseName string, done chan<- bool) {
-// 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
-// 	if err != nil {
-// 		done <- false
-//		return
-// 	}
-// 	defer db.Close()
-
-// 	deleteExerciseWorkoutplanQuery := "DELETE FROM workout_plan_exercise WHERE workout_plan_name = ? AND exercise_name = ?"
-// 	_, err = db.Exec(deleteExerciseWorkoutplanQuery, workoutplanName, exerciseName)
-// 	if err != nil {
-// 		done <- false
-//		return
-// 	}
-// 	fmt.Println("Exercise deleted successfully!")
-
-//		done <- true
-//	}
