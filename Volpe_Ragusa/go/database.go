@@ -324,6 +324,25 @@ func getMostRecentExercises(limit_value int, exercises chan<- []Exercise) {
 }
 
 // Funzioni per la gestione delle schede di allenamento (tabella users - campi workout_name e workout_description)
+func addUserWorkout(user_email, wp_name, wp_desc string, done chan<- bool) {
+	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
+	addQuery := "UPDATE users SET workout_name = ?, workout_description = ? WHERE email = ?"
+	_, err = db.Exec(addQuery, wp_name, wp_desc, user_email)
+	if err != nil {
+		done <- false
+		return
+	}
+	fmt.Println("Workout plan for user added successfully!")
+
+	done <- true
+}
+
+// func editUserWorkout()
 
 // Funzioni per la gestione dei dati relativi alle schede di allenamento
 func addExerciseWorkoutplan(user_email, ex_name string, ex_sets, ex_reps int, done chan<- bool) {

@@ -151,6 +151,22 @@ func main() {
 		}
 	})
 
+	// Endpoints per le funzionalità di gestione delle schede degli utenti
+	mux.HandleFunc("/addWorkout", func(w http.ResponseWriter, r *http.Request) {
+		email := r.FormValue("email")
+		wp_name := r.FormValue("workout_name")
+		wp_desc := r.FormValue("workout_desc")
+		done := make(chan bool)
+		var s string
+		go addUserWorkout(email, wp_name, wp_desc, done)
+		if <-done {
+			s = "success"
+		} else {
+			s = "failure"
+		}
+		w.Write([]byte(s))
+	})
+
 	// Endpoints per le funzionalità di gestione degli esercizi nelle schede di allenamento
 	mux.HandleFunc("/addExerciseWorkout", func(w http.ResponseWriter, r *http.Request) {
 		email := r.FormValue("email")
