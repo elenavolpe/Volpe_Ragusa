@@ -24,16 +24,14 @@ func main() {
 		fmt.Fprintf(w, "Contact us")
 	})
 
-	mux.HandleFunc("/register", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/signup", func(w http.ResponseWriter, r *http.Request) {
 		name := r.FormValue("name")
 		surname := r.FormValue("surname")
 		email := r.FormValue("email")
 		password := r.FormValue("password")
-		wp_name := r.FormValue("workout_name")
-		wp_desc := r.FormValue("workout_description")
 		usr := make(chan string) // Sarà la mail dell'utente se la registrazione è andata a buon fine, altrimenti "failure"
 		var s string
-		go signup(name, surname, email, password, wp_name, wp_desc, usr)
+		go signup(name, surname, email, password, usr)
 		s = <-usr
 		w.Write([]byte(s))
 	})

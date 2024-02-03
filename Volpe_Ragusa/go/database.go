@@ -73,15 +73,15 @@ func deleteAccount(email string, done chan<- bool) {
 	done <- true
 }
 
-func signup(name, surname, email, password, wp_name, wp_desc string, usr chan<- string) {
+func signup(name, surname, email, password string, usr chan<- string) {
 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer db.Close()
 
-	signupQuery := "INSERT INTO users (name, surname, email, pass, workout_name, workout_description) VALUES (?, ?, ?, ?, ?, ?)"
-	_, err = db.Exec(signupQuery, name, surname, email, password, wp_name, wp_desc)
+	signupQuery := "INSERT INTO users (name, surname, email, pass) VALUES (?, ?, ?, ?)"
+	_, err = db.Exec(signupQuery, name, surname, email, password)
 	if err != nil {
 		usr <- "failure"
 		return
@@ -323,26 +323,7 @@ func getMostRecentExercises(limit_value int, exercises chan<- []Exercise) {
 	exercises <- exs
 }
 
-// Funzioni per la gestione delle schede di allenamento (creazione, modifica, eliminazione)
-func deleteWorkoutplanExercises(wp_id, ex_id int) (done bool) {
-	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer db.Close()
-
-	if ex_id == -1 { // Elimino tutti gli esercizi associati alla scheda di allenamento con id "wp_id"
-		deleteQuery := "DELETE FROM workoutplan_exercises WHERE workoutplanid = ?"
-		_, err = db.Exec(deleteQuery, wp_id)
-
-		return err == nil
-	}
-
-	deleteQuery := "DELETE FROM workoutplan_exercises WHERE workoutplanid = ? AND exerciseid = ?"
-	_, err = db.Exec(deleteQuery, wp_id, ex_id)
-
-	return err == nil
-}
+// Funzioni per la gestione delle schede di allenamento (tabella users - campi workout_name e workout_description)
 
 // Funzioni per la gestione dei dati relativi alle schede di allenamento
 func addExerciseWorkoutplan(user_email, ex_name string, ex_sets, ex_reps int, done chan<- bool) {
