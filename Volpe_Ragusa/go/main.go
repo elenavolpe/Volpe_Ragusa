@@ -86,17 +86,30 @@ func main() {
 		w.Write([]byte(s))
 	})
 
-	mux.HandleFunc("/editExercise", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/editExerciseName", func(w http.ResponseWriter, r *http.Request) {
 		oldName := r.FormValue("oldName")
 		newName := r.FormValue("newName")
+		done := make(chan bool)
+		var s string
+		go editExerciseName(oldName, newName, done)
+		if <-done {
+			s = "success"
+		} else {
+			s = "failure"
+		}
+		w.Write([]byte(s))
+	})
+
+	mux.HandleFunc("/editExerciseDesc", func(w http.ResponseWriter, r *http.Request) {
+		oldName := r.FormValue("oldName")
 		newDescription := r.FormValue("newDescription")
 		done := make(chan bool)
 		var s string
-		go editExercise(oldName, newName, newDescription, done)
+		go editExerciseDescription(oldName, newDescription, done)
 		if <-done {
-			s = "Success"
+			s = "success"
 		} else {
-			s = "Failure"
+			s = "failure"
 		}
 		w.Write([]byte(s))
 	})
@@ -152,13 +165,39 @@ func main() {
 	})
 
 	// Endpoints per le funzionalità di gestione delle schede degli utenti
-	mux.HandleFunc("/addWorkout", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/updateWorkoutName", func(w http.ResponseWriter, r *http.Request) {
 		email := r.FormValue("email")
 		wp_name := r.FormValue("workout_name")
+		done := make(chan bool)
+		var s string
+		go updateUserWorkoutName(email, wp_name, done)
+		if <-done {
+			s = "success"
+		} else {
+			s = "failure"
+		}
+		w.Write([]byte(s))
+	})
+
+	mux.HandleFunc("/updateWorkoutDesc", func(w http.ResponseWriter, r *http.Request) {
+		email := r.FormValue("email")
 		wp_desc := r.FormValue("workout_desc")
 		done := make(chan bool)
 		var s string
-		go addUserWorkout(email, wp_name, wp_desc, done)
+		go updateUserWorkoutDescription(email, wp_desc, done)
+		if <-done {
+			s = "success"
+		} else {
+			s = "failure"
+		}
+		w.Write([]byte(s))
+	})
+
+	mux.HandleFunc("/deleteUserWorkout", func(w http.ResponseWriter, r *http.Request) {
+		email := r.FormValue("email")
+		done := make(chan bool)
+		var s string
+		go deleteUserWorkout(email, done)
 		if <-done {
 			s = "success"
 		} else {
@@ -173,22 +212,15 @@ func main() {
 		ex_name := r.FormValue("ex_name")
 		sets := r.FormValue("sets")
 		reps := r.FormValue("reps")
-		ex_sets := -1
-		ex_reps := -1
-		var err error
-		if sets != "" {
-			ex_sets, err = strconv.Atoi(sets)
-			if err != nil {
-				http.Error(w, "Invalid limit parameter", http.StatusBadRequest)
-				return
-			}
+		ex_sets, err := strconv.Atoi(sets)
+		if err != nil {
+			http.Error(w, "Invalid limit parameter", http.StatusBadRequest)
+			return
 		}
-		if reps != "" {
-			ex_reps, err = strconv.Atoi(reps)
-			if err != nil {
-				http.Error(w, "Invalid limit parameter", http.StatusBadRequest)
-				return
-			}
+		ex_reps, err := strconv.Atoi(reps)
+		if err != nil {
+			http.Error(w, "Invalid limit parameter", http.StatusBadRequest)
+			return
 		}
 		done := make(chan bool)
 		var s string
@@ -201,31 +233,38 @@ func main() {
 		w.Write([]byte(s))
 	})
 
-	mux.HandleFunc("/editExerciseWorkout", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/editExerciseSetsWorkout", func(w http.ResponseWriter, r *http.Request) {
 		email := r.FormValue("email")
 		ex_name := r.FormValue("ex_name")
 		sets := r.FormValue("sets")
-		reps := r.FormValue("reps")
-		ex_sets := -1
-		ex_reps := -1
-		var err error
-		if sets != "" {
-			ex_sets, err = strconv.Atoi(sets)
-			if err != nil {
-				http.Error(w, "Invalid limit parameter", http.StatusBadRequest)
-				return
-			}
-		}
-		if reps != "" {
-			ex_reps, err = strconv.Atoi(reps)
-			if err != nil {
-				http.Error(w, "Invalid limit parameter", http.StatusBadRequest)
-				return
-			}
+		ex_sets, err := strconv.Atoi(sets)
+		if err != nil {
+			http.Error(w, "Invalid limit parameter", http.StatusBadRequest)
+			return
 		}
 		done := make(chan bool)
 		var s string
-		go editExerciseWorkoutplan(email, ex_name, ex_sets, ex_reps, done)
+		go editExerciseSetsWorkoutplan(email, ex_name, ex_sets, done)
+		if <-done {
+			s = "success"
+		} else {
+			s = "failure"
+		}
+		w.Write([]byte(s))
+	})
+
+	mux.HandleFunc("/editExerciseRepsWorkout", func(w http.ResponseWriter, r *http.Request) {
+		email := r.FormValue("email")
+		ex_name := r.FormValue("ex_name")
+		reps := r.FormValue("reps")
+		ex_reps, err := strconv.Atoi(reps)
+		if err != nil {
+			http.Error(w, "Invalid limit parameter", http.StatusBadRequest)
+			return
+		}
+		done := make(chan bool)
+		var s string
+		go editExerciseRepsWorkoutplan(email, ex_name, ex_reps, done)
 		if <-done {
 			s = "success"
 		} else {
