@@ -11,6 +11,9 @@ CREATE TABLE IF NOT EXISTS users (
     surname VARCHAR(255) NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
     pass VARCHAR(255) NOT NULL
+    workout_name VARCHAR(255) NOT NULL,
+    workout_description VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS exercises (
@@ -22,24 +25,14 @@ CREATE TABLE IF NOT EXISTS exercises (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS workoutplans (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    description VARCHAR(255) NOT NULL,
-    userid INT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE (name, description, userid),
-    FOREIGN KEY (userid) REFERENCES users(id)
-);
-
--- Tabella di relazione uno a molti tra workoutplan ed exercise
+-- Tabella di relazione uno a molti tra users ed exercise
 CREATE TABLE IF NOT EXISTS workoutplan_exercises (
-    workoutplanid INT NOT NULL,
+    userid INT NOT NULL,
     exerciseid INT NOT NULL,
     sets INT NOT NULL, -- Serie
     reps INT NOT NULL, -- Ripetizioni
-    PRIMARY KEY (workoutplanid, exerciseid),
-    FOREIGN KEY (workoutplanid) REFERENCES workoutplans(id),
+    PRIMARY KEY (userid, exerciseid),
+    FOREIGN KEY (userid) REFERENCES users(id),
     FOREIGN KEY (exerciseid) REFERENCES exercises(id)
 );
 
