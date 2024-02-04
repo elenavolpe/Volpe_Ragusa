@@ -9,6 +9,14 @@ import (
 )
 
 func main() {
+	// Instanzio un nuovo mux per non usare quello di default ("DefaultServeMux") come best-practice del pacchetto go.
+
+	// It took me a long time to realise it isn't anything special. The default servemux is just a plain ol' servemux like we've already been using, which gets instantiated by default when the net/http package is used and is stored in a global variable. Here's the relevant line from the Go source:
+
+	// 	Generally speaking, I recommended against using the default servemux because it makes your code less clear and explicit and it poses a security risk. Because it's stored in a global variable, any package is able to access it and register a route — including any third-party packages that your application imports. If one of those third-party packages is compromised, they could use the default servemux to expose a malicious handler to the web.
+	// Instead it's better to use your own locally-scoped servemux, like we have been so far. But if you do decide to use the default servemux...
+	// The net/http package provides a couple of shortcuts for registering routes with the default servemux: http.Handle() and http.HandleFunc(). These do exactly the same as their namesake functions we've already looked at, with the difference that they add handlers to the default servemux instead of one that you've created.
+	// Additionally, http.ListenAndServe() will fall back to using the default servemux if no other handler is provided (that is, the second argument is set to nil).
 	mux := http.NewServeMux()
 
 	// Definizione handlers richieste per le diverse routes gestite dal multiplexer/router mux
