@@ -49,4 +49,13 @@ CREATE TABLE IF NOT EXISTS exercise_muscles (
     FOREIGN KEY (muscleid) REFERENCES muscles(id)
 );
 
+CREATE TABLE IF NOT EXISTS preferred_muscles (
+    userid INT NOT NULL,
+    muscleid INT NOT NULL,
+    PRIMARY KEY (userid, muscleid),
+    FOREIGN KEY (userid) REFERENCES users(id),
+    FOREIGN KEY (muscleid) REFERENCES muscles(id)
+);
+)
+
 INSERT INTO users (name, surname, email, pass) VALUES ("Francesco", "Franceschini", "francesco.franceschini@fakemail.com", "password");

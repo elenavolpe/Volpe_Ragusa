@@ -239,6 +239,35 @@ func main() {
 		w.Write([]byte(s))
 	})
 
+	// Endpoints per le funzionalità di gestione dei muscoli preferiti dell'utente
+	mux.HandleFunc("/addPreferredMuscle", func(w http.ResponseWriter, r *http.Request) {
+		email := r.FormValue("email")
+		muscle_name := r.FormValue("muscle_name")
+		done := make(chan bool)
+		var s string
+		go addPreferredMuscle(email, muscle_name, done)
+		if <-done {
+			s = "success"
+		} else {
+			s = "failure"
+		}
+		w.Write([]byte(s))
+	})
+
+	mux.HandleFunc("/deletePreferredMuscle", func(w http.ResponseWriter, r *http.Request) {
+		email := r.FormValue("email")
+		muscle_name := r.FormValue("muscle_name")
+		done := make(chan bool)
+		var s string
+		go deletePreferredMuscle(email, muscle_name, done)
+		if <-done {
+			s = "success"
+		} else {
+			s = "failure"
+		}
+		w.Write([]byte(s))
+	})
+
 	// Endpoints per le funzionalità di gestione delle schede degli utenti
 	mux.HandleFunc("/updateWorkoutName", func(w http.ResponseWriter, r *http.Request) {
 		email := r.FormValue("email")
@@ -386,10 +415,19 @@ func main() {
 
 	mux.HandleFunc("/getPreferredMuscles", func(w http.ResponseWriter, r *http.Request) {
 		//TO_DO, riceve in input l'email e ritorna la lista dei muscoli preferiti
+		email := r.FormValue("email")
+		muscles := make(chan []string)
+		go getPreferredMuscles(email, muscles)
+		w.Header().Set("Content-Type", "application/json")
+		err := json.NewEncoder(w).Encode(<-muscles)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
 	})
 
 	mux.HandleFunc("/getProposedExercises", func(w http.ResponseWriter, r *http.Request) {
 		//TO_DO, ritorna gli esercizi proposti in base ai muscoli preferiti(passati in input)
+
 	})
 
 	// Porta del server
