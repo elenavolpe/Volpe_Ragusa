@@ -72,10 +72,10 @@ def get_name(email):
             return f"Errore: {e}"
         
 def get_exercise(account):
-    if is_valid_email(account['email']):
+    if is_valid_email(account):
         try:
-            r = connect_go_server('getWorkoutPlan', account['email'])
-            #devo ritornarli
+            r = connect_go_server('getWorkoutPlan', account)
+            return r
         except TypeError as e:
             return f"Errore: {e}"
     else:
