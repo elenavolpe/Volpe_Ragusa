@@ -84,5 +84,21 @@ def get_muscoli():
         email = request.get_json()
         return  exercise_manager.get_grafico_muscoli(email)
 
+#aggiunge esercizio alla scheda del cliente
+@app.route('/aggiungi_esercizio', methods=['POST'])
+def aggiungi_esercizio():
+    if request.method == 'POST':
+        email = request.form.get('email')
+        esercizio = request.form.get('nomeEsercizio')
+        return  user_manager.aggiungi_esercizio_scheda(email,esercizio)
+
+#elimina esercizio dalla scheda del cliente
+@app.route('/elimina_esercizio', methods=['POST'])
+def elimina_esercizio():
+    if request.method == 'POST':
+        email = request.form.get('email')
+        esercizio = request.form.get('nomeEsercizio')
+        return  user_manager.elimina_esercizio_scheda(email,esercizio)
+
 if __name__ == '__main__':
      app.run(host='0.0.0.0', port=5000, threaded=True) # Avvio il server Flask

@@ -79,7 +79,6 @@ namespace Volpe_Ragusa.csharp
             login.Show();
         }
 
-        //vedi come chiamare questa funzione
         public void carica_esercizi()
         {
             using (WebClient client = new WebClient())
@@ -103,14 +102,25 @@ namespace Volpe_Ragusa.csharp
                     // Aggiungi dinamicamente i controlli al form
                     for (int i = 0; i < exercises.Length; i++)
                     {
+                        FlowLayoutPanel panel= new FlowLayoutPanel();
+                        panel.FlowDirection=FlowDirection.LeftToRight;
+                        panel.AutoSize=true;
+
                         Label label = new Label();
+                        label.Text=exercises[i];
+                        panel.Controls.Add(label);
+                        
+                        Button button = new Button();
+                        button.Size= new System.Drawing.Size(95,32);
+                        //TO_DO si dovrebbe fare un controllo se è già aggiunto o meno
+                        button.Text="aggiungi";
+                        button.Click += aggiungiEsercizio;
+                        panel.Controls.Add(button);
                         //vediamo cosa mi torna il json, creo label nome e label descrizione
-                        /*label.Text = $"Esercizio {i + 1}: {exercises[i]}";
-                        label.Location = new System.Drawing.Point(20, 50 + 30 * i);
-                        label.Size = new System.Drawing.Size(200, 20);
-                        Controls.Add(label);*/
-                        label.Text=exercises[i];//TO_DO dipende cosa ritorna
-                        PanelExercises.Controls.Add(label);
+                        //TO_DO aggiungere evento che aggiunge l'esercizio al bottone
+                        //button.Click+=aggiungiEsercizio();
+                        //TO_DO sistemare grandezza di questo panel
+                        PanelExercises.Controls.Add(panel);
                     }
                 }
                 catch (WebException ex)
@@ -121,85 +131,146 @@ namespace Volpe_Ragusa.csharp
             }
         }
 
-        //vedi come chiamare questa funzione
         public void carica_esercizi_preferiti()
         {
             using (WebClient client = new WebClient())
             {
                 try
                 {
-                    // URL del server Python
                     string url = "http://localhost:5000/get_esercizi_preferiti";
-                    // Creazione dei dati da inviare come parte della richiesta POST
                     NameValueCollection postData = new NameValueCollection
                     {
                         { "email", this.email }
-                        // Aggiungi altri parametri se necessario
                     };
-                    // Invio della richiesta POST sincrona
                     byte[] responseBytes = client.UploadValues(url, "POST", postData);
-                    // Converti la risposta in una stringa
                     string responseBody = System.Text.Encoding.UTF8.GetString(responseBytes);
-                    // metto quello che torna nel vettore di esercizi
                     string[] exercises = JsonConvert.DeserializeObject<string[]>(responseBody);
-                    // Aggiungi dinamicamente i controlli al form
                     for (int i = 0; i < exercises.Length; i++)
                     {
+                        FlowLayoutPanel panel= new FlowLayoutPanel();
+                        panel.FlowDirection=FlowDirection.LeftToRight;
+                        panel.AutoSize=true;
+
                         Label label = new Label();
-                        //vediamo cosa mi torna il json, creo label nome e label descrizione
-                        /*label.Text = $"Esercizio {i + 1}: {exercises[i]}";
-                        label.Location = new System.Drawing.Point(20, 50 + 30 * i);
-                        label.Size = new System.Drawing.Size(200, 20);
-                        Controls.Add(label);*/
                         label.Text=exercises[i];
-                        PanelPreferred.Controls.Add(label);
+                        panel.Controls.Add(label);
+                        
+                        Button button = new Button();
+                        button.Size= new System.Drawing.Size(95,32);
+                        //TO_DO si dovrebbe fare un controllo se è già aggiunto o meno
+                        button.Text="aggiungi";
+                        button.Click += aggiungiEsercizio;
+                        panel.Controls.Add(button);
+                        //vediamo cosa mi torna il json, creo label nome e label descrizione
+                        //TO_DO aggiungere evento che aggiunge l'esercizio al bottone
+                        //button.Click+=aggiungiEsercizio();
+                        //TO_DO sistemare grandezza di questo panel
+                        PanelPreferred.Controls.Add(panel);
                     }
                 }
                 catch (WebException ex)
                 {
-                    // Gestisci eventuali errori durante la richiesta HTTP
                     Console.WriteLine($"Errore durante la richiesta HTTP: {ex.Message}");
                 }
             }
         }
 
-        //vedi come chiamare questa funzione
         public void carica_esercizi_novità()
         {
             using (WebClient client = new WebClient())
             {
                 try
                 {
-                    // URL del server Python
                     string url = "http://localhost:5000/get_esercizi_recenti";
-                    // Creazione dei dati da inviare come parte della richiesta POST
                     NameValueCollection postData = new NameValueCollection
                     {
                         { "email", this.email }
-                        // Aggiungi altri parametri se necessario
                     };
-                    // Invio della richiesta POST sincrona
                     byte[] responseBytes = client.UploadValues(url, "POST", postData);
-                    // Converti la risposta in una stringa
                     string responseBody = System.Text.Encoding.UTF8.GetString(responseBytes);
-                    // metto quello che torna nel vettore di esercizi
                     string[] exercises = JsonConvert.DeserializeObject<string[]>(responseBody);
-                    // Aggiungi dinamicamente i controlli al form
                     for (int i = 0; i < exercises.Length; i++)
                     {
+                        FlowLayoutPanel panel= new FlowLayoutPanel();
+                        panel.FlowDirection=FlowDirection.LeftToRight;
+                        panel.AutoSize=true;
+
                         Label label = new Label();
-                        //vediamo cosa mi torna il json, creo label nome e label descrizione
-                        /*label.Text = $"Esercizio {i + 1}: {exercises[i]}";
-                        label.Location = new System.Drawing.Point(20, 50 + 30 * i);
-                        label.Size = new System.Drawing.Size(200, 20);
-                        Controls.Add(label);*/
                         label.Text=exercises[i];
-                        PanelNovità.Controls.Add(label);
+                        panel.Controls.Add(label);
+                        
+                        Button button = new Button();
+                        button.Size= new System.Drawing.Size(95,32);
+                        //TO_DO si dovrebbe fare un controllo se è già aggiunto o meno
+                        button.Text="aggiungi";
+                        button.Click += aggiungiEsercizio;
+                        panel.Controls.Add(button);
+                        //vediamo cosa mi torna il json, creo label nome e label descrizione
+                        //TO_DO aggiungere evento che aggiunge l'esercizio al bottone
+                        //TO_DO sistemare grandezza di questo panel
+                        PanelNovità.Controls.Add(panel);
                     }
                 }
                 catch (WebException ex)
                 {
-                    // Gestisci eventuali errori durante la richiesta HTTP
+                    Console.WriteLine($"Errore durante la richiesta HTTP: {ex.Message}");
+                }
+            }
+        }
+
+        private void aggiungiEsercizio(object sender, EventArgs e)
+        {
+            Button button = sender as Button;
+            button.Text="elimina";
+            button.Click -= aggiungiEsercizio;
+            button.Click += eliminaEsercizio;
+            Control contenitore = button.Parent;
+            Label label = contenitore.Controls.OfType<Label>().FirstOrDefault();
+            string nomeEsercizio=label.Text;
+            using (WebClient client = new WebClient())
+            {
+                try
+                {
+                    string url = "http://localhost:5000/aggiungi_esercizio";
+                    NameValueCollection postData = new NameValueCollection
+                    {
+                        { "email", this.email },
+                        {"esercizio", nomeEsercizio}
+                    };
+                    byte[] responseBytes = client.UploadValues(url, "POST", postData);
+                    string responseBody = System.Text.Encoding.UTF8.GetString(responseBytes);
+                }
+                catch (WebException ex)
+                {
+                    Console.WriteLine($"Errore durante la richiesta HTTP: {ex.Message}");
+                }
+            }
+        }
+
+        private void eliminaEsercizio(object sender, EventArgs e)
+        {
+            Button button = sender as Button;
+            button.Text="aggiungi";
+            button.Click -= eliminaEsercizio;
+            button.Click += aggiungiEsercizio;
+            Control contenitore = button.Parent;
+            Label label = contenitore.Controls.OfType<Label>().FirstOrDefault();
+            string nomeEsercizio=label.Text;
+            using (WebClient client = new WebClient())
+            {
+                try
+                {
+                    string url = "http://localhost:5000/elimina_esercizio";
+                    NameValueCollection postData = new NameValueCollection
+                    {
+                        { "email", this.email },
+                        {"esercizio", nomeEsercizio}
+                    };
+                    byte[] responseBytes = client.UploadValues(url, "POST", postData);
+                    string responseBody = System.Text.Encoding.UTF8.GetString(responseBytes);
+                }
+                catch (WebException ex)
+                {
                     Console.WriteLine($"Errore durante la richiesta HTTP: {ex.Message}");
                 }
             }

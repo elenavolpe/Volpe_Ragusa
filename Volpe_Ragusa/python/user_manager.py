@@ -84,10 +84,28 @@ def get_exercise(account):
 def get_muscoli_preferiti(email):
     if is_valid_email(email):
         try:
-            #TO_DO implementare questa funziona in go
+            #TO_DO implementare questa funzione in go
             r = connect_go_server('getPreferredMuscles', email)
             #devo ritornarli
         except TypeError as e:
             return f"Errore: {e}"
     else:
         return "email utente non valida"
+
+#aggiunge alla scheda di email l'esercizio
+def aggiungi_esercizio_scheda(email,esercizio):
+    try:
+        #TO_DO da sistemare, ho visto che hai aggiunto ripetute e cose del genere
+        r = connect_go_server('addExerciseWorkout', email,esercizio)
+        #devo ritornare ok
+    except TypeError as e:
+        return f"Errore: {e}"
+
+#elimina dalla scheda di email l'esercizio
+def elimina_esercizio_scheda(email,esercizio):
+    try:
+        #TO_DO da sistemare anche su go
+        r = connect_go_server('deleteExerciseWorkout', email,esercizio)
+        #devo ritornare ok
+    except TypeError as e:
+        return f"Errore: {e}"

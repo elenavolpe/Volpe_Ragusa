@@ -45,7 +45,6 @@ namespace Volpe_Ragusa.csharp
             {
                 try
                 {
-                    // URL del server Python
                     string url = "http://localhost:5000/get_scheda";
                     // Creazione dei dati da inviare come parte della richiesta POST
                     NameValueCollection postData = new NameValueCollection
@@ -53,24 +52,25 @@ namespace Volpe_Ragusa.csharp
                         { "email", this.email }
                         // Aggiungi altri parametri se necessario
                     };
-                    // Invio della richiesta POST sincrona
                     byte[] responseBytes = client.UploadValues(url, "POST", postData);
-                    // Converti la risposta in una stringa
                     string responseBody = System.Text.Encoding.UTF8.GetString(responseBytes);
                     // metto quello che torna nel vettore di esercizi
                     string[] exercises = JsonConvert.DeserializeObject<string[]>(responseBody);
-                    // Aggiungi dinamicamente i controlli al form
                     for (int i = 0; i < exercises.Length; i++)
                     {   
                         FlowLayoutPanel panel= new FlowLayoutPanel();
                         panel.FlowDirection=FlowDirection.LeftToRight;
+                        panel.AutoSize=true;
+
                         Label label = new Label();
-                        Button button = new Button();
-                        //vediamo cosa mi torna il json, creo label nome e label descrizione
                         label.Text=exercises[i];
-                        button.Text="elimina";
                         panel.Controls.Add(label);
+
+                        Button button = new Button();
+                        button.Size= new System.Drawing.Size(90,30);
+                        button.Text="elimina";
                         panel.Controls.Add(button);
+                        //vediamo cosa mi torna il json, creo label nome e label descrizione
                         //TO_DO aggiungere evento che elimina l'esercizio al bottone
                         //button.Click+=eliminaEsercizio();
                         //TO_DO sistemare grandezza di questo panel
@@ -79,7 +79,6 @@ namespace Volpe_Ragusa.csharp
                 }
                 catch (WebException ex)
                 {
-                    // Gestisci eventuali errori durante la richiesta HTTP
                     Console.WriteLine($"Errore durante la richiesta HTTP: {ex.Message}");
                 }
             }
