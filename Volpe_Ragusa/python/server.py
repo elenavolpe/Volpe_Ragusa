@@ -81,6 +81,13 @@ def get_esercizi_consigliati():
     if request.method == 'POST':
         email = request.get_json()
         return  exercise_manager.get_consigliati(email)
+    
+#ritorna gli esercizi consigliati in base ai muscoli preferiti    
+@app.route('/get_trascurati', methods=['POST'])
+def get_esercizi_trascurati():
+    if request.method == 'POST':
+        email = request.get_json()
+        return  exercise_manager.get_trascurati(email)
 
 #aggiunge esercizio alla scheda del cliente
 @app.route('/aggiungi_esercizio', methods=['POST'])
