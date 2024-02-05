@@ -458,7 +458,6 @@ func deleteMuscle(name string, done chan<- bool) {
 }
 
 // Funzioni per la gestione dei dati dei muscoli relativamente agli esercizi
-
 func addMuscleExercise(ex_name, muscle_name string, done chan<- bool) {
 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
 	if err != nil {
@@ -473,7 +472,7 @@ func addMuscleExercise(ex_name, muscle_name string, done chan<- bool) {
 	}
 
 	muscle_id := getMuscleID(muscle_name)
-	if ex_id == -1 {
+	if muscle_id == -1 {
 		done <- false
 		return
 	}
@@ -510,6 +509,67 @@ func deleteMuscleExercise(ex_name, muscle_name string, done chan<- bool) {
 
 	deleteQuery := "DELETE FROM exercise_muscles WHERE exerciseid = ? AND muscleid = ?"
 	_, err = db.Exec(deleteQuery, ex_id, muscle_id)
+	if err != nil {
+		done <- false
+		return
+	}
+	fmt.Println("Query run successfully!")
+
+	done <- true
+}
+
+// Funzioni per la gestione dei dati dei muscoli preferiti dell'utente
+func addPreferredMuscle(user_email, muscle_name string, done chan<- bool) {
+	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
+	uid := getUID(user_email)
+	if uid == -1 {
+		done <- false
+		return
+	}
+
+	muscle_id := getMuscleID(muscle_name)
+	if muscle_id == -1 {
+		done <- false
+		return
+	}
+
+	addQuery := "INSERT INTO preferred_muscles (userid, muscleid) VALUES (?, ?)"
+	_, err = db.Exec(addQuery, uid, muscle_id)
+	if err != nil {
+		done <- false
+		return
+	}
+	fmt.Printf("Muscle added successfully!")
+
+	done <- true
+}
+
+func deletePreferredMuscle(user_email, muscle_name string, done chan<- bool) {
+	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
+	uid := getUID(user_email)
+	if uid == -1 {
+		done <- false
+		return
+	}
+
+	muscle_id := getMuscleID(muscle_name)
+	if muscle_id == -1 {
+		done <- false
+		return
+	}
+
+	deleteQuery := "DELETE FROM preferred_muscles WHERE userid = ? AND muscleid = ?"
+	_, err = db.Exec(deleteQuery, uid, muscle_id)
 	if err != nil {
 		done <- false
 		return
@@ -726,20 +786,23 @@ func deleteExerciseWorkoutplan(user_email, ex_name string, done chan<- bool) {
 
 // DA TESTARE SE FUNZIONA VERAMENTE xD!
 // Dovrebbe essere una struttura che verrà poi convertita nel main in un json così modellato:
-// {
-// 	{
-// 		exercise
-// 			{
-// 				Name: "stringa"
-// 				Description: "stringa"
-// 			}
-// 		muscles
-// 			{
-// 				"lista di stringhe"
-// 			}
-// 	},
-// 		[] // Lista di questa mappa (exercise: {name:, description:}, muscles:{})
-// }
+// [
+//     {
+//         "exercise": {
+//             "Name": "Exercise1",
+//             "Description": "Description1"
+//         },
+//         "muscles": ["Muscle1", "Muscle2"]
+//     },
+//     {
+//         "exercise": {
+//             "Name": "Exercise2",
+//             "Description": "Description2"
+//         },
+//         "muscles": ["Muscle3", "Muscle4"]
+//     },
+//     // ... more ExerciseWorkout entries if any
+// ]
 
 func getWorkoutPlan(user_email string, workout_plan chan<- []ExerciseWorkout) {
 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
@@ -748,14 +811,8 @@ func getWorkoutPlan(user_email string, workout_plan chan<- []ExerciseWorkout) {
 	}
 	defer db.Close()
 
-	uid := getUID(user_email)
-	if uid == -1 {
-		fmt.Println("User ID not found!")
-		return
-	}
-
-	getExerciseQuery := "SELECT E.name, E.description FROM exercises AS E JOIN user_exercises AS UE ON E.id = UE.exerciseid JOIN users AS U ON UE.userid = U.id WHERE U.id = ?"
-	rows, err := db.Query(getExerciseQuery, uid)
+	getExerciseQuery := "SELECT E.name, E.description FROM exercises AS E JOIN user_exercises AS UE ON E.id = UE.exerciseid JOIN users AS U ON UE.userid = U.id WHERE U.email = ?"
+	rows, err := db.Query(getExerciseQuery, user_email)
 	if err != nil {
 		log.Println(err)
 		return
@@ -804,4 +861,45 @@ func getWorkoutPlan(user_email string, workout_plan chan<- []ExerciseWorkout) {
 	}
 
 	workout_plan <- workout
+}
+
+func getPreferredMuscles(user_email string, muscles chan<- []string) {
+	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
+	uid := getUID(user_email)
+	if uid == -1 {
+		log.Println("User not found!")
+		return
+	}
+
+	getQuery := "SELECT name FROM muscles AS M JOIN preferred_muscles AS PM ON M.id = PM.muscleid JOIN users AS U ON U.id = PM.userid  WHERE PM.userid = ?"
+	rows, err := db.Query(getQuery, uid)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	defer rows.Close()
+
+	var muscle_list []string
+	for rows.Next() {
+		var muscle string
+		err := rows.Scan()
+		if err != nil {
+			log.Println(err)
+			return
+		}
+
+		muscle_list = append(muscle_list, muscle)
+	}
+	err = rows.Err()
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	muscles <- muscle_list
 }
