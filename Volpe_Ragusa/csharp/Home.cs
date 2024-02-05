@@ -17,14 +17,6 @@ namespace Volpe_Ragusa.csharp
     public partial class Home : Form
     {
         string email;
-        /*public Home(string email)
-        {
-            InitializeComponent();
-            this.email = email;
-            string nome=get_name(email);
-            label1.Text="Ciao "+nome+", benvenuto in MyFitPlan";
-            //TO_DO inserire qui tutti i caricamenti
-        }*/
 
         public Home()
         {
@@ -97,18 +89,28 @@ namespace Volpe_Ragusa.csharp
                     byte[] responseBytes = client.UploadValues(url, "POST", postData);
                     // Converti la risposta in una stringa
                     string responseBody = System.Text.Encoding.UTF8.GetString(responseBytes);
-                    // metto quello che torna nel vettore di esercizi
-                    string[] exercises = JsonConvert.DeserializeObject<string[]>(responseBody);
-                    // Aggiungi dinamicamente i controlli al form
-                    for (int i = 0; i < exercises.Length; i++)
-                    {
+                    // Deserializza il JSON ricevuto
+                    List<ExerciseData> exerciseList = JsonConvert.DeserializeObject<List<ExerciseData>>(responseBody);
+                    foreach (ExerciseData exerciseData in exerciseList)
+                    {   
                         FlowLayoutPanel panel= new FlowLayoutPanel();
-                        panel.FlowDirection=FlowDirection.LeftToRight;
+                        panel.FlowDirection=FlowDirection.TopDown;
                         panel.AutoSize=true;
 
-                        Label label = new Label();
-                        label.Text=exercises[i];
-                        panel.Controls.Add(label);
+                        Label labelName = new Label();
+                        labelName.Text=exerciseData.Exercise.Name;
+                        labelName.Name="nome";
+                        panel.Controls.Add(labelName);
+
+                        Label labelDescription = new Label();
+                        labelDescription.Text=exerciseData.Exercise.Description;
+                        panel.Controls.Add(labelDescription);
+
+                        Label labelMuscles = new Label();
+                        foreach(string muscle in exerciseData.Muscles){
+                            labelMuscles.Text=muscle +", ";
+                        }
+                        panel.Controls.Add(labelMuscles);
                         
                         Button button = new Button();
                         button.Size= new System.Drawing.Size(95,32);
@@ -116,9 +118,6 @@ namespace Volpe_Ragusa.csharp
                         button.Text="aggiungi";
                         button.Click += aggiungiEsercizio;
                         panel.Controls.Add(button);
-                        //vediamo cosa mi torna il json, creo label nome e label descrizione
-                        //TO_DO aggiungere evento che aggiunge l'esercizio al bottone
-                        //button.Click+=aggiungiEsercizio();
                         //TO_DO sistemare grandezza di questo panel
                         PanelExercises.Controls.Add(panel);
                     }
@@ -144,16 +143,28 @@ namespace Volpe_Ragusa.csharp
                     };
                     byte[] responseBytes = client.UploadValues(url, "POST", postData);
                     string responseBody = System.Text.Encoding.UTF8.GetString(responseBytes);
-                    string[] exercises = JsonConvert.DeserializeObject<string[]>(responseBody);
-                    for (int i = 0; i < exercises.Length; i++)
-                    {
+                    // Deserializza il JSON ricevuto
+                    List<ExerciseData> exerciseList = JsonConvert.DeserializeObject<List<ExerciseData>>(responseBody);
+                    foreach (ExerciseData exerciseData in exerciseList)
+                    {   
                         FlowLayoutPanel panel= new FlowLayoutPanel();
-                        panel.FlowDirection=FlowDirection.LeftToRight;
+                        panel.FlowDirection=FlowDirection.TopDown;
                         panel.AutoSize=true;
 
-                        Label label = new Label();
-                        label.Text=exercises[i];
-                        panel.Controls.Add(label);
+                        Label labelName = new Label();
+                        labelName.Text=exerciseData.Exercise.Name;
+                        labelName.Name="nome";
+                        panel.Controls.Add(labelName);
+
+                        Label labelDescription = new Label();
+                        labelDescription.Text=exerciseData.Exercise.Description;
+                        panel.Controls.Add(labelDescription);
+
+                        Label labelMuscles = new Label();
+                        foreach(string muscle in exerciseData.Muscles){
+                            labelMuscles.Text=muscle +", ";
+                        }
+                        panel.Controls.Add(labelMuscles);
                         
                         Button button = new Button();
                         button.Size= new System.Drawing.Size(95,32);
@@ -161,9 +172,6 @@ namespace Volpe_Ragusa.csharp
                         button.Text="aggiungi";
                         button.Click += aggiungiEsercizio;
                         panel.Controls.Add(button);
-                        //vediamo cosa mi torna il json, creo label nome e label descrizione
-                        //TO_DO aggiungere evento che aggiunge l'esercizio al bottone
-                        //button.Click+=aggiungiEsercizio();
                         //TO_DO sistemare grandezza di questo panel
                         PanelPreferred.Controls.Add(panel);
                     }
@@ -188,16 +196,28 @@ namespace Volpe_Ragusa.csharp
                     };
                     byte[] responseBytes = client.UploadValues(url, "POST", postData);
                     string responseBody = System.Text.Encoding.UTF8.GetString(responseBytes);
-                    string[] exercises = JsonConvert.DeserializeObject<string[]>(responseBody);
-                    for (int i = 0; i < exercises.Length; i++)
-                    {
+                    // Deserializza il JSON ricevuto
+                    List<ExerciseData> exerciseList = JsonConvert.DeserializeObject<List<ExerciseData>>(responseBody);
+                    foreach (ExerciseData exerciseData in exerciseList)
+                    {   
                         FlowLayoutPanel panel= new FlowLayoutPanel();
-                        panel.FlowDirection=FlowDirection.LeftToRight;
+                        panel.FlowDirection=FlowDirection.TopDown;
                         panel.AutoSize=true;
 
-                        Label label = new Label();
-                        label.Text=exercises[i];
-                        panel.Controls.Add(label);
+                        Label labelName = new Label();
+                        labelName.Text=exerciseData.Exercise.Name;
+                        labelName.Name="nome";
+                        panel.Controls.Add(labelName);
+
+                        Label labelDescription = new Label();
+                        labelDescription.Text=exerciseData.Exercise.Description;
+                        panel.Controls.Add(labelDescription);
+
+                        Label labelMuscles = new Label();
+                        foreach(string muscle in exerciseData.Muscles){
+                            labelMuscles.Text=muscle +", ";
+                        }
+                        panel.Controls.Add(labelMuscles);
                         
                         Button button = new Button();
                         button.Size= new System.Drawing.Size(95,32);
@@ -205,8 +225,6 @@ namespace Volpe_Ragusa.csharp
                         button.Text="aggiungi";
                         button.Click += aggiungiEsercizio;
                         panel.Controls.Add(button);
-                        //vediamo cosa mi torna il json, creo label nome e label descrizione
-                        //TO_DO aggiungere evento che aggiunge l'esercizio al bottone
                         //TO_DO sistemare grandezza di questo panel
                         PanelNovità.Controls.Add(panel);
                     }
@@ -225,7 +243,7 @@ namespace Volpe_Ragusa.csharp
             button.Click -= aggiungiEsercizio;
             button.Click += eliminaEsercizio;
             Control contenitore = button.Parent;
-            Label label = contenitore.Controls.OfType<Label>().FirstOrDefault();
+            Label label = contenitore.Controls.Find("nome", true).FirstOrDefault() as Label;
             string nomeEsercizio=label.Text;
             using (WebClient client = new WebClient())
             {
@@ -254,7 +272,7 @@ namespace Volpe_Ragusa.csharp
             button.Click -= eliminaEsercizio;
             button.Click += aggiungiEsercizio;
             Control contenitore = button.Parent;
-            Label label = contenitore.Controls.OfType<Label>().FirstOrDefault();
+            Label label = contenitore.Controls.Find("nome", true).FirstOrDefault() as Label;
             string nomeEsercizio=label.Text;
             using (WebClient client = new WebClient())
             {

@@ -32,13 +32,11 @@ namespace Volpe_Ragusa.csharp
             carica_esercizi();
         }
 
-        //è sbagliato, non è al click
         private void labelHeader_Click(object sender, EventArgs e)
         {
-            //fare in modo che aperta la sessione al posto di nome si veda il nome dell'utente
+            
         }
 
-        //vedi come chiamare questa funzione
         public void carica_esercizi()
         {
             using (WebClient client = new WebClient())
@@ -50,29 +48,31 @@ namespace Volpe_Ragusa.csharp
                     NameValueCollection postData = new NameValueCollection
                     {
                         { "email", this.email }
-                        // Aggiungi altri parametri se necessario
                     };
                     byte[] responseBytes = client.UploadValues(url, "POST", postData);
                     string responseBody = System.Text.Encoding.UTF8.GetString(responseBytes);
-                    // metto quello che torna nel vettore di esercizi
-                    string[] exercises = JsonConvert.DeserializeObject<string[]>(responseBody);
-                    for (int i = 0; i < exercises.Length; i++)
+                    // Deserializza il JSON ricevuto
+                    List<ExerciseData> exerciseList = JsonConvert.DeserializeObject<List<ExerciseData>>(responseBody);
+                    foreach (ExerciseData exerciseData in exerciseList)
                     {   
                         FlowLayoutPanel panel= new FlowLayoutPanel();
                         panel.FlowDirection=FlowDirection.LeftToRight;
                         panel.AutoSize=true;
 
-                        Label label = new Label();
-                        label.Text=exercises[i];
-                        panel.Controls.Add(label);
+                        Label labelName = new Label();
+                        labelName.Text=exerciseData.Exercise.Name;
+                        labelName.Name="nome";
+                        panel.Controls.Add(labelName);
+
+                        Label labelDescription = new Label();
+                        labelDescription.Text=exerciseData.Exercise.Description;
+                        panel.Controls.Add(labelDescription);
 
                         Button button = new Button();
                         button.Size= new System.Drawing.Size(90,30);
                         button.Text="elimina";
                         button.Click += eliminaEsercizio;
                         panel.Controls.Add(button);
-                        //vediamo cosa mi torna il json, creo label nome e label descrizione
-                        //TO_DO aggiungere evento che elimina l'esercizio al bottone
                         //TO_DO sistemare grandezza di questo panel
                         PanelEsercizi.Controls.Add(panel);
                     }
@@ -102,7 +102,7 @@ namespace Volpe_Ragusa.csharp
         {
             Button button = sender as Button;
             Control contenitore = button.Parent;
-            Label label = contenitore.Controls.OfType<Label>().FirstOrDefault();
+            Label label = contenitore.Controls.Find("nome", true).FirstOrDefault() as Label;
             string nomeEsercizio=label.Text;
             using (WebClient client = new WebClient())
             {
@@ -122,7 +122,9 @@ namespace Volpe_Ragusa.csharp
                     Console.WriteLine($"Errore durante la richiesta HTTP: {ex.Message}");
                 }
             }
-            //TO_DO, dovrei ricaricare il panel forse, per aggiornare gli esercizi
+            //svuota il panel e lo ricarica così che si aggiornino gli esercizi
+            PanelEsercizi.Controls.Clear();
+            carica_esercizi();
         }
     }
 }
