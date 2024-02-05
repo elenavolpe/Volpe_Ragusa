@@ -31,11 +31,23 @@ namespace Volpe_Ragusa.csharp
             InitializeComponent();
             Utente utente=Utente.Istanza;
             this.email = utente.email;
-            //string nome=get_name(email);
             label1.Text="Ciao "+utente.name+", benvenuto in MyFitPlan";
-            PanelExercises.FlowDirection=FlowDirection.TopDown;
-            PanelNovità.FlowDirection=FlowDirection.TopDown;
+
+            flowLayoutPanel1.AutoScroll=true;
+            flowLayoutPanel1.FlowDirection=FlowDirection.TopDown;
+
+            flowLayoutPanel1.Controls.Add(label2);
+            flowLayoutPanel1.Controls.Add(PanelPreferred);
             PanelPreferred.FlowDirection=FlowDirection.TopDown;
+
+            flowLayoutPanel1.Controls.Add(label3);
+            flowLayoutPanel1.Controls.Add(PanelNovità);
+            PanelNovità.FlowDirection=FlowDirection.TopDown;
+
+            flowLayoutPanel1.Controls.Add(label4);
+            flowLayoutPanel1.Controls.Add(PanelExercises);
+            PanelExercises.FlowDirection=FlowDirection.TopDown;
+
             carica_esercizi();
             carica_esercizi_novità();
             carica_esercizi_preferiti();
