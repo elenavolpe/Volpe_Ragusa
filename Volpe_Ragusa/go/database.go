@@ -725,6 +725,22 @@ func deleteExerciseWorkoutplan(user_email, ex_name string, done chan<- bool) {
 }
 
 // DA TESTARE SE FUNZIONA VERAMENTE xD!
+// Dovrebbe essere una struttura che verrà poi convertita nel main in un json così modellato:
+// {
+// 	{
+// 		exercise
+// 			{
+// 				Name: "stringa"
+// 				Description: "stringa"
+// 			}
+// 		muscles
+// 			{
+// 				"lista di stringhe"
+// 			}
+// 	},
+// 		[] // Lista di questa mappa (exercise: {name:, description:}, muscles:{})
+// }
+
 func getWorkoutPlan(user_email string, workout_plan chan<- []ExerciseWorkout) {
 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
 	if err != nil {
