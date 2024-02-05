@@ -36,6 +36,7 @@ def get_grafico_muscoli(email):
     try:
         exercises=user_manager.get_exercise(email)
         #TO_DO chiamare modulo python che lo crea
+        # l'ho fatto io in server.py, alla riga 33
         print("mi dava fastidio l'errore su except")
     except TypeError as e:
         return f"Errore: {e}"

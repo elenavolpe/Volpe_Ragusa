@@ -70,9 +70,10 @@ func main() {
 	mux.HandleFunc("/addExercise", func(w http.ResponseWriter, r *http.Request) {
 		name := r.FormValue("name")
 		description := r.FormValue("description")
+		muscle := r.FormValue("muscle")
 		done := make(chan bool)
 		var s string
-		go addExercise(name, description, done)
+		go addExercise(name, description, muscle, done)
 		if <-done {
 			s = "Success"
 		} else {
@@ -114,6 +115,20 @@ func main() {
 		done := make(chan bool)
 		var s string
 		go editExerciseDescription(oldName, newDescription, done)
+		if <-done {
+			s = "success"
+		} else {
+			s = "failure"
+		}
+		w.Write([]byte(s))
+	})
+
+	mux.HandleFunc("/editExerciseMuscle", func(w http.ResponseWriter, r *http.Request) {
+		oldMuscle := r.FormValue("oldMuscle")
+		newMuscle := r.FormValue("newMuscle")
+		done := make(chan bool)
+		var s string
+		go editExerciseMuscle(oldMuscle, newMuscle, done)
 		if <-done {
 			s = "success"
 		} else {

@@ -129,15 +129,15 @@ func getUID(email string) (uid int) { // Funzione per ottenere l'User ID dell'ac
 
 // Funzioni per la gestione dei dati relativi agli esercizi
 
-func addExercise(name, description string, done chan<- bool) {
+func addExercise(name, description, muscle string, done chan<- bool) {
 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer db.Close()
 
-	addQuery := "INSERT INTO exercises (name, description) VALUES (?, ?)"
-	_, err = db.Exec(addQuery, name, description)
+	addQuery := "INSERT INTO exercises (name, description, muscle_group) VALUES (?, ?, ?)"
+	_, err = db.Exec(addQuery, name, description, muscle)
 	if err != nil {
 		done <- false
 		return
@@ -197,6 +197,24 @@ func editExerciseDescription(old_name, new_description string, done chan<- bool)
 		return
 	}
 	fmt.Println("Exercise description edited successfully!")
+
+	done <- true
+}
+
+func editExerciseMuscle(old_muscle, new_muscle string, done chan<- bool) {
+	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
+	editQuery := "UPDATE exercises SET muscle_group = ? WHERE muscle_group = ?"
+	_, err = db.Exec(editQuery, new_muscle, old_muscle)
+	if err != nil {
+		done <- false
+		return
+	}
+	fmt.Println("Exercise muscle group edited successfully!")
 
 	done <- true
 }
