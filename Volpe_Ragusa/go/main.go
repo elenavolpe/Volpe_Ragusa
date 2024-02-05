@@ -374,6 +374,14 @@ func main() {
 
 	mux.HandleFunc("/getWorkoutPlan", func(w http.ResponseWriter, r *http.Request) {
 		//TO_DO, riceve in input l'email e ritorna il workoutPlan
+		email := r.FormValue("email")
+		w_plan := make(chan []ExerciseWorkout)
+		go getWorkoutPlan(email, w_plan)
+		w.Header().Set("Content-Type", "application/json")
+		err := json.NewEncoder(w).Encode(<-w_plan)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
 	})
 
 	mux.HandleFunc("/getPreferredMuscles", func(w http.ResponseWriter, r *http.Request) {

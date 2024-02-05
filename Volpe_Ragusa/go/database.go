@@ -723,3 +723,69 @@ func deleteExerciseWorkoutplan(user_email, ex_name string, done chan<- bool) {
 
 	done <- true
 }
+
+// DA TESTARE SE FUNZIONA VERAMENTE xD!
+func getWorkoutPlan(user_email string, workout_plan chan<- []ExerciseWorkout) {
+	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
+	uid := getUID(user_email)
+	if uid == -1 {
+		fmt.Println("User ID not found!")
+		return
+	}
+
+	getExerciseQuery := "SELECT E.name, E.description FROM exercises AS E JOIN user_exercises AS UE ON E.id = UE.exerciseid JOIN users AS U ON UE.userid = U.id WHERE U.id = ?"
+	rows, err := db.Query(getExerciseQuery, uid)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	defer rows.Close()
+
+	var workout []ExerciseWorkout
+	for rows.Next() {
+		var ex ExerciseWorkout
+		err := rows.Scan(&ex.exercise.Name, &ex.exercise.Description)
+		if err != nil {
+			log.Println(err)
+			return
+		}
+		getMuscleQuery := "SELECT M.name from muscles AS M JOIN exercise_muscles AS EM ON EM.muscleid = M.id JOIN exercises AS E ON E.id = EM.exerciseid WHERE E.name = ?"
+		rows1, err := db.Query(getMuscleQuery, ex.exercise.Name)
+		if err != nil {
+			log.Println(err)
+			return
+		}
+		defer rows1.Close()
+
+		for rows.Next() {
+			var muscle_name string
+			err := rows.Scan(&muscle_name)
+			if err != nil {
+				log.Println(err)
+				return
+			}
+
+			ex.muscles = append(ex.muscles, muscle_name)
+		}
+
+		err = rows1.Err()
+		if err != nil {
+			log.Println(err)
+			return
+		}
+
+		workout = append(workout, ex)
+	}
+	err = rows.Err()
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	workout_plan <- workout
+}
