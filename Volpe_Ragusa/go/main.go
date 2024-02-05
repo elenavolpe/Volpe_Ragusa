@@ -130,7 +130,7 @@ func main() {
 
 	mux.HandleFunc("/getMostPopularExercises", func(w http.ResponseWriter, r *http.Request) {
 		limitParam := r.FormValue("limit")
-		limitValue := 1
+		limitValue := 3
 		var err error
 		if limitParam != "" {
 			limitValue, err = strconv.Atoi(limitParam)
@@ -150,7 +150,7 @@ func main() {
 
 	mux.HandleFunc("/getMostRecentExercises", func(w http.ResponseWriter, r *http.Request) {
 		limitParam := r.FormValue("limit")
-		limitValue := 1
+		limitValue := 3
 		var err error
 		if limitParam != "" {
 			limitValue, err = strconv.Atoi(limitParam)
