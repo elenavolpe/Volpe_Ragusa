@@ -26,8 +26,7 @@ def get_recent():
 def get_consigliati(email):
     muscoli=user_manager.get_muscoli_preferiti(email['email'])
     try:
-         #TO_DO vedere se si posso passare due parametri così
-         r = connect_go_server('getProposedExercises',email,muscoli)
+         r = connect_go_server('getProposedExercises',muscoli)
     except TypeError as e:
         return f"Errore: {e}"
     return

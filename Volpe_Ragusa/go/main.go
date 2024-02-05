@@ -57,6 +57,14 @@ func main() {
 		w.Write([]byte(s))
 	})
 
+	mux.HandleFunc("/modifyprofile", func(w http.ResponseWriter, r *http.Request) {
+		//TO_DO, riceve in input le cose da modificare
+	})
+
+	mux.HandleFunc("/verifypassword", func(w http.ResponseWriter, r *http.Request) {
+		//TO_DO, riceve in input l'email e la password, deve verificare che la password è corretta
+	})
+
 	mux.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
 		email := r.FormValue("email")
 		password := r.FormValue("password")
@@ -308,6 +316,22 @@ func main() {
 			s = "failure"
 		}
 		w.Write([]byte(s))
+	})
+
+	mux.HandleFunc("/getName", func(w http.ResponseWriter, r *http.Request) {
+		//TO_DO, riceve in input l'email e deve ritornare il nome corrispondente
+	})
+
+	mux.HandleFunc("/getWorkoutPlan", func(w http.ResponseWriter, r *http.Request) {
+		//TO_DO, riceve in input l'email e ritorna il workoutPlan
+	})
+
+	mux.HandleFunc("/getPreferredMuscles", func(w http.ResponseWriter, r *http.Request) {
+		//TO_DO, riceve in input l'email e ritorna la lista dei muscoli preferiti
+	})
+
+	mux.HandleFunc("/getProposedExercises", func(w http.ResponseWriter, r *http.Request) {
+		//TO_DO, ritorna gli esercizi proposti in base ai muscoli preferiti(passati in input)
 	})
 
 	// Porta del server
