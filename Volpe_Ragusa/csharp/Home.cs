@@ -33,20 +33,25 @@ namespace Volpe_Ragusa.csharp
             this.email = utente.email;
             label1.Text="Ciao "+utente.name+", benvenuto in MyFitPlan";
 
-            flowLayoutPanel1.AutoScroll=true;
+            this.AutoScroll=true;
+
+            flowLayoutPanel1.AutoSize=true;
             flowLayoutPanel1.FlowDirection=FlowDirection.TopDown;
 
             flowLayoutPanel1.Controls.Add(label2);
             flowLayoutPanel1.Controls.Add(PanelPreferred);
             PanelPreferred.FlowDirection=FlowDirection.TopDown;
+            PanelPreferred.AutoSize=true;
 
             flowLayoutPanel1.Controls.Add(label3);
             flowLayoutPanel1.Controls.Add(PanelNovità);
             PanelNovità.FlowDirection=FlowDirection.TopDown;
+            PanelNovità.AutoSize=true;
 
             flowLayoutPanel1.Controls.Add(label4);
             flowLayoutPanel1.Controls.Add(PanelExercises);
             PanelExercises.FlowDirection=FlowDirection.TopDown;
+            PanelExercises.AutoSize=true;
 
             carica_esercizi();
             carica_esercizi_novità();

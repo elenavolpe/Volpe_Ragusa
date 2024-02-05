@@ -24,8 +24,11 @@ namespace Volpe_Ragusa.csharp
             this.email = utente.email;
             //string nome=get_name(email);
             labelHeader.Text="Ecco la tua scheda "+utente.name;
+
+            this.AutoScroll=true;
+
             PanelEsercizi.FlowDirection=FlowDirection.TopDown;
-            PanelEsercizi.AutoScroll=true;
+            PanelEsercizi.AutoSize=true;
             carica_esercizi();
         }
 
