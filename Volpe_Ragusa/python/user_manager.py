@@ -92,6 +92,7 @@ def get_muscoli_preferiti(email):
             #devo ritornarli
         except TypeError as e:
             return f"Errore: {e}"
+        return r
     else:
         return "email utente non valida"
 

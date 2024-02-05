@@ -7,7 +7,7 @@ def get_exercises():
          r = connect_go_server('getExercises')
     except TypeError as e:
         return f"Errore: {e}"
-    return
+    return r
 
 #ritorna i primi 3 esercizi più selezionati
 def get_preferred():
@@ -15,7 +15,7 @@ def get_preferred():
          r = connect_go_server('getMostPopularExercises')
     except TypeError as e:
         return f"Errore: {e}"
-    return
+    return r
 
 #ritorna gli esercizi aggiunti più di recente (i primi 3?)
 def get_recent():
@@ -23,7 +23,7 @@ def get_recent():
          r = connect_go_server('getMostRecentExercises')
     except TypeError as e:
         return f"Errore: {e}"
-    return
+    return r
 
 #ritorna gli esercizi consigliati in base agli esercizi preferiti
 def get_consigliati(email):
@@ -35,7 +35,7 @@ def get_consigliati(email):
          r = connect_go_server('getProposedExercises',muscoli)
     except TypeError as e:
         return f"Errore: {e}"
-    return
+    return r
 
 #ritorna gli esercizi consigliati in base ai muscoli che stanno venendo trascurati
 def get_trascurati(email):
@@ -47,4 +47,4 @@ def get_trascurati(email):
          r = connect_go_server('getEserciziTrascurati',email)
     except TypeError as e:
         return f"Errore: {e}"
-    return
+    return r
