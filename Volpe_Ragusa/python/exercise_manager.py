@@ -27,10 +27,11 @@ def get_recent():
 
 #ritorna gli esercizi consigliati in base agli esercizi preferiti
 def get_consigliati(email):
-    muscoli=user_manager.get_muscoli_preferiti(email['email'])
+    muscoli=user_manager.get_muscoli_preferiti(email)
     #TO_DO in realtà invece di chiedere di nuovo a go, potremmo semplicemente usare
     #la get_exercises e filtrare gli esercizi corrispondenti
     try:
+         #TO_DO nel caso vogliamo comunque usarla, sistemare muscoli in dizionario
          r = connect_go_server('getProposedExercises',muscoli)
     except TypeError as e:
         return f"Errore: {e}"
@@ -42,6 +43,7 @@ def get_trascurati(email):
     #una lista dei muscoli trascurati, e quindi usando get_exercises(già implementata),
     #ritornare gli esercizi adatti, così da evitare di chiedere di nuovo a go
     try:
+         #TO_DO nel caso vogliamo comunque usarla, sistemare muscoli in dizionario
          r = connect_go_server('getEserciziTrascurati',email)
     except TypeError as e:
         return f"Errore: {e}"

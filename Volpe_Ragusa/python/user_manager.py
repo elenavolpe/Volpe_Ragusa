@@ -35,18 +35,21 @@ def modifica_profilo(account):
     #TO_DO potremmo prima fare autenticare il cliente?
     modify={}
     for key in account: #TO_DO non saprei come ritorna i muscoli
-        if account['key']!="":
+        if account[key]!="":
             #prendo solo i valori non nulli
-            modify['key']=account['key']
+            modify[key]=account[key]
 
     if account['newpassword']!="":
         if account['newpassword']==account['password']:
             return "la nuova password non può essere uguale a quella vecchia"
         else:
+            dict={}
+            dict['oldPassword']=account['password']
+            dict['email']=account['email']
             try:
                 #TO_DO go deve ritornare ok se la vecchia password è uguale a password
                 #TO_DO implementare questa funzione su go, sistemare come passare parametri
-                r = connect_go_server('verifypassword',account['password'],account['email'])
+                r = connect_go_server('verifypassword',dict)
                 #non ho ancora studiato go, non ho idea di cosa ritorna, per ora commento
                 #se la verifica password è andata a buon fine
                 try:
@@ -65,7 +68,7 @@ def modifica_profilo(account):
 def get_name(email):
     if email['email']!="":
         try:
-            nome = connect_go_server('getName', email['email'])
+            nome = connect_go_server('getName', email)
             print(nome)
             return nome
         except TypeError as e:
@@ -94,18 +97,24 @@ def get_muscoli_preferiti(email):
 
 #aggiunge alla scheda di email l'esercizio
 def aggiungi_esercizio_scheda(email,esercizio):
+    dict={}
+    dict['email']=email
+    dict['exercise']=esercizio
     try:
         #TO_DO da sistemare, ho visto che hai aggiunto ripetute e cose del genere
-        r = connect_go_server('addExerciseWorkout', email,esercizio)
+        r = connect_go_server('addExerciseWorkout', dict)
         #devo ritornare ok
     except TypeError as e:
         return f"Errore: {e}"
 
 #elimina dalla scheda di email l'esercizio
 def elimina_esercizio_scheda(email,esercizio):
+    dict={}
+    dict['email']=email
+    dict['exercise']=esercizio
     try:
         #TO_DO da sistemare anche su go
-        r = connect_go_server('deleteExerciseWorkout', email,esercizio)
+        r = connect_go_server('deleteExerciseWorkout', dict)
         #devo ritornare ok
     except TypeError as e:
         return f"Errore: {e}"

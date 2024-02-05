@@ -73,7 +73,7 @@ def get_recenti():
 def get_nome():
     if request.method == 'POST':
         email = request.get_json()
-        return  user_manager.get_name()
+        return  user_manager.get_name(email)
 
 #ritorna gli esercizi consigliati in base ai muscoli preferiti    
 @app.route('/get_consigliati', methods=['POST'])
