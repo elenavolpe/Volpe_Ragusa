@@ -3,7 +3,7 @@ import user_manager
 import exercise_manager
 from generate_muscle_stats import generate_muscle_stats
 
-# TO-DO: recuperare dati muscoli da C#
+# TO-DO: recuperare dati muscoli da C# ,vedi riga 35
 
 # Temporaneo: dati di esempio per test
 data = {
@@ -32,9 +32,11 @@ def login():
 # Route per ottenere l'immagine delle statistiche dei muscoli allenati
 @app.route('/get_muscle_stats', methods=['GET'])
 def get_image():
+    #TO_DO qui ti passo l'email, con get_scheda puoi trovare i muscoli allenati
     image = generate_muscle_stats(data)
     return send_file(image, mimetype='image/png')
 
+#modifica profilo utente
 @app.route('/modifica_profilo', methods=['POST'])
 def modify_profile():
     if request.method == 'POST':
@@ -65,24 +67,20 @@ def get_preferiti():
 def get_recenti():
     if request.method == 'POST':
         return  exercise_manager.get_recent()
-    
+
+#ritorna il nome data l'email    
 @app.route('/get_name', methods=['POST'])
 def get_nome():
     if request.method == 'POST':
         email = request.get_json()
         return  user_manager.get_name()
-    
+
+#ritorna gli esercizi consigliati in base ai muscoli preferiti    
 @app.route('/get_consigliati', methods=['POST'])
 def get_esercizi_consigliati():
     if request.method == 'POST':
         email = request.get_json()
         return  exercise_manager.get_consigliati(email)
-    
-@app.route('/get_grafico_muscoli', methods=['POST'])
-def get_muscoli():
-    if request.method == 'POST':
-        email = request.get_json()
-        return  exercise_manager.get_grafico_muscoli(email)
 
 #aggiunge esercizio alla scheda del cliente
 @app.route('/aggiungi_esercizio', methods=['POST'])

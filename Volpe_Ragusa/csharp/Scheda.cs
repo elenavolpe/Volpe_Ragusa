@@ -69,10 +69,10 @@ namespace Volpe_Ragusa.csharp
                         Button button = new Button();
                         button.Size= new System.Drawing.Size(90,30);
                         button.Text="elimina";
+                        button.Click += eliminaEsercizio;
                         panel.Controls.Add(button);
                         //vediamo cosa mi torna il json, creo label nome e label descrizione
                         //TO_DO aggiungere evento che elimina l'esercizio al bottone
-                        //button.Click+=eliminaEsercizio();
                         //TO_DO sistemare grandezza di questo panel
                         PanelEsercizi.Controls.Add(panel);
                     }
@@ -96,6 +96,33 @@ namespace Volpe_Ragusa.csharp
             Home home = new Home();
             this.Close();
             home.Show();
+        }
+
+        private void eliminaEsercizio(object sender, EventArgs e)
+        {
+            Button button = sender as Button;
+            Control contenitore = button.Parent;
+            Label label = contenitore.Controls.OfType<Label>().FirstOrDefault();
+            string nomeEsercizio=label.Text;
+            using (WebClient client = new WebClient())
+            {
+                try
+                {
+                    string url = "http://localhost:5000/elimina_esercizio";
+                    NameValueCollection postData = new NameValueCollection
+                    {
+                        { "email", this.email },
+                        {"esercizio", nomeEsercizio}
+                    };
+                    byte[] responseBytes = client.UploadValues(url, "POST", postData);
+                    string responseBody = System.Text.Encoding.UTF8.GetString(responseBytes);
+                }
+                catch (WebException ex)
+                {
+                    Console.WriteLine($"Errore durante la richiesta HTTP: {ex.Message}");
+                }
+            }
+            //TO_DO, dovrei ricaricare il panel forse, per aggiornare gli esercizi
         }
     }
 }

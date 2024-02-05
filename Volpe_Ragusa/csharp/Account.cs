@@ -82,7 +82,7 @@ namespace Volpe_Ragusa.csharp
             {
                 try
                 {
-                    string url = "http://localhost:5000/get_grafico_muscoli";
+                    string url = "http://localhost:5000/get_muscle_stats";
                     NameValueCollection postData = new NameValueCollection
                     {
                         { "email", this.email }
