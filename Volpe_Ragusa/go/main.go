@@ -20,18 +20,6 @@ func main() {
 	mux := http.NewServeMux()
 
 	// Definizione handlers richieste per le diverse routes gestite dal multiplexer/router mux
-	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "Home page")
-	})
-
-	mux.HandleFunc("/about", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "About us page")
-	})
-
-	mux.HandleFunc("/contact", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "Contact us")
-	})
-
 	mux.HandleFunc("/signup", func(w http.ResponseWriter, r *http.Request) {
 		name := r.FormValue("name")
 		surname := r.FormValue("surname")
@@ -70,10 +58,9 @@ func main() {
 	mux.HandleFunc("/addExercise", func(w http.ResponseWriter, r *http.Request) {
 		name := r.FormValue("name")
 		description := r.FormValue("description")
-		muscle := r.FormValue("muscle")
 		done := make(chan bool)
 		var s string
-		go addExercise(name, description, muscle, done)
+		go addExercise(name, description, done)
 		if <-done {
 			s = "Success"
 		} else {
@@ -115,20 +102,6 @@ func main() {
 		done := make(chan bool)
 		var s string
 		go editExerciseDescription(oldName, newDescription, done)
-		if <-done {
-			s = "success"
-		} else {
-			s = "failure"
-		}
-		w.Write([]byte(s))
-	})
-
-	mux.HandleFunc("/editExerciseMuscle", func(w http.ResponseWriter, r *http.Request) {
-		oldMuscle := r.FormValue("oldMuscle")
-		newMuscle := r.FormValue("newMuscle")
-		done := make(chan bool)
-		var s string
-		go editExerciseMuscle(oldMuscle, newMuscle, done)
 		if <-done {
 			s = "success"
 		} else {
@@ -185,6 +158,48 @@ func main() {
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
+	})
+
+	// Endpoints per le funzionalità di gestione dei dati relativi ai muscoli
+
+	mux.HandleFunc("/addMuscle", func(w http.ResponseWriter, r *http.Request) {
+		muscle := r.FormValue("muscle")
+		done := make(chan bool)
+		var s string
+		go addMuscle(muscle, done)
+		if <-done {
+			s = "success"
+		} else {
+			s = "failure"
+		}
+		w.Write([]byte(s))
+	})
+
+	mux.HandleFunc("/editMuscleName", func(w http.ResponseWriter, r *http.Request) {
+		old_muscle := r.FormValue("old_muscle")
+		new_muscle := r.FormValue("new_muscle")
+		done := make(chan bool)
+		var s string
+		go editMuscleName(old_muscle, new_muscle, done)
+		if <-done {
+			s = "success"
+		} else {
+			s = "failure"
+		}
+		w.Write([]byte(s))
+	})
+
+	mux.HandleFunc("/deleteMuscle", func(w http.ResponseWriter, r *http.Request) {
+		muscle := r.FormValue("muscle")
+		done := make(chan bool)
+		var s string
+		go deleteMuscle(muscle, done)
+		if <-done {
+			s = "success"
+		} else {
+			s = "failure"
+		}
+		w.Write([]byte(s))
 	})
 
 	// Endpoints per le funzionalità di gestione delle schede degli utenti
