@@ -122,7 +122,7 @@ func main() {
 		exercises := make(chan []Exercise)
 		go getExercises(exercises)
 		w.Header().Set("Content-Type", "application/json")
-		err := json.NewEncoder(w).Encode(<-exercises) // Vedere come funziona json.NewEnconder(w).Encode()
+		err := json.NewEncoder(w).Encode(<-exercises) // Probablimente bisognerà spiegare come funziona json.NewEnconder(w).Encode()
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
@@ -211,6 +211,33 @@ func main() {
 	})
 
 	// Endpoints per le funzionalità di gestione dei muscoli relativi agli esercizi associati
+	mux.HandleFunc("/addMuscleExercise", func(w http.ResponseWriter, r *http.Request) {
+		ex_name := r.FormValue("ex_name")
+		muscle_name := r.FormValue("muscle_name")
+		done := make(chan bool)
+		var s string
+		go addMuscleExercise(ex_name, muscle_name, done)
+		if <-done {
+			s = "success"
+		} else {
+			s = "failure"
+		}
+		w.Write([]byte(s))
+	})
+
+	mux.HandleFunc("/deleteMuscleExercise", func(w http.ResponseWriter, r *http.Request) {
+		ex_name := r.FormValue("ex_name")
+		muscle_name := r.FormValue("muscle_name")
+		done := make(chan bool)
+		var s string
+		go deleteMuscleExercise(ex_name, muscle_name, done)
+		if <-done {
+			s = "success"
+		} else {
+			s = "failure"
+		}
+		w.Write([]byte(s))
+	})
 
 	// Endpoints per le funzionalità di gestione delle schede degli utenti
 	mux.HandleFunc("/updateWorkoutName", func(w http.ResponseWriter, r *http.Request) {

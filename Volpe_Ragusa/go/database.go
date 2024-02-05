@@ -459,23 +459,65 @@ func deleteMuscle(name string, done chan<- bool) {
 
 // Funzioni per la gestione dei dati dei muscoli relativamente agli esercizi
 
-// func addMuscleExercises(muscle_name, string, done chan<- bool) {
-// 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
-// 	if err != nil {
-// 		log.Fatal(err)
-// 	}
-// 	defer db.Close()
+func addMuscleExercise(ex_name, muscle_name string, done chan<- bool) {
+	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
 
-// 	addQuery := "INSERT INTO muscles (name) VALUES (?)"
-// 	_, err = db.Exec(addQuery, name)
-// 	if err != nil {
-// 		done <- false
-// 		return
-// 	}
-// 	fmt.Printf("Muscle added successfully!")
+	ex_id := getExerciseID(ex_name)
+	if ex_id == -1 {
+		done <- false
+		return
+	}
 
-// 	done <- true
-// }
+	muscle_id := getMuscleID(muscle_name)
+	if ex_id == -1 {
+		done <- false
+		return
+	}
+
+	addQuery := "INSERT INTO exercise_muscles (exerciseid, muscleid) VALUES (?, ?)"
+	_, err = db.Exec(addQuery, ex_id, muscle_id)
+	if err != nil {
+		done <- false
+		return
+	}
+	fmt.Printf("Muscle added successfully!")
+
+	done <- true
+}
+
+func deleteMuscleExercise(ex_name, muscle_name string, done chan<- bool) {
+	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
+	ex_id := getExerciseID(ex_name)
+	if ex_id == -1 {
+		done <- false
+		return
+	}
+
+	muscle_id := getMuscleID(muscle_name)
+	if muscle_id == -1 {
+		done <- false
+		return
+	}
+
+	deleteQuery := "DELETE FROM exercise_muscles WHERE exerciseid = ? AND muscleid = ?"
+	_, err = db.Exec(deleteQuery, ex_id, muscle_id)
+	if err != nil {
+		done <- false
+		return
+	}
+	fmt.Println("Query run successfully!")
+
+	done <- true
+}
 
 // Funzioni per la gestione delle schede di allenamento (tabella users - campi workout_name e workout_description)
 func updateUserWorkoutName(user_email, wp_name string, done chan<- bool) {
