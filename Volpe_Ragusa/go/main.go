@@ -210,6 +210,8 @@ func main() {
 		w.Write([]byte(s))
 	})
 
+	// Endpoints per le funzionalità di gestione dei muscoli relativi agli esercizi associati
+
 	// Endpoints per le funzionalità di gestione delle schede degli utenti
 	mux.HandleFunc("/updateWorkoutName", func(w http.ResponseWriter, r *http.Request) {
 		email := r.FormValue("email")
@@ -335,6 +337,12 @@ func main() {
 
 	mux.HandleFunc("/getName", func(w http.ResponseWriter, r *http.Request) {
 		//TO_DO, riceve in input l'email e deve ritornare il nome corrispondente
+		email := r.FormValue("email")
+		name := make(chan string)
+		var s string
+		go getUserName(email, name)
+		s = <-name
+		w.Write([]byte(s))
 	})
 
 	mux.HandleFunc("/getWorkoutPlan", func(w http.ResponseWriter, r *http.Request) {

@@ -27,6 +27,8 @@ func ConnectDB(username, password, host, port, dbName string) (*sql.DB, error) {
 	return db, nil
 }
 
+// Funzioni di gestione degli utenti
+
 func deleteAccount(email string, done chan<- bool) {
 	//admin per collegarsi a mysql
 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
@@ -131,6 +133,29 @@ func getUID(email string) (uid int) { // Funzione per ottenere l'User ID dell'ac
 	fmt.Println("UID found!")
 
 	return
+}
+
+func getUserName(email string, name chan<- string) {
+	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
+	user_name := ""
+
+	getQuery := "SELECT name from users WHERE email = ?"
+	err = db.QueryRow(getQuery, email).Scan(&user_name)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			fmt.Println("User not found!")
+		}
+		name <- "failure"
+		return
+	}
+	fmt.Println("User found!")
+
+	name <- user_name
 }
 
 // Funzioni per la gestione dei dati relativi agli esercizi
@@ -377,6 +402,9 @@ func getMuscleID(muscle string) (muscle_id int) {
 	getQuery := "SELECT id from muscles WHERE name = ?"
 	err = db.QueryRow(getQuery, muscle).Scan(&muscle_id)
 	if err != nil {
+		if err == sql.ErrNoRows {
+			fmt.Println("No Muscle found!")
+		}
 		return -1 // -1 è per segnalare il fallimento della query
 	}
 	fmt.Println("Muscle's ID found!")
@@ -431,23 +459,23 @@ func deleteMuscle(name string, done chan<- bool) {
 
 // Funzioni per la gestione dei dati dei muscoli relativamente agli esercizi
 
-func addMuscleExercises(muscle_name, string, done chan<- bool) {
-	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer db.Close()
+// func addMuscleExercises(muscle_name, string, done chan<- bool) {
+// 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+// 	defer db.Close()
 
-	addQuery := "INSERT INTO muscles (name) VALUES (?)"
-	_, err = db.Exec(addQuery, name)
-	if err != nil {
-		done <- false
-		return
-	}
-	fmt.Printf("Muscle added successfully!")
+// 	addQuery := "INSERT INTO muscles (name) VALUES (?)"
+// 	_, err = db.Exec(addQuery, name)
+// 	if err != nil {
+// 		done <- false
+// 		return
+// 	}
+// 	fmt.Printf("Muscle added successfully!")
 
-	done <- true
-}
+// 	done <- true
+// }
 
 // Funzioni per la gestione delle schede di allenamento (tabella users - campi workout_name e workout_description)
 func updateUserWorkoutName(user_email, wp_name string, done chan<- bool) {
