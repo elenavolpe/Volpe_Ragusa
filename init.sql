@@ -21,13 +21,12 @@ CREATE TABLE IF NOT EXISTS exercises (
     name VARCHAR(255) UNIQUE,
     description VARCHAR(255) NOT NULL,
     popularity_score INT DEFAULT 0 NOT NULL,
-    muscle_group VARCHAR(255) NOT NULL,
     last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Tabella di relazione uno a molti tra users ed exercise
-CREATE TABLE IF NOT EXISTS workoutplan_exercises (
+-- Tabella di relazione molti a molti tra users ed exercise
+CREATE TABLE IF NOT EXISTS user_exercises (
     userid INT NOT NULL,
     exerciseid INT NOT NULL,
     sets INT NOT NULL DEFAULT 0, -- Serie
@@ -35,6 +34,19 @@ CREATE TABLE IF NOT EXISTS workoutplan_exercises (
     PRIMARY KEY (userid, exerciseid),
     FOREIGN KEY (userid) REFERENCES users(id),
     FOREIGN KEY (exerciseid) REFERENCES exercises(id)
+);
+
+CREATE TABLE IF NOT EXISTS muscles (
+    id INT PRIMARY KEY,
+    name VARCHAR(255) UNIQUE NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS exercise_muscles (
+    exerciseid INT NOT NULL,
+    muscleid INT NOT NULL,
+    PRIMARY KEY (exerciseid, muscleid),
+    FOREIGN KEY (exerciseid) REFERENCES exercises(id),
+    FOREIGN KEY (muscleid) REFERENCES muscles(id)
 );
 
 INSERT INTO users (name, surname, email, pass) VALUES ("Francesco", "Franceschini", "francesco.franceschini@fakemail.com", "password");

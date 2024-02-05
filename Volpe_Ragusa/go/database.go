@@ -47,7 +47,7 @@ func deleteAccount(email string, done chan<- bool) {
 	}
 
 	// Prima di cancellare l'utente, bisogna cancellare i dati relativi alla sua scheda
-	deleteQuery := "DELETE FROM workoutplan_exercises WHERE userid = ?"
+	deleteQuery := "DELETE FROM user_exercises WHERE userid = ?"
 	_, err = tx.Exec(deleteQuery, uid)
 	if err != nil {
 		done <- false
@@ -55,8 +55,8 @@ func deleteAccount(email string, done chan<- bool) {
 		return
 	}
 
-	deleteQuery = "DELETE FROM users WHERE email = ?"
-	_, err = tx.Exec(deleteQuery, email)
+	deleteQuery = "DELETE FROM users WHERE id = ?"
+	_, err = tx.Exec(deleteQuery, uid)
 	if err != nil {
 		done <- false
 		tx.Rollback()
@@ -68,7 +68,7 @@ func deleteAccount(email string, done chan<- bool) {
 		done <- false
 		return
 	}
-	fmt.Println("All user data deleted successfully!")
+	fmt.Println("All queries run successfully!")
 
 	done <- true
 }
@@ -102,6 +102,9 @@ func login(email, password string, usr chan<- string) {
 	var name string
 	err = db.QueryRow(loginQuery, email, password).Scan(&name)
 	if err != nil {
+		if err == sql.ErrNoRows {
+			fmt.Println("No User found!")
+		}
 		usr <- "failure"
 		return
 	}
@@ -120,6 +123,9 @@ func getUID(email string) (uid int) { // Funzione per ottenere l'User ID dell'ac
 	getQuery := "SELECT id from users WHERE email = ?"
 	err = db.QueryRow(getQuery, email).Scan(&uid)
 	if err != nil {
+		if err == sql.ErrNoRows {
+			fmt.Println("No User found!")
+		}
 		return -1 // -1 è per segnalare il fallimento della query
 	}
 	fmt.Println("UID found!")
@@ -129,15 +135,15 @@ func getUID(email string) (uid int) { // Funzione per ottenere l'User ID dell'ac
 
 // Funzioni per la gestione dei dati relativi agli esercizi
 
-func addExercise(name, description, muscle string, done chan<- bool) {
+func addExercise(name, description string, done chan<- bool) {
 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer db.Close()
 
-	addQuery := "INSERT INTO exercises (name, description, muscle_group) VALUES (?, ?, ?)"
-	_, err = db.Exec(addQuery, name, description, muscle)
+	addQuery := "INSERT INTO exercises (name, description) VALUES (?, ?)"
+	_, err = db.Exec(addQuery, name, description)
 	if err != nil {
 		done <- false
 		return
@@ -160,7 +166,7 @@ func deleteExercise(name string, done chan<- bool) {
 		done <- false
 		return
 	}
-	fmt.Println("Exercise deleted successfully!")
+	fmt.Println("Query run successfully!")
 
 	done <- true
 }
@@ -201,24 +207,6 @@ func editExerciseDescription(old_name, new_description string, done chan<- bool)
 	done <- true
 }
 
-func editExerciseMuscle(old_muscle, new_muscle string, done chan<- bool) {
-	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer db.Close()
-
-	editQuery := "UPDATE exercises SET muscle_group = ? WHERE muscle_group = ?"
-	_, err = db.Exec(editQuery, new_muscle, old_muscle)
-	if err != nil {
-		done <- false
-		return
-	}
-	fmt.Println("Exercise muscle group edited successfully!")
-
-	done <- true
-}
-
 func getExercises(exercises chan<- []Exercise) {
 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
 	if err != nil {
@@ -229,7 +217,8 @@ func getExercises(exercises chan<- []Exercise) {
 	getQuery := "SELECT name, description FROM exercises"
 	rows, err := db.Query(getQuery)
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return
 	}
 	defer rows.Close()
 
@@ -238,13 +227,15 @@ func getExercises(exercises chan<- []Exercise) {
 		var ex Exercise
 		err := rows.Scan(&ex.Name, &ex.Description)
 		if err != nil {
-			log.Fatal(err)
+			log.Println(err)
+			return
 		}
 		exs = append(exs, ex)
 	}
 	err = rows.Err()
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return
 	}
 
 	exercises <- exs
@@ -260,6 +251,9 @@ func getExerciseID(name string) (ex_id int) {
 	getQuery := "SELECT id from exercises WHERE name = ?"
 	err = db.QueryRow(getQuery, name).Scan(&ex_id)
 	if err != nil {
+		if err == sql.ErrNoRows {
+			fmt.Println("No Exercise found!")
+		}
 		return -1
 	}
 	fmt.Println("Exercise ID found successfully!")
@@ -277,7 +271,8 @@ func getMostPopularExercises(limit_value int, exercises chan<- []Exercise) {
 	getQuery := fmt.Sprintf("SELECT name, description FROM exercises ORDER BY popularity_score DESC LIMIT %d", limit_value)
 	rows, err := db.Query(getQuery)
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return
 	}
 	defer rows.Close()
 
@@ -286,13 +281,15 @@ func getMostPopularExercises(limit_value int, exercises chan<- []Exercise) {
 		var ex Exercise
 		err := rows.Scan(&ex.Name, &ex.Description)
 		if err != nil {
-			log.Fatal(err)
+			log.Println(err)
+			return
 		}
 		exs = append(exs, ex)
 	}
 	err = rows.Err()
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return
 	}
 
 	exercises <- exs
@@ -308,7 +305,8 @@ func getMostRecentExercises(limit_value int, exercises chan<- []Exercise) {
 	getQuery := fmt.Sprintf("SELECT name, description FROM exercises ORDER BY created_at DESC LIMIT %d", limit_value)
 	rows, err := db.Query(getQuery)
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return
 	}
 	defer rows.Close()
 
@@ -317,16 +315,138 @@ func getMostRecentExercises(limit_value int, exercises chan<- []Exercise) {
 		var ex Exercise
 		err := rows.Scan(&ex.Name, &ex.Description)
 		if err != nil {
-			log.Fatal(err)
+			log.Println(err)
+			return
 		}
 		exs = append(exs, ex)
 	}
 	err = rows.Err()
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return
 	}
 
 	exercises <- exs
+}
+
+// Funzioni per la gestione dei dati relativi ai muscoli
+
+func addMuscle(name string, done chan<- bool) {
+	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
+	addQuery := "INSERT INTO muscles (name) VALUES (?)"
+	_, err = db.Exec(addQuery, name)
+	if err != nil {
+		done <- false
+		return
+	}
+	fmt.Printf("Muscle added successfully!")
+
+	done <- true
+}
+
+func editMuscleName(old_name, new_name string, done chan<- bool) {
+	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
+	editQuery := "UPDATE muscles SET name = ? WHERE name = ?"
+	_, err = db.Exec(editQuery, new_name, old_name)
+	if err != nil {
+		done <- false
+		return
+	}
+	fmt.Printf("Muscle added successfully!")
+
+	done <- true
+}
+
+func getMuscleID(muscle string) (muscle_id int) {
+	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
+	getQuery := "SELECT id from muscles WHERE name = ?"
+	err = db.QueryRow(getQuery, muscle).Scan(&muscle_id)
+	if err != nil {
+		return -1 // -1 è per segnalare il fallimento della query
+	}
+	fmt.Println("Muscle's ID found!")
+
+	return
+}
+
+func deleteMuscle(name string, done chan<- bool) {
+	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
+	muscle_id := getMuscleID(name)
+	if muscle_id == -1 {
+		done <- false
+		return
+	}
+
+	tx, err := db.Begin()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Prima di cancellare il muscolo scelto, bisogna cancellare gli accompiamenti con i vari esercizi in cui è presente
+	deleteQuery := "DELETE FROM exercise_muscles WHERE muscle = ?"
+	_, err = tx.Exec(deleteQuery, muscle_id)
+	if err != nil {
+		done <- false
+		tx.Rollback()
+		return
+	}
+
+	deleteQuery = "DELETE FROM muscles WHERE id = ?"
+	_, err = tx.Exec(deleteQuery, muscle_id)
+	if err != nil {
+		done <- false
+		tx.Rollback()
+		return
+	}
+
+	err = tx.Commit()
+	if err != nil {
+		done <- false
+		return
+	}
+	fmt.Println("All queries run successfully!")
+
+	done <- true
+}
+
+// Funzioni per la gestione dei dati dei muscoli relativamente agli esercizi
+
+func addMuscleExercises(muscle_name, string, done chan<- bool) {
+	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
+	addQuery := "INSERT INTO muscles (name) VALUES (?)"
+	_, err = db.Exec(addQuery, name)
+	if err != nil {
+		done <- false
+		return
+	}
+	fmt.Printf("Muscle added successfully!")
+
+	done <- true
 }
 
 // Funzioni per la gestione delle schede di allenamento (tabella users - campi workout_name e workout_description)
@@ -384,14 +504,14 @@ func deleteUserWorkout(user_email string, done chan<- bool) {
 		log.Fatal(err)
 	}
 
-	deleteQuery := "DELETE FROM workoutplan_exercises WHERE userid = ?"
+	deleteQuery := "DELETE FROM user_exercises WHERE userid = ?"
 	_, err = tx.Exec(deleteQuery, uid)
 	if err != nil {
 		done <- false
 		tx.Rollback()
 		return
 	}
-	fmt.Println("All exercises of user workout plan deleted successfully")
+	fmt.Println("All queries run successfully")
 
 	// Reset delle informazioni della scheda dell'utente (nome e descrizione a NULL)
 	updateQuery := "UPDATE users SET workout_name = NULL, workout_description = NULL WHERE id = ?"
@@ -433,7 +553,7 @@ func addExerciseWorkoutplan(user_email, ex_name string, ex_sets, ex_reps int, do
 		return
 	}
 
-	addQuery := "INSERT INTO workoutplan_exercises (userid, exerciseid, sets, reps) VALUES (?, ?, ?, ?)"
+	addQuery := "INSERT INTO user_exercises (userid, exerciseid, sets, reps) VALUES (?, ?, ?, ?)"
 	_, err = db.Exec(addQuery, uid, ex_id, ex_sets, ex_reps)
 	if err != nil {
 		done <- false
@@ -463,7 +583,7 @@ func editExerciseSetsWorkoutplan(user_email, ex_name string, new_ex_sets int, do
 		return
 	}
 
-	editQuery := "UPDATE workoutplan_exercises SET sets = ?  WHERE userid = ? AND exerciseid = ?"
+	editQuery := "UPDATE user_exercises SET sets = ?  WHERE userid = ? AND exerciseid = ?"
 	_, err = db.Exec(editQuery, new_ex_sets, uid, ex_id)
 	if err != nil {
 		done <- false
@@ -493,7 +613,7 @@ func editExerciseRepsWorkoutplan(user_email, ex_name string, new_ex_reps int, do
 		return
 	}
 
-	editQuery := "UPDATE workoutplan_exercises SET reps = ?  WHERE userid = ? AND exerciseid = ?"
+	editQuery := "UPDATE user_exercises SET reps = ?  WHERE userid = ? AND exerciseid = ?"
 	_, err = db.Exec(editQuery, new_ex_reps, uid, ex_id)
 	if err != nil {
 		done <- false
@@ -523,13 +643,13 @@ func deleteExerciseWorkoutplan(user_email, ex_name string, done chan<- bool) {
 		return
 	}
 
-	deleteQuery := "DELETE FROM workoutplan_exercises WHERE uid = ? AND ex_id = ?"
+	deleteQuery := "DELETE FROM user_exercises WHERE uid = ? AND ex_id = ?"
 	_, err = db.Exec(deleteQuery, uid, ex_id)
 	if err != nil {
 		done <- false
 		return
 	}
-	fmt.Println("Exercise deleted from workout plan successfully!")
+	fmt.Println("Query run successfully!")
 
 	done <- true
 }
