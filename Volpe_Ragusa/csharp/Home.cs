@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Data;
@@ -32,6 +33,9 @@ namespace Volpe_Ragusa.csharp
             this.email = utente.email;
             //string nome=get_name(email);
             label1.Text="Ciao "+utente.name+", benvenuto in MyFitPlan";
+            PanelExercises.FlowDirection=FlowDirection.TopDown;
+            PanelNovità.FlowDirection=FlowDirection.TopDown;
+            PanelPreferred.FlowDirection=FlowDirection.TopDown;
             carica_esercizi();
             carica_esercizi_novità();
             carica_esercizi_preferiti();
@@ -84,10 +88,12 @@ namespace Volpe_Ragusa.csharp
                     {
                         Label label = new Label();
                         //vediamo cosa mi torna il json, creo label nome e label descrizione
-                        //label.Text = $"Esercizio {i + 1}: {exercises[i]}";
+                        /*label.Text = $"Esercizio {i + 1}: {exercises[i]}";
                         label.Location = new System.Drawing.Point(20, 50 + 30 * i);
                         label.Size = new System.Drawing.Size(200, 20);
-                        Controls.Add(label);
+                        Controls.Add(label);*/
+                        label.Text=exercises[i];//TO_DO dipende cosa ritorna
+                        PanelExercises.Controls.Add(label);
                     }
                 }
                 catch (WebException ex)
@@ -124,10 +130,12 @@ namespace Volpe_Ragusa.csharp
                     {
                         Label label = new Label();
                         //vediamo cosa mi torna il json, creo label nome e label descrizione
-                        //label.Text = $"Esercizio {i + 1}: {exercises[i]}";
+                        /*label.Text = $"Esercizio {i + 1}: {exercises[i]}";
                         label.Location = new System.Drawing.Point(20, 50 + 30 * i);
                         label.Size = new System.Drawing.Size(200, 20);
-                        Controls.Add(label);
+                        Controls.Add(label);*/
+                        label.Text=exercises[i];
+                        PanelPreferred.Controls.Add(label);
                     }
                 }
                 catch (WebException ex)
@@ -164,10 +172,12 @@ namespace Volpe_Ragusa.csharp
                     {
                         Label label = new Label();
                         //vediamo cosa mi torna il json, creo label nome e label descrizione
-                        //label.Text = $"Esercizio {i + 1}: {exercises[i]}";
+                        /*label.Text = $"Esercizio {i + 1}: {exercises[i]}";
                         label.Location = new System.Drawing.Point(20, 50 + 30 * i);
                         label.Size = new System.Drawing.Size(200, 20);
-                        Controls.Add(label);
+                        Controls.Add(label);*/
+                        label.Text=exercises[i];
+                        PanelNovità.Controls.Add(label);
                     }
                 }
                 catch (WebException ex)

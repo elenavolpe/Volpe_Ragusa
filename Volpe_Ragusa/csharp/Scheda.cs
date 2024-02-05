@@ -24,6 +24,7 @@ namespace Volpe_Ragusa.csharp
             this.email = utente.email;
             //string nome=get_name(email);
             labelHeader.Text="Ecco la tua scheda "+utente.name;
+            PanelEsercizi.FlowDirection=FlowDirection.TopDown;
             carica_esercizi();
         }
 
@@ -59,10 +60,12 @@ namespace Volpe_Ragusa.csharp
                     {
                         Label label = new Label();
                         //vediamo cosa mi torna il json, creo label nome e label descrizione
-                        //label.Text = $"Esercizio {i + 1}: {exercises[i]}";
+                        /*label.Text = $"Esercizio {i + 1}: {exercises[i]}";
                         label.Location = new System.Drawing.Point(20, 50 + 30 * i);
                         label.Size = new System.Drawing.Size(200, 20);
-                        Controls.Add(label);
+                        Controls.Add(label);*/
+                        label.Text=exercises[i];
+                        PanelEsercizi.Controls.Add(label);
                     }
                 }
                 catch (WebException ex)
