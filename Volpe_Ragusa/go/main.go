@@ -425,10 +425,9 @@ func main() {
 		}
 	})
 
-	mux.HandleFunc("/getProposedExercises", func(w http.ResponseWriter, r *http.Request) {
-		//TO_DO, ritorna gli esercizi proposti in base ai muscoli preferiti(passati in input)
-
-	})
+	// mux.HandleFunc("/getProposedExercises", func(w http.ResponseWriter, r *http.Request) {
+	// 	//TO_DO, ritorna gli esercizi proposti in base ai muscoli preferiti(passati in input)
+	// })
 
 	// Porta del server
 	port := 8080
