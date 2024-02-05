@@ -31,6 +31,7 @@
             labelHeader = new Label();
             buttonAccount = new Button();
             buttonHome = new Button();
+            PanelEsercizi = new FlowLayoutPanel();
             SuspendLayout();
             // 
             // labelHeader
@@ -63,11 +64,19 @@
             buttonHome.UseVisualStyleBackColor = true;
             buttonHome.Click += buttonHome_Click;
             // 
+            // PanelEsercizi
+            // 
+            PanelEsercizi.Location = new Point(47, 70);
+            PanelEsercizi.Name = "PanelEsercizi";
+            PanelEsercizi.Size = new Size(582, 368);
+            PanelEsercizi.TabIndex = 3;
+            // 
             // Scheda
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(PanelEsercizi);
             Controls.Add(buttonHome);
             Controls.Add(buttonAccount);
             Controls.Add(labelHeader);
@@ -82,5 +91,6 @@
         private Label labelHeader;
         private Button buttonAccount;
         private Button buttonHome;
+        private FlowLayoutPanel PanelEsercizi;
     }
 }
