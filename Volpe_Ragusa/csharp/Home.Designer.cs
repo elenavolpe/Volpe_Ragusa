@@ -35,10 +35,10 @@
             button1 = new Button();
             button2 = new Button();
             button3 = new Button();
-            vScrollBar1 = new VScrollBar();
             PanelPreferred = new FlowLayoutPanel();
             PanelNovità = new FlowLayoutPanel();
             PanelExercises = new FlowLayoutPanel();
+            flowLayoutPanel1 = new FlowLayoutPanel();
             SuspendLayout();
             // 
             // label1
@@ -107,13 +107,6 @@
             button3.UseVisualStyleBackColor = true;
             button3.Click += button3_Click;
             // 
-            // vScrollBar1
-            // 
-            vScrollBar1.Location = new Point(780, -25);
-            vScrollBar1.Name = "vScrollBar1";
-            vScrollBar1.Size = new Size(29, 547);
-            vScrollBar1.TabIndex = 9;
-            // 
             // PanelPreferred
             // 
             PanelPreferred.Location = new Point(57, 120);
@@ -135,15 +128,22 @@
             PanelExercises.Size = new Size(438, 108);
             PanelExercises.TabIndex = 12;
             // 
+            // flowLayoutPanel1
+            // 
+            flowLayoutPanel1.Location = new Point(20, 75);
+            flowLayoutPanel1.Name = "flowLayoutPanel1";
+            flowLayoutPanel1.Size = new Size(608, 436);
+            flowLayoutPanel1.TabIndex = 13;
+            // 
             // Home
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(803, 523);
+            Controls.Add(flowLayoutPanel1);
             Controls.Add(PanelExercises);
             Controls.Add(PanelNovità);
             Controls.Add(PanelPreferred);
-            Controls.Add(vScrollBar1);
             Controls.Add(button3);
             Controls.Add(button2);
             Controls.Add(button1);
@@ -166,9 +166,9 @@
         private Button button1;
         private Button button2;
         private Button button3;
-        private VScrollBar vScrollBar1;
         private FlowLayoutPanel PanelPreferred;
         private FlowLayoutPanel PanelNovità;
         private FlowLayoutPanel PanelExercises;
+        private FlowLayoutPanel flowLayoutPanel1;
     }
 }
