@@ -31,6 +31,16 @@ namespace Volpe_Ragusa.csharp
             InitializeComponent();
             Utente utente=Utente.Istanza;
             this.email=utente.email;
+            //da cambiare in base all'email che decidiamo per l'admin
+            if(this.email=="admin@mail.it"){
+                //TO_DO sistemare tutti i label
+                buttonScheda.Hide();
+                buttonImpostazioni.Hide();
+            }
+            else{
+                carica_esercizi_consigliati();
+                get_grafico();
+            }
             labelBenvenuto.Text="Benvenuto nel tuo profilo "+utente.name;
             //TO_DO inserire qui tutti i caricamenti
         }

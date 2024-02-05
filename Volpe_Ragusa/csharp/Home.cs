@@ -32,7 +32,9 @@ namespace Volpe_Ragusa.csharp
             this.email = utente.email;
             //string nome=get_name(email);
             label1.Text="Ciao "+utente.name+", benvenuto in MyFitPlan";
-            //TO_DO inserire qui tutti i caricamenti
+            carica_esercizi();
+            carica_esercizi_novità();
+            carica_esercizi_preferiti();
         }
 
         private void button1_Click(object sender, EventArgs e)

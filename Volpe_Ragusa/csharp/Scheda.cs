@@ -24,7 +24,7 @@ namespace Volpe_Ragusa.csharp
             this.email = utente.email;
             //string nome=get_name(email);
             labelHeader.Text="Ecco la tua scheda "+utente.name;
-            //TO_DO inserire qui tutti i caricamenti
+            carica_esercizi();
         }
 
         //è sbagliato, non è al click
