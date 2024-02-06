@@ -93,7 +93,7 @@ def add_exercise_admin(esercizio):
     #TO_DO deve prima verificare che l'email sia quella dell'admin,
     #quindi aggiunge al database
     try:
-         r = connect_go_server('addExercise',dict)
+         r = connect_go_server('addExercise',esercizio)
     except TypeError as e:
         return f"Errore: {e}"
     return 
