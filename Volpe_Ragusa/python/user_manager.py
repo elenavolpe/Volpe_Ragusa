@@ -8,6 +8,7 @@ def login(account):
     if is_valid_email(account['email']) and is_valid_password(account['password']):
         try:
             r = connect_go_server('verifypassword', account)
+            return r
         except TypeError as e:
             return f"Errore: {e}"
     else:
@@ -80,6 +81,8 @@ def getInfo(email):
         try:
             utente = connect_go_server('getInfo', email)
             print(utente)
+            if utente['id']==-1:
+                return "errore"
             return utente
         except TypeError as e:
             return f"Errore: {e}"
@@ -99,7 +102,7 @@ def get_muscoli_preferiti(email):
         try:
             #TO_DO implementare questa funzione in go
             r = connect_go_server('getPreferredMuscles', email)
-            #devo ritornarli
+            #TO_DO ritornami un json dei nomi in caso
         except TypeError as e:
             return f"Errore: {e}"
         return r

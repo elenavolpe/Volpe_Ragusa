@@ -22,7 +22,6 @@ namespace Volpe_Ragusa.csharp
             InitializeComponent();
             Utente utente=Utente.Istanza;
             this.email = utente.email;
-            //string nome=get_name(email);
             labelIntro.Text="Ciao "+utente.name+", qui puoi modificare il tuo profilo";
         }
 

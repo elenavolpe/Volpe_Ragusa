@@ -129,6 +129,13 @@ def add_exercise():
         email = request.form.get('email')
         esercizio = request.form.get('nomeEsercizio')
         return  exercise_manager.delete_exercise_admin(email,esercizio)
+    
+#ritorna i preferred muscles dell'utente
+@app.route('/get_muscles', methods=['POST'])
+def get_muscles():
+    if request.method == 'POST':
+        email = request.form.get('email')
+        return  user_manager.get_muscoli_preferiti(email)
 
 if __name__ == '__main__':
      app.run(host='0.0.0.0', port=5000, threaded=True) # Avvio il server Flask

@@ -53,16 +53,18 @@ namespace Volpe_Ragusa
                         string response = client.UploadString($"{pythonServerUrl}/endpoint", "POST", jsonData);
                         // Leggi la risposta
                         Console.WriteLine($"Risposta dal server Python: {response}");
-                        //TO_DO se la risposta è positiva fatti mandare tutte le info del cliente,
-                        //così setti le info nel singletone
                         
                         //se la risposta � positiva posso passare direttamente a home o account come parametro nome e email
-                        Utente utente=Utente.Istanza;
-                        utente.setAddress(email);
-                        //Account account = new Account(email);
-                        Account account = new Account();
-                        this.Close();
-                        account.Show();
+                        if(response=="ok"){
+                            Utente utente=Utente.Istanza;
+                            utente.setAddress(email);
+                            //Account account = new Account(email);
+                            Account account = new Account();
+                            this.Close();
+                            account.Show();
+                        }else{
+                            Console.WriteLine("email o password errati");
+                        }
                     }
                     catch (WebException ex)
                     {

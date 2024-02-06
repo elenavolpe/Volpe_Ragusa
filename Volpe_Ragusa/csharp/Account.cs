@@ -26,7 +26,8 @@ namespace Volpe_Ragusa.csharp
             Caricamenti caricamenti= new Caricamenti(this.email);
             //da cambiare in base all'email che decidiamo per l'admin
             if(this.email=="admin@mail.it"){
-                //TO_DO sistemare tutti i label
+                //TO_DO magari mettere al posto dei label dell'utente,
+                //le cose per aggiungere un nuovo esercizio
                 labelBenvenuto.Text="Benvenuto nel tuo profilo "+utente.name + ", qui puoi aggiungere o eliminare esercizi dalla lista ";
                 buttonScheda.Hide();
                 buttonImpostazioni.Hide();
@@ -37,9 +38,9 @@ namespace Volpe_Ragusa.csharp
                 labelBenvenuto.Text="Benvenuto nel tuo profilo "+utente.name;
                 labelEmail.Text=utente.email;
                 labelNome.Text=utente.name;
-                labelCognome.Text="cognome";
-                labelEta.Text="età";
-                labelMuscoli.Text="muscoli";
+                labelCognome.Text=utente.cognome;
+                labelEta.Text=utente.eta.ToString();
+                labelMuscoli.Text=utente.muscoli.ToString();
                 //get_grafico();
                 caricamenti.get_grafico(this.email,flowLayoutPanel1);
                 //carica_esercizi_consigliati();
@@ -47,7 +48,6 @@ namespace Volpe_Ragusa.csharp
                 //carica_muscoli_trascurati();
                 caricamenti.carica_muscoli_trascurati(this.email,flowLayoutPanel1);
             }
-            //TO_DO inserire qui tutti i caricamenti
             this.AutoScroll=true;
             flowLayoutPanel1.AutoSize=true;
             flowLayoutPanel1.FlowDirection=FlowDirection.TopDown;
