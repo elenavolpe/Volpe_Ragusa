@@ -69,6 +69,7 @@
             labelNome.Size = new Size(113, 25);
             labelNome.TabIndex = 1;
             labelNome.Text = "nome: nome";
+            labelNome.Visible=false;
             // 
             // labelEmail
             // 
@@ -78,6 +79,7 @@
             labelEmail.Size = new Size(105, 25);
             labelEmail.TabIndex = 2;
             labelEmail.Text = "email: email";
+            labelEmail.Visible=false;
             // 
             // labelCognome
             // 
@@ -87,6 +89,7 @@
             labelCognome.Size = new Size(173, 25);
             labelCognome.TabIndex = 3;
             labelCognome.Text = "cognome: cognome";
+            labelCognome.Visible=false;
             // 
             // labelEta
             // 
@@ -96,6 +99,7 @@
             labelEta.Size = new Size(69, 25);
             labelEta.TabIndex = 4;
             labelEta.Text = "età: età";
+            labelEta.Visible=false;
             // 
             // labelMuscoli
             // 
@@ -105,6 +109,7 @@
             labelMuscoli.Size = new Size(209, 25);
             labelMuscoli.TabIndex = 5;
             labelMuscoli.Text = "muscoli preferiti: muscoli";
+            labelMuscoli.Visible=false;
             // 
             // buttonHome
             // 
@@ -164,13 +169,6 @@
             // 
             // flowLayoutPanelAggiungi
             // 
-            flowLayoutPanelAggiungi.Controls.Add(label2);
-            flowLayoutPanelAggiungi.Controls.Add(labelAggiungi);
-            flowLayoutPanelAggiungi.Controls.Add(textBox1);
-            flowLayoutPanelAggiungi.Controls.Add(label3);
-            flowLayoutPanelAggiungi.Controls.Add(checkedListBox1);
-            flowLayoutPanelAggiungi.Controls.Add(textBox2);
-            flowLayoutPanelAggiungi.Controls.Add(label4);
             flowLayoutPanelAggiungi.Location = new Point(21, 78);
             flowLayoutPanelAggiungi.Name = "flowLayoutPanelAggiungi";
             flowLayoutPanelAggiungi.Size = new Size(545, 312);
@@ -246,11 +244,13 @@
             Controls.Add(buttonLogout);
             Controls.Add(buttonScheda);
             Controls.Add(buttonHome);
+            /*
             Controls.Add(labelMuscoli);
             Controls.Add(labelEta);
             Controls.Add(labelCognome);
             Controls.Add(labelEmail);
             Controls.Add(labelNome);
+            */
             Controls.Add(labelBenvenuto);
             Name = "Account";
             Text = "Account";

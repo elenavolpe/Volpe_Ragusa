@@ -468,7 +468,7 @@ public class Caricamenti{
             }
         }
 
-        private void addEsercizio(object sender, EventArgs e)
+        /*private void addEsercizio(object sender, EventArgs e)
         {
             Button button = sender as Button;
             button.Text="elimina";
@@ -495,14 +495,14 @@ public class Caricamenti{
                     Console.WriteLine($"Errore durante la richiesta HTTP: {ex.Message}");
                 }
             }
-        }
+        }*/
 
         private void deleteEsercizio(object sender, EventArgs e)
         {
             Button button = sender as Button;
-            button.Text="aggiungi";
+            //button.Text="aggiungi";
             button.Click -= deleteEsercizio;
-            button.Click += addEsercizio;
+            //button.Click += addEsercizio;
             Control contenitore = button.Parent;
             Label label = contenitore.Controls.Find("nome", true).FirstOrDefault() as Label;
             string nomeEsercizio=label.Text;

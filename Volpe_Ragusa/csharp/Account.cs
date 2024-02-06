@@ -17,29 +17,50 @@ namespace Volpe_Ragusa.csharp
     public partial class Account : Form
     {
         string email;
-
+        Caricamenti caricamenti;
         public Account()
         {
             InitializeComponent();
             Utente utente=Utente.Istanza;
             this.email=utente.email;
-            Caricamenti caricamenti= new Caricamenti(this.email);
+            caricamenti= new Caricamenti(this.email);
+            /*flowLayoutPanel1.Controls.Clear(); 
+            flowLayoutPanel1.AutoSize=true;
+            flowLayoutPanel1.FlowDirection=FlowDirection.TopDown;*/
+            flowLayoutPanelAggiungi.Controls.Clear();
+            flowLayoutPanelAggiungi.AutoSize=true;
+            flowLayoutPanelAggiungi.FlowDirection=FlowDirection.TopDown;
             //da cambiare in base all'email che decidiamo per l'admin
             if(this.email=="admin@mail.it"){
-                //TO_DO magari mettere al posto dei label dell'utente,
-                //le cose per aggiungere un nuovo esercizio
                 labelBenvenuto.Text="Benvenuto nel tuo profilo "+utente.name + ", qui puoi aggiungere o eliminare esercizi dalla lista ";
                 buttonScheda.Hide();
                 buttonImpostazioni.Hide();
+                flowLayoutPanelAggiungi.Controls.Add(label2);
+                flowLayoutPanelAggiungi.Controls.Add(labelAggiungi);
+                flowLayoutPanelAggiungi.Controls.Add(textBox1);
+                textBox1.Name="nome"; //vedi
+                flowLayoutPanelAggiungi.Controls.Add(label3);
+                flowLayoutPanelAggiungi.Controls.Add(textBox2);
+                textBox2.Name="descrizione"; //vedi
+                flowLayoutPanelAggiungi.Controls.Add(label4);
+                flowLayoutPanelAggiungi.Controls.Add(checkedListBox1);
+                Button buttonaggiungi= new Button();
+                buttonaggiungi.Text="aggiungi";
+                buttonaggiungi.Click+=addEsercizio;
                 //carica_esercizi();
                 caricamenti.carica_esercizi(this.email,flowLayoutPanel1);
             }
             else{
                 labelBenvenuto.Text="Benvenuto nel tuo profilo "+utente.name;
+                flowLayoutPanelAggiungi.Controls.Add(labelEmail);
                 labelEmail.Text=utente.email;
+                flowLayoutPanelAggiungi.Controls.Add(labelNome);
                 labelNome.Text=utente.name;
+                flowLayoutPanelAggiungi.Controls.Add(labelCognome);
                 labelCognome.Text=utente.cognome;
+                flowLayoutPanelAggiungi.Controls.Add(labelEta);
                 labelEta.Text=utente.eta.ToString();
+                flowLayoutPanelAggiungi.Controls.Add(labelMuscoli);
                 labelMuscoli.Text=utente.muscoli.ToString();
                 //get_grafico();
                 caricamenti.get_grafico(this.email,flowLayoutPanel1);
@@ -51,6 +72,65 @@ namespace Volpe_Ragusa.csharp
             this.AutoScroll=true;
             flowLayoutPanel1.AutoSize=true;
             flowLayoutPanel1.FlowDirection=FlowDirection.TopDown;
+        }
+
+        private void addEsercizio(object sender, EventArgs e)
+        {
+            Button button = sender as Button;
+            //button.Text="elimina";
+            button.Click -= addEsercizio;
+            //button.Click += deleteEsercizio;
+            Control contenitore = button.Parent;
+            TextBox box1 = contenitore.Controls.Find("nome", true).FirstOrDefault() as TextBox;
+            string nomeEsercizio=box1.Text;
+            TextBox box2 = contenitore.Controls.Find("descrizione", true).FirstOrDefault() as TextBox;
+            string descrizioneEsercizio=box2.Text;
+            List<string> muscoliSelezionati = new List<string>();
+            for (int i = 0; i < checkedListBox1.Items.Count; i++)
+            {
+                if (checkedListBox1.GetItemChecked(i))
+                {
+                    muscoliSelezionati.Add(checkedListBox1.Items[i].ToString());
+                }
+            }
+            using (WebClient client = new WebClient())
+            {
+                try
+                {
+                    string url = "http://localhost:5000/add_exercise";
+                    /*NameValueCollection postData = new NameValueCollection
+                    {
+                        { "email", this.email },
+                        {"esercizio", nomeEsercizio},
+                        {"descrizione", descrizioneEsercizio},
+                        {"muscoli", muscoliSelezionati}
+                        //TO_DO prendere e passargli tutti i muscoli
+                    };*/
+                    var dataToSend = new
+                        {
+                            email= this.email,
+                            nome= nomeEsercizio,
+                            descrizione = descrizioneEsercizio,
+                            muscoli = muscoliSelezionati
+                        };
+                    string jsonData = JsonConvert.SerializeObject(dataToSend);
+                    StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+                    // Impostare l'intestazione Content-Type
+                    client.Headers[HttpRequestHeader.ContentType] = "application/json";
+                    // Invio di una richiesta POST
+                    string response = client.UploadString($"{url}/endpoint", "POST", jsonData);
+                    // Leggi la risposta
+                    Console.WriteLine($"Risposta dal server Python: {response}");
+                    //se è andato tutto bene
+                    box1.Text="";
+                    box2.Text="";
+                }
+                catch (WebException ex)
+                {
+                    Console.WriteLine($"Errore durante la richiesta HTTP: {ex.Message}");
+                }
+            }
+            caricamenti.carica_esercizi(this.email,flowLayoutPanel1);
         }
 
         private void buttonHome_Click(object sender, EventArgs e)

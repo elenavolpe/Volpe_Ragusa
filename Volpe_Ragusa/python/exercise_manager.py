@@ -50,7 +50,15 @@ def get_trascurati(email):
     return r
 
 #aggiunge un esercizio alla lista degli esercizi (admin)
-def add_exercise_admin(email,nomeEsercizio):
+def add_exercise_admin(esercizio):
+    #ti sto passando un json del tipo
+    '''
+        email= this.email,
+        nome= nomeEsercizio,
+        descrizione = descrizioneEsercizio,
+        muscoli = muscoliSelezionati
+    '''
+    #muscoli è una lista di stringhe
     #TO_DO deve prima verificare che l'email sia quella dell'admin,
     #quindi aggiunge al database
     return 
