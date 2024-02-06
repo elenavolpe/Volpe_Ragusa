@@ -27,9 +27,15 @@ func main() {
 		surname := r.FormValue("surname")
 		email := r.FormValue("email")
 		password := r.FormValue("password")
+		string_age := r.FormValue("age")
+		age, err := strconv.Atoi(string_age)
+		if err != nil {
+			http.Error(w, "Invalid parameter", http.StatusBadRequest)
+			return
+		}
 		usr := make(chan string) // Sarà la mail dell'utente se la registrazione è andata a buon fine, altrimenti "failure"
 		var s string
-		go signup(name, surname, email, password, usr)
+		go signup(name, surname, email, password, age, usr)
 		s = <-usr
 		w.Write([]byte(s))
 	})
@@ -339,12 +345,12 @@ func main() {
 		reps := r.FormValue("reps")
 		ex_sets, err := strconv.Atoi(sets)
 		if err != nil {
-			http.Error(w, "Invalid limit parameter", http.StatusBadRequest)
+			http.Error(w, "Invalid parameter", http.StatusBadRequest)
 			return
 		}
 		ex_reps, err := strconv.Atoi(reps)
 		if err != nil {
-			http.Error(w, "Invalid limit parameter", http.StatusBadRequest)
+			http.Error(w, "Invalid parameter", http.StatusBadRequest)
 			return
 		}
 		done := make(chan bool)
@@ -364,7 +370,7 @@ func main() {
 		sets := r.FormValue("sets")
 		ex_sets, err := strconv.Atoi(sets)
 		if err != nil {
-			http.Error(w, "Invalid limit parameter", http.StatusBadRequest)
+			http.Error(w, "Invalid parameter", http.StatusBadRequest)
 			return
 		}
 		done := make(chan bool)
@@ -384,7 +390,7 @@ func main() {
 		reps := r.FormValue("reps")
 		ex_reps, err := strconv.Atoi(reps)
 		if err != nil {
-			http.Error(w, "Invalid limit parameter", http.StatusBadRequest)
+			http.Error(w, "Invalid parameter", http.StatusBadRequest)
 			return
 		}
 		done := make(chan bool)

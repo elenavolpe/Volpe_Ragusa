@@ -80,15 +80,15 @@ func deleteAccount(email string, done chan<- bool) {
 	done <- true
 }
 
-func signup(name, surname, email, password string, usr chan<- string) {
+func signup(name, surname, email, password string, age int, usr chan<- string) {
 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer db.Close()
 
-	signupQuery := "INSERT INTO users (name, surname, email, pass) VALUES (?, ?, ?, ?)"
-	_, err = db.Exec(signupQuery, name, surname, email, password)
+	signupQuery := "INSERT INTO users (name, surname, email, pass, age) VALUES (?, ?, ?, ?, ?)"
+	_, err = db.Exec(signupQuery, name, surname, email, password, age)
 	if err != nil {
 		log.Println(err)
 		usr <- "failure"
@@ -176,14 +176,14 @@ func getUserInfo(user_email string, usr chan<- User) {
 	}
 	defer db.Close()
 
-	getQuery := "SELECT id, name, surname, email, workout_name, workout_description FROM users where email = ?"
+	getQuery := "SELECT id, name, surname, email, age, workout_name, workout_description FROM users where email = ?"
 	var user User
-	err = db.QueryRow(getQuery, user_email).Scan(&user.Id, &user.Name, &user.Surname, &user.Email, &user.WorkoutName, &user.WorkoutDescription)
+	err = db.QueryRow(getQuery, user_email).Scan(&user.Id, &user.Name, &user.Surname, &user.Email, &user.Age, &user.WorkoutName, &user.WorkoutDescription)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			fmt.Println("No User found!")
 		}
-		emptyUsr := User{-1, "", "", "", "", ""}
+		emptyUsr := User{-1, "", "", "", 0, "", ""}
 		usr <- emptyUsr
 		return
 	}

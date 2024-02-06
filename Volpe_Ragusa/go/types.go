@@ -15,6 +15,7 @@ type User struct {
 	Name               string `json:"name"`
 	Surname            string `json:"surname"`
 	Email              string `json:"email"`
+	Age                int    `json:age`
 	WorkoutName        string `json:"workout_name"`
 	WorkoutDescription string `json:"workout_description"`
 }
