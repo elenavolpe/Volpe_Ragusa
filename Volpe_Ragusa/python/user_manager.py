@@ -7,7 +7,7 @@ def login(account):
     
     if is_valid_email(account['email']) and is_valid_password(account['password']):
         try:
-            r = connect_go_server('login', account)
+            r = connect_go_server('verifypassword', account)
         except TypeError as e:
             return f"Errore: {e}"
     else:
@@ -22,7 +22,7 @@ def signin(account):
         try:
             #TO_DO go deve verificare che l'email non sia già stata usata,
             #nel caso ritorna "email già in uso"
-            r = connect_go_server('signin', account)
+            r = connect_go_server('signup', account)
         except TypeError as e:
             return f"Errore: {e}"
     else:
