@@ -20,6 +20,8 @@ func main() {
 	mux := http.NewServeMux()
 
 	// Definizione handlers richieste per le diverse routes gestite dal multiplexer/router mux
+
+	// Endpoints per la gestione degli utenti
 	mux.HandleFunc("/signup", func(w http.ResponseWriter, r *http.Request) {
 		name := r.FormValue("name")
 		surname := r.FormValue("surname")
@@ -47,22 +49,41 @@ func main() {
 
 	mux.HandleFunc("/modifyprofile", func(w http.ResponseWriter, r *http.Request) {
 		//TO_DO, riceve in input le cose da modificare
+		// Qual' è la struttura delle informazioni che ricevo input?
 	})
+
+	// mux.HandleFunc("/verifypassword", func(w http.ResponseWriter, r *http.Request) {
+	//TO_DO, riceve in input l'email e la password, deve verificare che la password è corretta
+	// questa è la login, proprio dopo, cambio l'endpoint successivo in "verifypassword" e ritorno una stringa "success" in caso di successo, "failure" in caso di fallimento.
+	// })
 
 	mux.HandleFunc("/verifypassword", func(w http.ResponseWriter, r *http.Request) {
-		//TO_DO, riceve in input l'email e la password, deve verificare che la password è corretta
-	})
-
-	mux.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
 		email := r.FormValue("email")
 		password := r.FormValue("password")
-		usr := make(chan string) // Sarà la mail dell'utente se la registrazione è andata a buon fine, altrimenti "failure"
+		done := make(chan bool) // Sarà il messaggio "ok" se il login è andato a buon fine, altrimenti "failure"
 		var s string
-		go login(email, password, usr)
-		s = <-usr
+		go login(email, password, done)
+		if <-done {
+			s = "ok"
+		} else {
+			s = "failure"
+		}
 		w.Write([]byte(s))
 	})
 
+	mux.HandleFunc("/getInfo", func(w http.ResponseWriter, r *http.Request) {
+		// Riceve l'email da python, ritorna, se non ci sono errori, tutti i dati dell'utente. Altrimenti ritorna un utente con il campo id settato a -1 e i campi stringa vuoti
+		email := r.FormValue("email")
+		usr := make(chan User)
+		go getUserInfo(email, usr)
+		w.Header().Set("Content-Type", "application/json")
+		err := json.NewEncoder(w).Encode(<-usr) // I nomi dei campi del json di User puoi vederli in types.go
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+	})
+
+	// Endpoints per la gestione degli esercizi
 	mux.HandleFunc("/addExercise", func(w http.ResponseWriter, r *http.Request) {
 		name := r.FormValue("name")
 		description := r.FormValue("description")

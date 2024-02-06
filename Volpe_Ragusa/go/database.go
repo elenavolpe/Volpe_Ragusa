@@ -13,12 +13,14 @@ func ConnectDB(username, password, host, port, dbName string) (*sql.DB, error) {
 	dataSourceName := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", username, password, host, port, dbName)
 	db, err := sql.Open("mysql", dataSourceName)
 	if err != nil {
+		log.Println(err)
 		return nil, err
 	}
 
 	// Poiché open non ci dice se la connessione con il db è avvenuta effettivamente, testiamo la connessione con il metodo Ping() della struct db:
 	err = db.Ping()
 	if err != nil {
+		log.Println(err)
 		return nil, err
 	}
 
@@ -52,6 +54,7 @@ func deleteAccount(email string, done chan<- bool) {
 	deleteQuery := "DELETE FROM user_exercises WHERE userid = ?"
 	_, err = tx.Exec(deleteQuery, uid)
 	if err != nil {
+		log.Println(err)
 		done <- false
 		tx.Rollback()
 		return
@@ -60,6 +63,7 @@ func deleteAccount(email string, done chan<- bool) {
 	deleteQuery = "DELETE FROM users WHERE id = ?"
 	_, err = tx.Exec(deleteQuery, uid)
 	if err != nil {
+		log.Println(err)
 		done <- false
 		tx.Rollback()
 		return
@@ -67,6 +71,7 @@ func deleteAccount(email string, done chan<- bool) {
 
 	err = tx.Commit()
 	if err != nil {
+		log.Println(err)
 		done <- false
 		return
 	}
@@ -85,6 +90,7 @@ func signup(name, surname, email, password string, usr chan<- string) {
 	signupQuery := "INSERT INTO users (name, surname, email, pass) VALUES (?, ?, ?, ?)"
 	_, err = db.Exec(signupQuery, name, surname, email, password)
 	if err != nil {
+		log.Println(err)
 		usr <- "failure"
 		return
 	}
@@ -93,26 +99,30 @@ func signup(name, surname, email, password string, usr chan<- string) {
 	usr <- email
 }
 
-func login(email, password string, usr chan<- string) {
+func login(email, password string, done chan<- bool) {
 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer db.Close()
 
-	loginQuery := "SELECT name FROM users WHERE email = ? AND pass = ?"
-	var name string
-	err = db.QueryRow(loginQuery, email, password).Scan(&name)
-	if err != nil {
-		if err == sql.ErrNoRows {
-			fmt.Println("No User found!")
+	loginQuery := "SELECT EXISTS(SELECT 1 FROM users WHERE email = ? AND pass = ?)"
+	var exists bool
+	err = db.QueryRow(loginQuery, email, password).Scan(&exists)
+	if err == nil {
+		if exists {
+			fmt.Println("User found!")
+			done <- true
+			return
+		} else {
+			fmt.Println("User not found!")
+			done <- false
+			return
 		}
-		usr <- "failure"
-		return
+	} else {
+		log.Println(err)
+		done <- false
 	}
-	fmt.Println("User found!")
-
-	usr <- email
 }
 
 func getUID(email string) (uid int) { // Funzione per ottenere l'User ID dell'account loggato richiedente
@@ -128,6 +138,7 @@ func getUID(email string) (uid int) { // Funzione per ottenere l'User ID dell'ac
 		if err == sql.ErrNoRows {
 			fmt.Println("No User found!")
 		}
+		log.Println(err)
 		return -1 // -1 è per segnalare il fallimento della query
 	}
 	fmt.Println("UID found!")
@@ -158,6 +169,29 @@ func getUserName(email string, name chan<- string) {
 	name <- user_name
 }
 
+func getUserInfo(user_email string, usr chan<- User) {
+	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
+	getQuery := "SELECT id, name, surname, email, workout_name, workout_description FROM users where email = ?"
+	var user User
+	err = db.QueryRow(getQuery, user_email).Scan(&user.Id, &user.Name, &user.Surname, &user.Email, &user.WorkoutName, &user.WorkoutDescription)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			fmt.Println("No User found!")
+		}
+		emptyUsr := User{-1, "", "", "", "", ""}
+		usr <- emptyUsr
+		return
+	}
+	fmt.Println("User found!")
+
+	usr <- user
+}
+
 // Funzioni per la gestione dei dati relativi agli esercizi
 
 func addExercise(name, description string, done chan<- bool) {
@@ -170,6 +204,7 @@ func addExercise(name, description string, done chan<- bool) {
 	addQuery := "INSERT INTO exercises (name, description) VALUES (?, ?)"
 	_, err = db.Exec(addQuery, name, description)
 	if err != nil {
+		log.Println(err)
 		done <- false
 		return
 	}
@@ -188,6 +223,7 @@ func deleteExercise(name string, done chan<- bool) {
 	deleteQuery := "DELETE FROM exercises WHERE name = ?"
 	_, err = db.Exec(deleteQuery, name)
 	if err != nil {
+		log.Println(err)
 		done <- false
 		return
 	}
@@ -206,6 +242,7 @@ func editExerciseName(old_name, new_name string, done chan<- bool) {
 	editQuery := "UPDATE exercises SET name = ? WHERE name = ?"
 	_, err = db.Exec(editQuery, new_name, old_name)
 	if err != nil {
+		log.Println(err)
 		done <- false
 		return
 	}
@@ -224,6 +261,7 @@ func editExerciseDescription(old_name, new_description string, done chan<- bool)
 	editQuery := "UPDATE exercises SET description = ? WHERE name = ?"
 	_, err = db.Exec(editQuery, new_description, old_name)
 	if err != nil {
+		log.Println(err)
 		done <- false
 		return
 	}
@@ -366,6 +404,7 @@ func addMuscle(name string, done chan<- bool) {
 	addQuery := "INSERT INTO muscles (name) VALUES (?)"
 	_, err = db.Exec(addQuery, name)
 	if err != nil {
+		log.Println(err)
 		done <- false
 		return
 	}
@@ -384,6 +423,7 @@ func editMuscleName(old_name, new_name string, done chan<- bool) {
 	editQuery := "UPDATE muscles SET name = ? WHERE name = ?"
 	_, err = db.Exec(editQuery, new_name, old_name)
 	if err != nil {
+		log.Println(err)
 		done <- false
 		return
 	}
@@ -405,6 +445,7 @@ func getMuscleID(muscle string) (muscle_id int) {
 		if err == sql.ErrNoRows {
 			fmt.Println("No Muscle found!")
 		}
+		log.Println(err)
 		return -1 // -1 è per segnalare il fallimento della query
 	}
 	fmt.Println("Muscle's ID found!")
@@ -434,6 +475,7 @@ func deleteMuscle(name string, done chan<- bool) {
 	deleteQuery := "DELETE FROM exercise_muscles WHERE muscle = ?"
 	_, err = tx.Exec(deleteQuery, muscle_id)
 	if err != nil {
+		log.Println(err)
 		done <- false
 		tx.Rollback()
 		return
@@ -442,6 +484,7 @@ func deleteMuscle(name string, done chan<- bool) {
 	deleteQuery = "DELETE FROM muscles WHERE id = ?"
 	_, err = tx.Exec(deleteQuery, muscle_id)
 	if err != nil {
+		log.Println(err)
 		done <- false
 		tx.Rollback()
 		return
@@ -449,6 +492,7 @@ func deleteMuscle(name string, done chan<- bool) {
 
 	err = tx.Commit()
 	if err != nil {
+		log.Println(err)
 		done <- false
 		return
 	}
@@ -480,6 +524,7 @@ func addMuscleExercise(ex_name, muscle_name string, done chan<- bool) {
 	addQuery := "INSERT INTO exercise_muscles (exerciseid, muscleid) VALUES (?, ?)"
 	_, err = db.Exec(addQuery, ex_id, muscle_id)
 	if err != nil {
+		log.Println(err)
 		done <- false
 		return
 	}
@@ -510,6 +555,7 @@ func deleteMuscleExercise(ex_name, muscle_name string, done chan<- bool) {
 	deleteQuery := "DELETE FROM exercise_muscles WHERE exerciseid = ? AND muscleid = ?"
 	_, err = db.Exec(deleteQuery, ex_id, muscle_id)
 	if err != nil {
+		log.Println(err)
 		done <- false
 		return
 	}
@@ -541,6 +587,7 @@ func addPreferredMuscle(user_email, muscle_name string, done chan<- bool) {
 	addQuery := "INSERT INTO preferred_muscles (userid, muscleid) VALUES (?, ?)"
 	_, err = db.Exec(addQuery, uid, muscle_id)
 	if err != nil {
+		log.Println(err)
 		done <- false
 		return
 	}
@@ -571,6 +618,7 @@ func deletePreferredMuscle(user_email, muscle_name string, done chan<- bool) {
 	deleteQuery := "DELETE FROM preferred_muscles WHERE userid = ? AND muscleid = ?"
 	_, err = db.Exec(deleteQuery, uid, muscle_id)
 	if err != nil {
+		log.Println(err)
 		done <- false
 		return
 	}
@@ -590,6 +638,7 @@ func updateUserWorkoutName(user_email, wp_name string, done chan<- bool) {
 	addQuery := "UPDATE users SET workout_name = ? WHERE email = ?"
 	_, err = db.Exec(addQuery, wp_name, user_email)
 	if err != nil {
+		log.Println(err)
 		done <- false
 		return
 	}
@@ -608,6 +657,7 @@ func updateUserWorkoutDescription(user_email, wp_desc string, done chan<- bool) 
 	addQuery := "UPDATE users SET workout_description = ? WHERE email = ?"
 	_, err = db.Exec(addQuery, wp_desc, user_email)
 	if err != nil {
+		log.Println(err)
 		done <- false
 		return
 	}
@@ -637,6 +687,7 @@ func deleteUserWorkout(user_email string, done chan<- bool) {
 	deleteQuery := "DELETE FROM user_exercises WHERE userid = ?"
 	_, err = tx.Exec(deleteQuery, uid)
 	if err != nil {
+		log.Println(err)
 		done <- false
 		tx.Rollback()
 		return
@@ -647,6 +698,7 @@ func deleteUserWorkout(user_email string, done chan<- bool) {
 	updateQuery := "UPDATE users SET workout_name = NULL, workout_description = NULL WHERE id = ?"
 	_, err = tx.Exec(updateQuery, uid)
 	if err != nil {
+		log.Println(err)
 		done <- false
 		tx.Rollback()
 		return
@@ -655,6 +707,7 @@ func deleteUserWorkout(user_email string, done chan<- bool) {
 
 	err = tx.Commit()
 	if err != nil {
+		log.Println(err)
 		done <- false
 		return
 	}
@@ -686,6 +739,7 @@ func addExerciseWorkoutplan(user_email, ex_name string, ex_sets, ex_reps int, do
 	addQuery := "INSERT INTO user_exercises (userid, exerciseid, sets, reps) VALUES (?, ?, ?, ?)"
 	_, err = db.Exec(addQuery, uid, ex_id, ex_sets, ex_reps)
 	if err != nil {
+		log.Println(err)
 		done <- false
 		return
 	}
@@ -716,6 +770,7 @@ func editExerciseSetsWorkoutplan(user_email, ex_name string, new_ex_sets int, do
 	editQuery := "UPDATE user_exercises SET sets = ?  WHERE userid = ? AND exerciseid = ?"
 	_, err = db.Exec(editQuery, new_ex_sets, uid, ex_id)
 	if err != nil {
+		log.Println(err)
 		done <- false
 		return
 	}
@@ -746,6 +801,7 @@ func editExerciseRepsWorkoutplan(user_email, ex_name string, new_ex_reps int, do
 	editQuery := "UPDATE user_exercises SET reps = ?  WHERE userid = ? AND exerciseid = ?"
 	_, err = db.Exec(editQuery, new_ex_reps, uid, ex_id)
 	if err != nil {
+		log.Println(err)
 		done <- false
 		return
 	}
@@ -776,6 +832,7 @@ func deleteExerciseWorkoutplan(user_email, ex_name string, done chan<- bool) {
 	deleteQuery := "DELETE FROM user_exercises WHERE uid = ? AND ex_id = ?"
 	_, err = db.Exec(deleteQuery, uid, ex_id)
 	if err != nil {
+		log.Println(err)
 		done <- false
 		return
 	}
@@ -822,13 +879,13 @@ func getWorkoutPlan(user_email string, workout_plan chan<- []ExerciseWorkout) {
 	var workout []ExerciseWorkout
 	for rows.Next() {
 		var ex ExerciseWorkout
-		err := rows.Scan(&ex.exercise.Name, &ex.exercise.Description)
+		err := rows.Scan(&ex.Exercise.Name, &ex.Exercise.Description)
 		if err != nil {
 			log.Println(err)
 			return
 		}
 		getMuscleQuery := "SELECT M.name from muscles AS M JOIN exercise_muscles AS EM ON EM.muscleid = M.id JOIN exercises AS E ON E.id = EM.exerciseid WHERE E.name = ?"
-		rows1, err := db.Query(getMuscleQuery, ex.exercise.Name)
+		rows1, err := db.Query(getMuscleQuery, ex.Exercise.Name)
 		if err != nil {
 			log.Println(err)
 			return
@@ -843,7 +900,7 @@ func getWorkoutPlan(user_email string, workout_plan chan<- []ExerciseWorkout) {
 				return
 			}
 
-			ex.muscles = append(ex.muscles, muscle_name)
+			ex.Muscles = append(ex.Muscles, muscle_name)
 		}
 
 		err = rows1.Err()
@@ -859,6 +916,7 @@ func getWorkoutPlan(user_email string, workout_plan chan<- []ExerciseWorkout) {
 		log.Println(err)
 		return
 	}
+	fmt.Println("Queries run successfully!")
 
 	workout_plan <- workout
 }
@@ -900,6 +958,7 @@ func getPreferredMuscles(user_email string, muscles chan<- []string) {
 		log.Println(err)
 		return
 	}
+	fmt.Println("Query run successfully!")
 
 	muscles <- muscle_list
 }
