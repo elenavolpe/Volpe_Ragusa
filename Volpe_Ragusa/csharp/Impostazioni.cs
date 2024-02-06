@@ -73,14 +73,14 @@ namespace Volpe_Ragusa.csharp
                     string response = client.UploadString($"{pythonServerUrl}/endpoint", "POST", jsonData);
                     // Leggi la risposta
                     Console.WriteLine($"Risposta dal server Python: {response}");
-                    //TO_DO fatti ritornare l'email dell'utente che ha modificato
-
-                    //se va bene vado ad account
-                    Utente utente=Utente.Istanza;
-                    utente.setAddress(email); //TO_DO con email giusta
-                    Account account1 = new Account();
-                    this.Close();
-                    account1.Show();
+                    if(response!="failure"){
+                        //se va bene vado ad account
+                        Utente utente=Utente.Istanza;
+                        utente.setAddress(response); //TO_DO con email giusta
+                        Account account1 = new Account();
+                        this.Close();
+                        account1.Show();
+                    }
                 }
                 catch (WebException ex)
                 {

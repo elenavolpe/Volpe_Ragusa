@@ -184,7 +184,6 @@ public class Caricamenti{
                     NameValueCollection postData = new NameValueCollection
                     {
                         { "email", email }
-                        // Aggiungi altri parametri se necessario
                     };
                     // Invio della richiesta POST sincrona
                     byte[] responseBytes = client.UploadValues(url, "POST", postData);

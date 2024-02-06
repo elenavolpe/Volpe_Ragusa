@@ -17,8 +17,6 @@ public class Utente
     // Il costruttore è privato per evitare l'istanziazione diretta della classe
     private Utente()
     {
-        //this.email=email;
-        //this.nome=get_name(email);
     }
 
     public static Utente Istanza
@@ -101,9 +99,11 @@ public class Utente
         this.email=email;
         if(email==""){
             this.name="";
+            this.cognome="";
+            this.eta=0;
+            this.muscoli=null;
         }
         else{
-            //this.name=get_name(email);
             getInfo(email);
             muscoli=getMuscles(email);
         }

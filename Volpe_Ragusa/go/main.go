@@ -54,7 +54,9 @@ func main() {
 	})
 
 	mux.HandleFunc("/modifyprofile", func(w http.ResponseWriter, r *http.Request) {
-		//TO_DO, riceve in input le cose da modificare
+		//TO_DO, riceve in input un dizionario con key e dato da modificare
+		//TO_DO hai idea se ti posso passare nel dizionario la stringa di muscoli?
+		//se va tutto bene ritornami la mail del cliente, sennò ritornami "failure"
 		// Qual' è la struttura delle informazioni che ricevo input?
 	})
 
