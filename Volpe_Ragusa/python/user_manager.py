@@ -33,9 +33,8 @@ def modifica_profilo(account):
     if type(account) is not dict:
         return f"Errore signin: account deve essere un dizionario, invece è di tipo {type(account)}"
     
-    #TO_DO potremmo prima fare autenticare il cliente?
     modify={}
-    for key in account: #TO_DO non saprei come ritorna i muscoli
+    for key in account: #vedi se i muscoli te li passo bene
         if account[key]!="":
             #prendo solo i valori non nulli
             modify[key]=account[key]
@@ -48,16 +47,15 @@ def modifica_profilo(account):
             dict['oldPassword']=account['password']
             dict['email']=account['email']
             try:
-                #TO_DO go deve ritornare ok se la vecchia password è uguale a password
-                #TO_DO implementare questa funzione su go, sistemare come passare parametri
                 r = connect_go_server('verifypassword',dict)
-                #non ho ancora studiato go, non ho idea di cosa ritorna, per ora commento
-                #se la verifica password è andata a buon fine
-                try:
-                    #TO_DO implementare questa funzione su go
-                    r = connect_go_server('modifyprofile', modify)
-                except TypeError as e:
-                    return f"Errore: {e}"
+                if r=="ok":
+                    try:
+                        #TO_DO implementare questa funzione su go
+                        r = connect_go_server('modifyprofile', modify)
+                    except TypeError as e:
+                        return f"Errore: {e}"
+                else:
+                    return "verifica password non andata a buon fine "
             except TypeError as e:
                 return f"Errore: {e}"
     else: #in questo caso non c'è la necessità di verificare la password
@@ -75,7 +73,6 @@ def get_name(email):
         except TypeError as e:
             return f"Errore: {e}"
         
-#TO_DO federico mi dovresti ritornare le info dell'utente data l'email
 def getInfo(email):
     if email['email']!="":
         try:

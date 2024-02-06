@@ -78,7 +78,6 @@ def get_nome():
     
 #ritorna le info dell'utente data l'email    
 @app.route('/get_info', methods=['POST'])
-#TO_DO
 def get_info():
     if request.method == 'POST':
         email = request.get_json()

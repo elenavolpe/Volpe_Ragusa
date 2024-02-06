@@ -78,7 +78,7 @@ namespace Volpe_Ragusa.csharp
         {
             Button button = sender as Button;
             //button.Text="elimina";
-            button.Click -= addEsercizio;
+            //button.Click -= addEsercizio;
             //button.Click += deleteEsercizio;
             Control contenitore = button.Parent;
             TextBox box1 = contenitore.Controls.Find("nome", true).FirstOrDefault() as TextBox;

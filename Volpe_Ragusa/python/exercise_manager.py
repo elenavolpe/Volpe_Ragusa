@@ -1,5 +1,6 @@
 from utils import connect_go_server
 import user_manager
+import json
 
 #ritorna la lista degli esercizi (tutti)
 def get_exercises():
@@ -28,29 +29,59 @@ def get_recent():
 #ritorna gli esercizi consigliati in base agli esercizi preferiti
 def get_consigliati(email):
     muscoli=user_manager.get_muscoli_preferiti(email)
-    #TO_DO in realtà invece di chiedere di nuovo a go, potremmo semplicemente usare
-    #la get_exercises e filtrare gli esercizi corrispondenti
-    try:
-         #TO_DO nel caso vogliamo comunque usarla, sistemare muscoli in dizionario
-         r = connect_go_server('getProposedExercises',muscoli)
-    except TypeError as e:
-        return f"Errore: {e}"
-    return r
+    esercizi=get_exercises()
+    consigliati=[] #vedi
+    #scorro tutti gli esercizi
+    for esercizio in esercizi:
+        #muscoli dell'esercizio in questione
+        muscoliEsercizio=esercizio['muscles']
+        #scorro i muscoli preferiti
+        for muscolo in muscoli:
+            #se quell'esercizio allena almeno quel determinato muscolo
+            if muscolo in muscoliEsercizio:
+                consigliati.append(esercizio)
+                break
+    print(consigliati)
+    return json.dumps(consigliati)
 
 #ritorna gli esercizi consigliati in base ai muscoli che stanno venendo trascurati
 def get_trascurati(email):
-    #TO_DO in realtà potremmo, usando get_scheda o get_muscle_stats, ottenere
-    #una lista dei muscoli trascurati, e quindi usando get_exercises(già implementata),
-    #ritornare gli esercizi adatti, così da evitare di chiedere di nuovo a go
+    #TO_DO vedi se si possono ottenere i muscoli trascurati direttamente
+    #da get_muscle_stats
+    eserciziScheda=user_manager.get_exercise(email)
+    muscoliAllenati=[]
+    for esercizio in eserciziScheda:
+        for muscolo in esercizio['muscles']:
+            if muscolo not in muscoliAllenati:
+                #creo una lista di muscoli allenati
+                muscoliAllenati.append(muscolo)
+    #recupero la lista di tutti i muscoli
     try:
-         #TO_DO nel caso vogliamo comunque usarla, sistemare muscoli in dizionario
-         r = connect_go_server('getEserciziTrascurati',email)
+         #TO_DO Federico se mi puoi ritornare la lista di tutti i muscoli
+         allMuscles = connect_go_server('getAllMuscles')
     except TypeError as e:
         return f"Errore: {e}"
-    return r
+    #creo una lista dei muscoli trascurati
+    muscoliTrascurati=list(set(allMuscles)-set(muscoliAllenati))
+    #prendo tutti gli esercizi
+    eserciziAll=get_exercises()
+    consigliati=[] #vedi
+    #scorro tutti gli esercizi
+    for esercizio in eserciziAll:
+        #muscoli dell'esercizio in questione
+        muscoliEsercizio=esercizio['muscles']
+        #scorro i muscoli trascurati
+        for muscolo in muscoliTrascurati:
+            #se quell'esercizio allena almeno quel determinato muscolo
+            if muscolo in muscoliEsercizio:
+                consigliati.append(esercizio)
+                break
+    print(consigliati)
+    return json.dumps(consigliati)
 
 #aggiunge un esercizio alla lista degli esercizi (admin)
 def add_exercise_admin(esercizio):
+    #TO_DO federico nella route che hai messo mancano i muscoli che allena
     #ti sto passando un json del tipo
     '''
         email= this.email,
@@ -61,10 +92,21 @@ def add_exercise_admin(esercizio):
     #muscoli è una lista di stringhe
     #TO_DO deve prima verificare che l'email sia quella dell'admin,
     #quindi aggiunge al database
+    try:
+         r = connect_go_server('addExercise',dict)
+    except TypeError as e:
+        return f"Errore: {e}"
     return 
 
 #elimina un esercizio dalla lista degli esercizi (admin)
 def delete_exercise_admin(email,nomeEsercizio):
     #TO_DO deve prima verificare che l'email sia quella dell'admin,
     #quindi elimina l'esercizio dal database
-    return 
+    dict={}
+    dict['email']=email
+    dict['name']=nomeEsercizio
+    try:
+         r = connect_go_server('deleteExercise',dict)
+    except TypeError as e:
+        return f"Errore: {e}"
+    return r
