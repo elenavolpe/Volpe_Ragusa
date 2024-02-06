@@ -74,6 +74,16 @@ def get_name(email):
         except TypeError as e:
             return f"Errore: {e}"
         
+#TO_DO federico mi dovresti ritornare le info dell'utente data l'email
+def getInfo(email):
+    if email['email']!="":
+        try:
+            utente = connect_go_server('getInfo', email)
+            print(utente)
+            return utente
+        except TypeError as e:
+            return f"Errore: {e}"
+        
 def get_exercise(account):
     if is_valid_email(account):
         try:

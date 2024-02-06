@@ -48,3 +48,15 @@ def get_trascurati(email):
     except TypeError as e:
         return f"Errore: {e}"
     return r
+
+#aggiunge un esercizio alla lista degli esercizi (admin)
+def add_exercise_admin(email,nomeEsercizio):
+    #TO_DO deve prima verificare che l'email sia quella dell'admin,
+    #quindi aggiunge al database
+    return 
+
+#elimina un esercizio dalla lista degli esercizi (admin)
+def delete_exercise_admin(email,nomeEsercizio):
+    #TO_DO deve prima verificare che l'email sia quella dell'admin,
+    #quindi elimina l'esercizio dal database
+    return 

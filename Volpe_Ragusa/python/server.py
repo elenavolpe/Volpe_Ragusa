@@ -38,6 +38,7 @@ def get_image():
 
 #modifica profilo utente
 @app.route('/modifica_profilo', methods=['POST'])
+#TO_DO federico ritornami l'email di chi ha modificato
 def modify_profile():
     if request.method == 'POST':
         account = request.get_json()
@@ -74,6 +75,14 @@ def get_nome():
     if request.method == 'POST':
         email = request.get_json()
         return  user_manager.get_name(email)
+    
+#ritorna le info dell'utente data l'email    
+@app.route('/get_info', methods=['POST'])
+#TO_DO
+def get_info():
+    if request.method == 'POST':
+        email = request.get_json()
+        return  user_manager.getInfo(email)
 
 #ritorna gli esercizi consigliati in base ai muscoli preferiti    
 @app.route('/get_consigliati', methods=['POST'])
@@ -104,6 +113,22 @@ def elimina_esercizio():
         email = request.form.get('email')
         esercizio = request.form.get('nomeEsercizio')
         return  user_manager.elimina_esercizio_scheda(email,esercizio)
+    
+#aggiunge esercizio alla lista di esercizi (admin)
+@app.route('/add_exercise', methods=['POST'])
+def add_exercise():
+    if request.method == 'POST':
+        email = request.form.get('email')
+        esercizio = request.form.get('nomeEsercizio')
+        return  exercise_manager.add_exercise_admin(email,esercizio)
+    
+#aggiunge esercizio alla lista di esercizi (admin)
+@app.route('/delete_exercise', methods=['POST'])
+def add_exercise():
+    if request.method == 'POST':
+        email = request.form.get('email')
+        esercizio = request.form.get('nomeEsercizio')
+        return  exercise_manager.delete_exercise_admin(email,esercizio)
 
 if __name__ == '__main__':
      app.run(host='0.0.0.0', port=5000, threaded=True) # Avvio il server Flask

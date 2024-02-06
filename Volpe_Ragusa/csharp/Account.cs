@@ -17,15 +17,7 @@ namespace Volpe_Ragusa.csharp
     public partial class Account : Form
     {
         string email;
-        /*public Account(string email)
-        {
-            InitializeComponent();
-            this.email = email;
-            string nome=get_name(email);
-            labelBenvenuto.Text="Benvenuto nel tuo profilo "+nome;
-            //TO_DO inserire qui tutti i caricamenti
-        }*/
-
+        
         public Account()
         {
             InitializeComponent();
@@ -34,15 +26,26 @@ namespace Volpe_Ragusa.csharp
             //da cambiare in base all'email che decidiamo per l'admin
             if(this.email=="admin@mail.it"){
                 //TO_DO sistemare tutti i label
+                labelBenvenuto.Text="Benvenuto nel tuo profilo "+utente.name + ", qui puoi aggiungere o eliminare esercizi dalla lista ";
                 buttonScheda.Hide();
                 buttonImpostazioni.Hide();
+                carica_esercizi();
             }
             else{
-                carica_esercizi_consigliati();
+                labelBenvenuto.Text="Benvenuto nel tuo profilo "+utente.name;
+                labelEmail.Text=utente.email;
+                labelNome.Text=utente.name;
+                labelCognome.Text="cognome";
+                labelEta.Text="età";
+                labelMuscoli.Text="muscoli";
                 get_grafico();
+                carica_esercizi_consigliati();
+                carica_muscoli_trascurati();
             }
-            labelBenvenuto.Text="Benvenuto nel tuo profilo "+utente.name;
             //TO_DO inserire qui tutti i caricamenti
+            this.AutoScroll=true;
+            flowLayoutPanel1.AutoSize=true;
+            flowLayoutPanel1.FlowDirection=FlowDirection.TopDown;
         }
 
         private void buttonHome_Click(object sender, EventArgs e)
@@ -100,6 +103,10 @@ namespace Volpe_Ragusa.csharp
                         label.Size = new System.Drawing.Size(200, 20);
                         Controls.Add(label);
                     }*/
+                    Label label=new Label();
+                    label.Text="ecco il grafico che rappresenta la % di muscoli che stai allenando in base alla tua scheda ";
+                    flowLayoutPanel1.Controls.Add(label);
+                    //flowLayoutPanel1.Controls.Add(grafico); TO_DO
                 }
                 catch (WebException ex)
                 {
@@ -110,6 +117,9 @@ namespace Volpe_Ragusa.csharp
 
         public void carica_esercizi_consigliati()
         {
+            Label label=new Label();
+            label.Text="Ecco gli esercizi che ti consigliamo in base ai tuoi muscoli preferiti ";
+            flowLayoutPanel1.Controls.Add(label);
             using (WebClient client = new WebClient())
             {
                 try
@@ -163,6 +173,9 @@ namespace Volpe_Ragusa.csharp
 
         public void carica_muscoli_trascurati()
         {
+            Label label=new Label();
+            label.Text="Perchè non aggiungi uno di questi esercizi? Sembrerebbe che stai trascurando qualche gruppo muscolare ";
+            flowLayoutPanel1.Controls.Add(label);
             using (WebClient client = new WebClient())
             {
                 try
@@ -214,6 +227,68 @@ namespace Volpe_Ragusa.csharp
             }
         }
 
+        public void carica_esercizi()
+        {
+            Label label=new Label();
+            label.Text="Ciao Admin, qui puoi eliminare o aggiungere esercizi dalla lista ";
+            flowLayoutPanel1.Controls.Add(label);
+            using (WebClient client = new WebClient())
+            {
+                try
+                {
+                    // URL del server Python
+                    string url = "http://localhost:5000/get_esercizi";
+                    // Creazione dei dati da inviare come parte della richiesta POST
+                    NameValueCollection postData = new NameValueCollection
+                    {
+                        { "email", this.email }
+                        // Aggiungi altri parametri se necessario
+                    };
+                    // Invio della richiesta POST sincrona
+                    byte[] responseBytes = client.UploadValues(url, "POST", postData);
+                    // Converti la risposta in una stringa
+                    string responseBody = System.Text.Encoding.UTF8.GetString(responseBytes);
+                    // Deserializza il JSON ricevuto
+                    List<ExerciseData> exerciseList = JsonConvert.DeserializeObject<List<ExerciseData>>(responseBody);
+                    foreach (ExerciseData exerciseData in exerciseList)
+                    {   
+                        FlowLayoutPanel panel= new FlowLayoutPanel();
+                        panel.FlowDirection=FlowDirection.TopDown;
+                        panel.AutoSize=true;
+
+                        Label labelName = new Label();
+                        labelName.Text=exerciseData.Exercise.Name;
+                        labelName.Name="nome";
+                        panel.Controls.Add(labelName);
+
+                        Label labelDescription = new Label();
+                        labelDescription.Text=exerciseData.Exercise.Description;
+                        panel.Controls.Add(labelDescription);
+
+                        Label labelMuscles = new Label();
+                        foreach(string muscle in exerciseData.Muscles){
+                            labelMuscles.Text=muscle +", ";
+                        }
+                        panel.Controls.Add(labelMuscles);
+                        
+                        Button button = new Button();
+                        button.Size= new System.Drawing.Size(95,32);
+                        //TO_DO si dovrebbe fare un controllo se è già aggiunto o meno
+                        button.Text="elimina";
+                        button.Click += eliminaEsercizio;
+                        panel.Controls.Add(button);
+                        //TO_DO sistemare grandezza di questo panel
+                        flowLayoutPanel1.Controls.Add(panel);
+                    }
+                }
+                catch (WebException ex)
+                {
+                    // Gestisci eventuali errori durante la richiesta HTTP
+                    Console.WriteLine($"Errore durante la richiesta HTTP: {ex.Message}");
+                }
+            }
+        }
+
         private void aggiungiEsercizio(object sender, EventArgs e)
         {
             Button button = sender as Button;
@@ -227,7 +302,7 @@ namespace Volpe_Ragusa.csharp
             {
                 try
                 {
-                    string url = "http://localhost:5000/aggiungi_esercizio";
+                    string url = "http://localhost:5000/add_exercise";
                     NameValueCollection postData = new NameValueCollection
                     {
                         { "email", this.email },
@@ -256,7 +331,7 @@ namespace Volpe_Ragusa.csharp
             {
                 try
                 {
-                    string url = "http://localhost:5000/elimina_esercizio";
+                    string url = "http://localhost:5000/delete_exercise";
                     NameValueCollection postData = new NameValueCollection
                     {
                         { "email", this.email },

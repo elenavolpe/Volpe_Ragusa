@@ -7,11 +7,12 @@ public class Utente
     private static Utente _istanza;
     //private static readonly object _oggettoLock = new object();
 
-    public string name { get; set; }
-    //public string cognome { get; set; }
-
+    public string name;
     public string email;
-    //TO_DO in caso aggiungi tutte le altre informazioni
+    public string cognome;
+    public int eta;
+    public List<string> muscoli;
+    //TO_DO aggiungere le restanti informazioni dell'utente
 
     // Il costruttore è privato per evitare l'istanziazione diretta della classe
     private Utente()
@@ -40,9 +41,9 @@ public class Utente
         }
     }
 
-    private string get_name(string email)
+    private string getInfo(string email)
         {
-            string url = "http://localhost:5000/get_name";
+            string url = "http://localhost:5000/get_info";
             string name="nome";
             using (WebClient client = new WebClient()){
                 try{
@@ -52,7 +53,7 @@ public class Utente
                     };
                     byte[] responseBytes = client.UploadValues(url, "POST", postData);
                     name = Encoding.UTF8.GetString(responseBytes);
-                    //TO_DO vedi se ritorna giusto
+                    //TO_DO ritorna le informazioni e setti tutte le info
                 }
                 catch (WebException ex)
                 {
@@ -69,7 +70,8 @@ public class Utente
             this.name="";
         }
         else{
-            this.name=get_name(email);
+            //this.name=get_name(email);
+            getInfo(email);
         }
     }
 }
