@@ -17,7 +17,7 @@ namespace Volpe_Ragusa.csharp
     public partial class Account : Form
     {
         string email;
-        
+
         public Account()
         {
             InitializeComponent();
@@ -275,7 +275,7 @@ namespace Volpe_Ragusa.csharp
                         button.Size= new System.Drawing.Size(95,32);
                         //TO_DO si dovrebbe fare un controllo se è già aggiunto o meno
                         button.Text="elimina";
-                        button.Click += eliminaEsercizio;
+                        button.Click += deleteEsercizio;
                         panel.Controls.Add(button);
                         //TO_DO sistemare grandezza di questo panel
                         flowLayoutPanel1.Controls.Add(panel);
@@ -302,7 +302,7 @@ namespace Volpe_Ragusa.csharp
             {
                 try
                 {
-                    string url = "http://localhost:5000/add_exercise";
+                    string url = "http://localhost:5000/aggiungi_esercizio";
                     NameValueCollection postData = new NameValueCollection
                     {
                         { "email", this.email },
@@ -324,6 +324,64 @@ namespace Volpe_Ragusa.csharp
             button.Text="aggiungi";
             button.Click -= eliminaEsercizio;
             button.Click += aggiungiEsercizio;
+            Control contenitore = button.Parent;
+            Label label = contenitore.Controls.Find("nome", true).FirstOrDefault() as Label;
+            string nomeEsercizio=label.Text;
+            using (WebClient client = new WebClient())
+            {
+                try
+                {
+                    string url = "http://localhost:5000/elimina_esercizio";
+                    NameValueCollection postData = new NameValueCollection
+                    {
+                        { "email", this.email },
+                        {"esercizio", nomeEsercizio}
+                    };
+                    byte[] responseBytes = client.UploadValues(url, "POST", postData);
+                    string responseBody = System.Text.Encoding.UTF8.GetString(responseBytes);
+                }
+                catch (WebException ex)
+                {
+                    Console.WriteLine($"Errore durante la richiesta HTTP: {ex.Message}");
+                }
+            }
+        }
+
+        private void addEsercizio(object sender, EventArgs e)
+        {
+            Button button = sender as Button;
+            button.Text="elimina";
+            button.Click -= addEsercizio;
+            button.Click += deleteEsercizio;
+            Control contenitore = button.Parent;
+            Label label = contenitore.Controls.Find("nome", true).FirstOrDefault() as Label;
+            string nomeEsercizio=label.Text;
+            using (WebClient client = new WebClient())
+            {
+                try
+                {
+                    string url = "http://localhost:5000/add_exercise";
+                    NameValueCollection postData = new NameValueCollection
+                    {
+                        { "email", this.email },
+                        {"esercizio", nomeEsercizio}
+                    };
+                    byte[] responseBytes = client.UploadValues(url, "POST", postData);
+                    string responseBody = System.Text.Encoding.UTF8.GetString(responseBytes);
+                }
+                catch (WebException ex)
+                {
+                    Console.WriteLine($"Errore durante la richiesta HTTP: {ex.Message}");
+                }
+            }
+        }
+
+        private void deleteEsercizio(object sender, EventArgs e)
+        {
+            Button button = sender as Button;
+            button.Text="aggiungi";
+            button.Click -= deleteEsercizio;
+            button.Click += addEsercizio;
             Control contenitore = button.Parent;
             Label label = contenitore.Controls.Find("nome", true).FirstOrDefault() as Label;
             string nomeEsercizio=label.Text;
