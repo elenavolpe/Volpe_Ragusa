@@ -23,13 +23,15 @@ namespace Volpe_Ragusa.csharp
             InitializeComponent();
             Utente utente=Utente.Istanza;
             this.email=utente.email;
+            Caricamenti caricamenti= new Caricamenti(this.email);
             //da cambiare in base all'email che decidiamo per l'admin
             if(this.email=="admin@mail.it"){
                 //TO_DO sistemare tutti i label
                 labelBenvenuto.Text="Benvenuto nel tuo profilo "+utente.name + ", qui puoi aggiungere o eliminare esercizi dalla lista ";
                 buttonScheda.Hide();
                 buttonImpostazioni.Hide();
-                carica_esercizi();
+                //carica_esercizi();
+                caricamenti.carica_esercizi(this.email,flowLayoutPanel1);
             }
             else{
                 labelBenvenuto.Text="Benvenuto nel tuo profilo "+utente.name;
@@ -38,9 +40,12 @@ namespace Volpe_Ragusa.csharp
                 labelCognome.Text="cognome";
                 labelEta.Text="età";
                 labelMuscoli.Text="muscoli";
-                get_grafico();
-                carica_esercizi_consigliati();
-                carica_muscoli_trascurati();
+                //get_grafico();
+                caricamenti.get_grafico(this.email,flowLayoutPanel1);
+                //carica_esercizi_consigliati();
+                caricamenti.carica_esercizi_consigliati(this.email,flowLayoutPanel1);
+                //carica_muscoli_trascurati();
+                caricamenti.carica_muscoli_trascurati(this.email,flowLayoutPanel1);
             }
             //TO_DO inserire qui tutti i caricamenti
             this.AutoScroll=true;
@@ -79,7 +84,7 @@ namespace Volpe_Ragusa.csharp
             impostazioni.Show();
         }
 
-        public void get_grafico()
+        /*public void get_grafico()
         {
             using (WebClient client = new WebClient())
             {
@@ -103,7 +108,7 @@ namespace Volpe_Ragusa.csharp
                         label.Size = new System.Drawing.Size(200, 20);
                         Controls.Add(label);
                     }*/
-                    Label label=new Label();
+                    /*Label label=new Label();
                     label.Text="ecco il grafico che rappresenta la % di muscoli che stai allenando in base alla tua scheda ";
                     flowLayoutPanel1.Controls.Add(label);
                     //flowLayoutPanel1.Controls.Add(grafico); TO_DO
@@ -113,9 +118,9 @@ namespace Volpe_Ragusa.csharp
                     Console.WriteLine($"Errore durante la richiesta HTTP: {ex.Message}");
                 }
             }
-        }
+        }*/
 
-        public void carica_esercizi_consigliati()
+        /*public void carica_esercizi_consigliati()
         {
             Label label=new Label();
             label.Text="Ecco gli esercizi che ti consigliamo in base ai tuoi muscoli preferiti ";
@@ -169,9 +174,9 @@ namespace Volpe_Ragusa.csharp
                     Console.WriteLine($"Errore durante la richiesta HTTP: {ex.Message}");
                 }
             }
-        }
+        }*/
 
-        public void carica_muscoli_trascurati()
+        /*public void carica_muscoli_trascurati()
         {
             Label label=new Label();
             label.Text="Perchè non aggiungi uno di questi esercizi? Sembrerebbe che stai trascurando qualche gruppo muscolare ";
@@ -225,9 +230,9 @@ namespace Volpe_Ragusa.csharp
                     Console.WriteLine($"Errore durante la richiesta HTTP: {ex.Message}");
                 }
             }
-        }
+        }*/
 
-        public void carica_esercizi()
+        /*public void carica_esercizi()
         {
             Label label=new Label();
             label.Text="Ciao Admin, qui puoi eliminare o aggiungere esercizi dalla lista ";
@@ -287,9 +292,13 @@ namespace Volpe_Ragusa.csharp
                     Console.WriteLine($"Errore durante la richiesta HTTP: {ex.Message}");
                 }
             }
-        }
+        }*/
 
-        private void aggiungiEsercizio(object sender, EventArgs e)
+        /*private List<string> get_scheda_utente(string email){
+
+        }*/
+
+        /*private void aggiungiEsercizio(object sender, EventArgs e)
         {
             Button button = sender as Button;
             button.Text="elimina";
@@ -316,9 +325,9 @@ namespace Volpe_Ragusa.csharp
                     Console.WriteLine($"Errore durante la richiesta HTTP: {ex.Message}");
                 }
             }
-        }
+        }*/
 
-        private void eliminaEsercizio(object sender, EventArgs e)
+        /*private void eliminaEsercizio(object sender, EventArgs e)
         {
             Button button = sender as Button;
             button.Text="aggiungi";
@@ -345,9 +354,9 @@ namespace Volpe_Ragusa.csharp
                     Console.WriteLine($"Errore durante la richiesta HTTP: {ex.Message}");
                 }
             }
-        }
+        }*/
 
-        private void addEsercizio(object sender, EventArgs e)
+        /*private void addEsercizio(object sender, EventArgs e)
         {
             Button button = sender as Button;
             button.Text="elimina";
@@ -374,9 +383,9 @@ namespace Volpe_Ragusa.csharp
                     Console.WriteLine($"Errore durante la richiesta HTTP: {ex.Message}");
                 }
             }
-        }
+        }*/
 
-        private void deleteEsercizio(object sender, EventArgs e)
+        /*private void deleteEsercizio(object sender, EventArgs e)
         {
             Button button = sender as Button;
             button.Text="aggiungi";
@@ -403,6 +412,6 @@ namespace Volpe_Ragusa.csharp
                     Console.WriteLine($"Errore durante la richiesta HTTP: {ex.Message}");
                 }
             }
-        }
+        }*/
     }
 }

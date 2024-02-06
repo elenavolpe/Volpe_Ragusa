@@ -23,6 +23,7 @@ namespace Volpe_Ragusa.csharp
             InitializeComponent();
             Utente utente=Utente.Istanza;
             this.email = utente.email;
+            Caricamenti caricamenti = new Caricamenti(this.email);
             label1.Text="Ciao "+utente.name+", benvenuto in MyFitPlan";
 
             this.AutoScroll=true;
@@ -45,9 +46,12 @@ namespace Volpe_Ragusa.csharp
             PanelExercises.FlowDirection=FlowDirection.TopDown;
             PanelExercises.AutoSize=true;
 
-            carica_esercizi();
-            carica_esercizi_novità();
-            carica_esercizi_preferiti();
+            //carica_esercizi();
+            caricamenti.carica_esercizi(this.email,PanelExercises);
+            //carica_esercizi_novità();
+            caricamenti.carica_esercizi_novità(this.email,PanelNovità);
+            //carica_esercizi_preferiti();
+            caricamenti.carica_esercizi_preferiti(this.email,PanelPreferred);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -71,7 +75,7 @@ namespace Volpe_Ragusa.csharp
             login.Show();
         }
 
-        public void carica_esercizi()
+        /*public void carica_esercizi()
         {
             using (WebClient client = new WebClient())
             {
@@ -128,9 +132,9 @@ namespace Volpe_Ragusa.csharp
                     Console.WriteLine($"Errore durante la richiesta HTTP: {ex.Message}");
                 }
             }
-        }
+        }*/
 
-        public void carica_esercizi_preferiti()
+        /*public void carica_esercizi_preferiti()
         {
             using (WebClient client = new WebClient())
             {
@@ -181,9 +185,9 @@ namespace Volpe_Ragusa.csharp
                     Console.WriteLine($"Errore durante la richiesta HTTP: {ex.Message}");
                 }
             }
-        }
+        }*/
 
-        public void carica_esercizi_novità()
+        /*public void carica_esercizi_novità()
         {
             using (WebClient client = new WebClient())
             {
@@ -234,9 +238,9 @@ namespace Volpe_Ragusa.csharp
                     Console.WriteLine($"Errore durante la richiesta HTTP: {ex.Message}");
                 }
             }
-        }
+        }*/
 
-        private void aggiungiEsercizio(object sender, EventArgs e)
+        /*private void aggiungiEsercizio(object sender, EventArgs e)
         {
             Button button = sender as Button;
             button.Text="elimina";
@@ -263,9 +267,9 @@ namespace Volpe_Ragusa.csharp
                     Console.WriteLine($"Errore durante la richiesta HTTP: {ex.Message}");
                 }
             }
-        }
+        }*/
 
-        private void eliminaEsercizio(object sender, EventArgs e)
+        /*private void eliminaEsercizio(object sender, EventArgs e)
         {
             Button button = sender as Button;
             button.Text="aggiungi";
@@ -292,6 +296,6 @@ namespace Volpe_Ragusa.csharp
                     Console.WriteLine($"Errore durante la richiesta HTTP: {ex.Message}");
                 }
             }
-        }
+        }*/
     }
 }

@@ -22,6 +22,7 @@ namespace Volpe_Ragusa.csharp
             InitializeComponent();
             Utente utente=Utente.Istanza;
             this.email = utente.email;
+            Caricamenti caricamenti= new Caricamenti(this.email);
             //string nome=get_name(email);
             labelHeader.Text="Ecco la tua scheda "+utente.name;
 
@@ -29,7 +30,9 @@ namespace Volpe_Ragusa.csharp
 
             PanelEsercizi.FlowDirection=FlowDirection.TopDown;
             PanelEsercizi.AutoSize=true;
-            carica_esercizi();
+            //carica_esercizi();
+            PanelEsercizi.Name="Scheda";
+            caricamenti.get_scheda(this.email,PanelEsercizi);
         }
 
         private void labelHeader_Click(object sender, EventArgs e)
@@ -37,7 +40,7 @@ namespace Volpe_Ragusa.csharp
             
         }
 
-        public void carica_esercizi()
+        /*public void get_scheda()
         {
             using (WebClient client = new WebClient())
             {
@@ -82,7 +85,7 @@ namespace Volpe_Ragusa.csharp
                     Console.WriteLine($"Errore durante la richiesta HTTP: {ex.Message}");
                 }
             }
-        }
+        }*/
 
         private void buttonAccount_Click(object sender, EventArgs e)
         {
@@ -98,7 +101,7 @@ namespace Volpe_Ragusa.csharp
             home.Show();
         }
 
-        private void eliminaEsercizio(object sender, EventArgs e)
+        /*private void eliminaEsercizio(object sender, EventArgs e)
         {
             Button button = sender as Button;
             Control contenitore = button.Parent;
@@ -125,6 +128,6 @@ namespace Volpe_Ragusa.csharp
             //svuota il panel e lo ricarica così che si aggiornino gli esercizi
             PanelEsercizi.Controls.Clear();
             carica_esercizi();
-        }
+        }*/
     }
 }
