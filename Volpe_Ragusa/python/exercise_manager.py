@@ -125,6 +125,8 @@ def delete_exercise_admin(email,nomeEsercizio):
         dict['name']=nomeEsercizio
         try:
             r = connect_go_server('deleteExercise',dict)
+            if r != "success":
+                return "Errore nell'eliminazione dell'esercizio!"
         except Exception as e:
             return f"Errore: {e}"
         return r
