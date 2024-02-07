@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from io import BytesIO
 
 def generate_muscle_stats(data):
+    
     # Creazione dataframe per permettere di usare i metodi di Pandas
     df = pd.DataFrame(data)
 

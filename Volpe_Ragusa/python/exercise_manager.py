@@ -44,10 +44,7 @@ def get_consigliati(email):
     print(consigliati)
     return json.dumps(consigliati)
 
-#ritorna gli esercizi consigliati in base ai muscoli che stanno venendo trascurati
-def get_trascurati(email):
-    #TO_DO vedi se si possono ottenere i muscoli trascurati direttamente
-    #da get_muscle_stats
+def get_muscoli_allenati(email):
     eserciziScheda=user_manager.get_exercise(email)
     muscoliAllenati=[]
     for esercizio in eserciziScheda:
@@ -55,6 +52,12 @@ def get_trascurati(email):
             if muscolo not in muscoliAllenati:
                 #creo una lista di muscoli allenati
                 muscoliAllenati.append(muscolo)
+
+#ritorna gli esercizi consigliati in base ai muscoli che stanno venendo trascurati
+def get_trascurati(email):
+    #TO_DO vedi se si possono ottenere i muscoli trascurati direttamente
+    #da get_muscle_stats
+    muscoliAllenati=get_muscoli_allenati(email)
     #recupero la lista di tutti i muscoli
     try:
          #TO_DO Federico se mi puoi ritornare la lista di tutti i muscoli
@@ -81,8 +84,6 @@ def get_trascurati(email):
 
 #aggiunge un esercizio alla lista degli esercizi (admin)
 def add_exercise_admin(esercizio):
-    #TO_DO federico nella route che hai messo mancano i muscoli che allena
-    #ti sto passando un json del tipo
     '''
         email= this.email,
         nome= nomeEsercizio,
@@ -90,15 +91,14 @@ def add_exercise_admin(esercizio):
         muscoli = muscoliSelezionati
     '''
     #muscoli è una lista di stringhe
-    #TO_DO deve prima verificare che l'email sia quella dell'admin,
-    #quindi aggiunge al database
-    isAdmin = user_manager.authenticate_admin(email)
+    #prima verifica che l'utente sia l'admin
+    isAdmin = user_manager.authenticate_admin(esercizio['email'])
     if isAdmin:
         try:
             r = connect_go_server('addExercise',esercizio)
             if r!="success":
                 return "Errore nell'aggiunta dell'esercizio!"
-            for muscolo in esercizio['muscles']:
+            for muscolo in esercizio['muscoli']:
                 dict={}
                 dict['esercizio']=esercizio['nome']
                 dict['muscolo']=muscolo
@@ -116,8 +116,7 @@ def add_exercise_admin(esercizio):
 
 #elimina un esercizio dalla lista degli esercizi (admin)
 def delete_exercise_admin(email,nomeEsercizio):
-    #TO_DO deve prima verificare che l'email sia quella dell'admin,
-    #quindi elimina l'esercizio dal database
+    #prima verifica che l'utente sia l'admin
     isAdmin = user_manager.authenticate_admin(email)
     if isAdmin:
         dict={}

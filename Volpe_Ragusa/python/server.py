@@ -30,9 +30,13 @@ def login():
         return user_manager.login(account)
 
 # Route per ottenere l'immagine delle statistiche dei muscoli allenati
-@app.route('/get_muscle_stats', methods=['GET'])
+@app.route('/get_muscle_stats', methods=['POST'])
 def get_image():
-    #TO_DO qui ti passo l'email, con get_scheda puoi trovare i muscoli allenati
+    emaildata=request.get_json()
+    email=emaildata['email'] #vedi
+    #prendo i muscoli allenati
+    data=exercise_manager.get_muscoli_allenati(email)
+    #TO_DO sistemare questa funzione
     image = generate_muscle_stats(data)
     return send_file(image, mimetype='image/png')
 

@@ -3,6 +3,7 @@ import json
 
 # (account) deve essere dizionario con i campi 'email' e 'password'
 def login(account):
+    account=json.loads(account)
     if type(account) is not dict:
         return f"Errore login: account deve essere un dizionario, invece è di tipo {type(account)}"
     
@@ -17,6 +18,7 @@ def login(account):
 
 # In questo caso account deve essere un dizionario con i campi 'email', 'password', 'name', 'surname'
 def signin(account):
+    account=json.loads(account)
     if type(account) is not dict:
         return f"Errore signin: account deve essere un dizionario, invece è di tipo {type(account)}"
     
@@ -29,19 +31,17 @@ def signin(account):
         return "Errore: formato email e/o password non validi"
     
 def modifica_profilo(account):
+    account=json.loads(account)
     if type(account) is not dict:
-        return f"Errore signin: account deve essere un dizionario, invece è di tipo {type(account)}"
-    
-    modify={}
-    for key in account: #vedi se i muscoli te li passo bene
-        if account[key]!="":
-            #prendo solo i valori non nulli
-            modify[key]=account[key]
-
+        return f"Errore signin: account deve essere un dizionario, invece è di tipo {type(account)}"    
+    flag=False
+    #nel caso in cui si vuole cambiare la password
     if account['newpassword']!="":
+        #prima si verifica che non sia uguale a quella vecchia
         if account['newpassword']==account['password']:
             return "la nuova password non può essere uguale a quella vecchia"
         else:
+            #poi si verifica che quella vecchia sia quella giusta
             dict={}
             dict['oldPassword']=account['password']
             dict['email']=account['email']
@@ -49,7 +49,12 @@ def modifica_profilo(account):
                 r = connect_go_server('verifypassword',dict)
                 if r=="ok":
                     try:
+                        modify={}
+                        modify['email']=account['email']
+                        modify['newpassword']=account['newpassword']
                         r = connect_go_server('modifypassword', modify)
+                        if r=="failure":
+                            flag=True
                     except Exception as e:
                         return f"Errore: {e}"
                 else:
@@ -57,47 +62,40 @@ def modifica_profilo(account):
             except Exception as e:
                 return f"Errore: {e}"
     else: #in questo caso non c'è la necessità di verificare la password
-        if account['newemail']!="":
-            if account['newemail']==account['email']:
-                return "la nuova email non può essere uguale a quella vecchia"
-            else:
-                if is_valid_email(account['newemail']):
-                    try:
-                        r = connect_go_server('modifyemail', modify)
-                    except Exception as e:
-                        return f"Errore: {e}"
-                else:
-                    return "email non valida"
-        if account['newname']!="":
-            if account['newname']==account['name']:
-                return "il nuovo nome non può essere uguale a quello vecchio"
+        if account['nome']!="":
             try:
+                modify={}
+                modify['email']=account['email']
+                modify['newname']=account['nome']
                 r = connect_go_server('modifyname', modify)
+                if r=="failure":
+                    flag=True
             except Exception as e:
                 return f"Errore: {e}"
-        if account['newsurname']!="":
-            if account['newsurname']==account['surname']:
-                return "il nuovo cognome non può essere uguale a quello vecchio"
+        if account['eta']!="":
             try:
-                r = connect_go_server('modifysurname', modify)
-            except Exception as e:
-                return f"Errore: {e}"
-        # Gli altri campi modifica la chiave se non è giusta, se ne mancano altri aggiungili
-        if account['newage']!="":
-            if account['newage']==account['age']:
-                return "la nuova età non può essere uguale a quella vecchia"
-            try:
+                modify={}
+                modify['email']=account['email']
+                modify['newage']=account['eta']
                 r = connect_go_server('modifyage', modify)
+                if r=="failure":
+                    flag=True
             except Exception as e:
                 return f"Errore: {e}"
-        if account['newpreferredmuscles']!="":
-            if account['newpreferredmuscles']==account['preferredmuscles']:
-                return "i nuovi muscoli preferiti non possono essere uguali a quelli vecchi"
+        if account['muscoli']!="":
             try:
+                modify={}
+                modify['email']=account['email']
+                modify['newpreferredmuscles']=account['muscoli']
                 r = connect_go_server('modifypreferredmuscles', modify)
+                if r=="failure":
+                    flag=True
             except Exception as e:
                 return f"Errore: {e}"
-        return r
+        if flag==True:
+            return "qualcosa è andato storto"
+        else:
+            return "ok"
         
 def get_name(email):
     if email['email']!="":
@@ -146,6 +144,7 @@ def aggiungi_esercizio_scheda(email,esercizio):
     dict['exercise']=esercizio
     try:
         r = connect_go_server('addExerciseWorkout', dict)
+        return r
     except Exception as e:
         return f"Errore: {e}"
 
@@ -156,6 +155,7 @@ def elimina_esercizio_scheda(email,esercizio):
     dict['exercise']=esercizio
     try:
         r = connect_go_server('deleteExerciseWorkout', dict)
+        return r
     except Exception as e:
         return f"Errore: {e}"
 
@@ -165,4 +165,5 @@ def authenticate_admin(email):
          r = connect_go_server('verifyadmin',email)
     except Exception as e:
         return f"Errore: {e}"
-    return json.loads(r)
+    #return json.loads(r)
+    return r
