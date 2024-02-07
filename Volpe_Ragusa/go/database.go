@@ -8,7 +8,7 @@ import (
 	"github.com/go-sql-driver/mysql" // Driver per la gestione del database MySQL (l'underscore indica che il package viene importato ma non utilizzato direttamente nel codice, rimosso perché utilizzo ora variabile del package (mysql) a riga 95)
 )
 
-// TO_DO eliminare le entries di exercise_muscles e preferred_muscles quando si elimina un esercizio o un muscolo
+// TO_DO eliminare le entries di exercise_muscles quando si elimina un esercizio o un muscolo
 // TO_DO eliminare le entries di user_exercises quando si elimina un utente o un esercizio
 // TO_DO eliminare le entries di preferred_muscles quando si elimina un utente o un muscolo
 
