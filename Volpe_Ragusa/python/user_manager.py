@@ -51,6 +51,9 @@ def modifica_profilo(account):
                 if r=="ok":
                     try:
                         #TO_DO implementare questa funzione su go
+                        # potremmo invece fare una funzione su go che modifica in questo caso la password e, negli altri casi, usare funzioni che modificano i campi corrispondenti?
+                        # perché verrebbe più comodo, per esempio, fare una funzione che modifica la password in go, e una che modifica il nome in go, ecc. e python gestisce la chiamata a queste funzioni in base a quali campi sono stati modificati
+                        # per la lista dei muscoli preferiti, invece, potremmo fare una funzione che aggiunge o toglie un muscolo preferito in go, o in un altro modo dipende da come l'hai pensato tu da C#
                         r = connect_go_server('modifyprofile', modify)
                     except TypeError as e:
                         return f"Errore: {e}"

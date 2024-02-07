@@ -62,7 +62,7 @@ func main() {
 
 	// mux.HandleFunc("/verifypassword", func(w http.ResponseWriter, r *http.Request) {
 	//TO_DO, riceve in input l'email e la password, deve verificare che la password è corretta
-	// questa è la login, proprio dopo, cambio l'endpoint successivo in "verifypassword" e ritorno una stringa "success" in caso di successo, "failure" in caso di fallimento.
+	// questa è la login, proprio dopo, cambio l'endpoint successivo in "ok" e ritorno una stringa "success" in caso di successo, "failure" in caso di fallimento.
 	// })
 
 	mux.HandleFunc("/verifypassword", func(w http.ResponseWriter, r *http.Request) {
