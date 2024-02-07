@@ -3,8 +3,6 @@ import user_manager
 import exercise_manager
 from generate_muscle_stats import generate_muscle_stats
 
-# TO_DO: recuperare dati muscoli da C# ,vedi riga 35
-
 # Temporaneo: dati di esempio per test
 data = {
     'Muscoli': [['Petto', 'Tricipiti'], ['Spalle'], ['Petto', 'Spalle', 'Tricipiti'], ['Spalle', 'Tricipiti', 'Petto'], 
@@ -35,8 +33,8 @@ def get_image():
     emaildata=request.get_json()
     email=emaildata['email'] #vedi
     #prendo i muscoli allenati
-    data=exercise_manager.get_muscoli_allenati(email)
-    #TO_DO sistemare questa funzione
+    allenati=exercise_manager.get_muscoli_allenati(email)
+    #TO_DO sistemare questa funzione, passargli anche allenati
     image = generate_muscle_stats(data)
     return send_file(image, mimetype='image/png')
 
