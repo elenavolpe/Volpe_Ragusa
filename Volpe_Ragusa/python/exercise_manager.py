@@ -104,6 +104,8 @@ def add_exercise_admin(esercizio):
                 dict['muscolo']=muscolo
                 try:
                     r = connect_go_server('addMuscleExercise',dict)
+                    if r != "success":
+                        return f"Errore nell'aggiunta del muscolo {dict['muscolo']}!"
                 except Exception as e:
                     return f"Errore: {e}"
         except Exception as e:
