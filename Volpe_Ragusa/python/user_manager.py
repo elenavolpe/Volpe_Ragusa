@@ -50,7 +50,6 @@ def modifica_profilo(account):
                 r = connect_go_server('verifypassword',dict)
                 if r=="ok":
                     try:
-                        #TO_DO implementare questa funzione su go
                         r = connect_go_server('modifypassword', modify)
                     except TypeError as e:
                         return f"Errore: {e}"
@@ -99,6 +98,7 @@ def modifica_profilo(account):
                 r = connect_go_server('modifypreferredmuscles', modify)
             except TypeError as e:
                 return f"Errore: {e}"
+        return r
         
 def get_name(email):
     if email['email']!="":
@@ -133,9 +133,7 @@ def get_exercise(account):
 def get_muscoli_preferiti(email):
     if is_valid_email(email):
         try:
-            #TO_DO implementare questa funzione in go
             r = connect_go_server('getPreferredMuscles', email)
-            #TO_DO ritornami un json dei nomi in caso
         except TypeError as e:
             return f"Errore: {e}"
         return r
