@@ -130,6 +130,32 @@ func login(email, password string, done chan<- bool) {
 	}
 }
 
+func authAdmin(user_email, password string, done chan<- bool) {
+	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
+	loginQuery := "SELECT admin FROM users WHERE email = ? AND pass = ?"
+	var isAdmin bool
+	err = db.QueryRow(loginQuery, user_email, password).Scan(&isAdmin)
+	if err == nil {
+		if isAdmin {
+			fmt.Println("User is an admin!")
+			done <- true
+			return
+		} else {
+			fmt.Println("User is not an admin!")
+			done <- false
+			return
+		}
+	} else {
+		log.Println(err)
+		done <- false
+	}
+}
+
 func getUID(email string) (uid int) { // Funzione per ottenere l'User ID dell'account loggato richiedente
 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
 	if err != nil {

@@ -3,7 +3,7 @@ import user_manager
 import exercise_manager
 from generate_muscle_stats import generate_muscle_stats
 
-# TO-DO: recuperare dati muscoli da C# ,vedi riga 35
+# TO_DO: recuperare dati muscoli da C# ,vedi riga 35
 
 # Temporaneo: dati di esempio per test
 data = {

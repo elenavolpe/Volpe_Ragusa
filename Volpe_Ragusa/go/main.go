@@ -79,6 +79,18 @@ func main() {
 		w.Write([]byte(s))
 	})
 
+	mux.HandleFunc("/verifyadmin", func(w http.ResponseWriter, r *http.Request) {
+		email := r.FormValue("email")
+		password := r.FormValue("password")
+		isAdmin := make(chan bool)
+		go authAdmin(email, password, isAdmin)
+		w.Header().Set("Content-Type", "application/json")
+		err := json.NewEncoder(w).Encode(<-isAdmin)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+	})
+
 	mux.HandleFunc("/verifypassword", func(w http.ResponseWriter, r *http.Request) {
 		email := r.FormValue("email")
 		password := r.FormValue("oldPassword")

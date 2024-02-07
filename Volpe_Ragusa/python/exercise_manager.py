@@ -6,30 +6,30 @@ import json
 def get_exercises():
     try:
          r = connect_go_server('getExercises')
-    except TypeError as e:
+    except Exception as e:
         return f"Errore: {e}"
-    return r
+    return json.loads(r)
 
 #ritorna i primi 3 esercizi più selezionati
 def get_preferred():
     try:
          r = connect_go_server('getMostPopularExercises')
-    except TypeError as e:
+    except Exception as e:
         return f"Errore: {e}"
-    return r
+    return json.loads(r)
 
-#ritorna gli esercizi aggiunti più di recente (i primi 3?)
+#ritorna gli esercizi aggiunti più di recente (i primi 3?) Si ho messo limit 3 nella query di default, stessa cosa per getMostPopularExercises
 def get_recent():
     try:
          r = connect_go_server('getMostRecentExercises')
-    except TypeError as e:
+    except Exception as e:
         return f"Errore: {e}"
-    return r
+    return json.loads(r)
 
 #ritorna gli esercizi consigliati in base agli esercizi preferiti
 def get_consigliati(email):
-    muscoli=user_manager.get_muscoli_preferiti(email)
-    esercizi=get_exercises()
+    muscoli=json.loads(user_manager.get_muscoli_preferiti(email))
+    esercizi=json.loads(get_exercises()) # probabilmente non funzionerà perchè esercizi
     consigliati=[] #vedi
     #scorro tutti gli esercizi
     for esercizio in esercizi:
@@ -59,7 +59,7 @@ def get_trascurati(email):
     try:
          #TO_DO Federico se mi puoi ritornare la lista di tutti i muscoli
          allMuscles = connect_go_server('getAllMuscles')
-    except TypeError as e:
+    except Exception as e:
         return f"Errore: {e}"
     #creo una lista dei muscoli trascurati
     muscoliTrascurati=list(set(allMuscles)-set(muscoliAllenati))
@@ -94,7 +94,7 @@ def add_exercise_admin(esercizio):
     #quindi aggiunge al database
     try:
          r = connect_go_server('addExercise',esercizio)
-    except TypeError as e:
+    except Exception as e:
         return f"Errore: {e}"
     return 
 
@@ -102,11 +102,12 @@ def add_exercise_admin(esercizio):
 def delete_exercise_admin(email,nomeEsercizio):
     #TO_DO deve prima verificare che l'email sia quella dell'admin,
     #quindi elimina l'esercizio dal database
+    isAdmin = user_manager.authenticate_admin(email)
     dict={}
     dict['email']=email
     dict['name']=nomeEsercizio
     try:
          r = connect_go_server('deleteExercise',dict)
-    except TypeError as e:
+    except Exception as e:
         return f"Errore: {e}"
     return r

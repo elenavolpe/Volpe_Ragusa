@@ -1,4 +1,5 @@
 from utils import connect_go_server, is_valid_email, is_valid_password
+import json
 
 # (account) deve essere dizionario con i campi 'email' e 'password'
 def login(account):
@@ -7,9 +8,9 @@ def login(account):
     
     if is_valid_email(account['email']) and is_valid_password(account['password']):
         try:
-            r = connect_go_server('verifypassword', account)
+            r = connect_go_server('login', account)
             return r
-        except TypeError as e:
+        except Exception as e:
             return f"Errore: {e}"
     else:
         return "Errore formato email e/o password non validi"
@@ -22,7 +23,7 @@ def signin(account):
     if is_valid_email(account['email']) and is_valid_password(account['password']) and account['name'] != '' and account['surname'] != '':
         try:
             r = connect_go_server('signup', account)
-        except TypeError as e:
+        except Exception as e:
             return f"Errore: {e}"
     else:
         return "Errore: formato email e/o password non validi"
@@ -49,11 +50,11 @@ def modifica_profilo(account):
                 if r=="ok":
                     try:
                         r = connect_go_server('modifypassword', modify)
-                    except TypeError as e:
+                    except Exception as e:
                         return f"Errore: {e}"
                 else:
                     return "verifica password non andata a buon fine "
-            except TypeError as e:
+            except Exception as e:
                 return f"Errore: {e}"
     else: #in questo caso non c'è la necessità di verificare la password
         if account['newemail']!="":
@@ -63,7 +64,7 @@ def modifica_profilo(account):
                 if is_valid_email(account['newemail']):
                     try:
                         r = connect_go_server('modifyemail', modify)
-                    except TypeError as e:
+                    except Exception as e:
                         return f"Errore: {e}"
                 else:
                     return "email non valida"
@@ -72,14 +73,14 @@ def modifica_profilo(account):
                 return "il nuovo nome non può essere uguale a quello vecchio"
             try:
                 r = connect_go_server('modifyname', modify)
-            except TypeError as e:
+            except Exception as e:
                 return f"Errore: {e}"
         if account['newsurname']!="":
             if account['newsurname']==account['surname']:
                 return "il nuovo cognome non può essere uguale a quello vecchio"
             try:
                 r = connect_go_server('modifysurname', modify)
-            except TypeError as e:
+            except Exception as e:
                 return f"Errore: {e}"
         # Gli altri campi modifica la chiave se non è giusta, se ne mancano altri aggiungili
         if account['newage']!="":
@@ -87,14 +88,14 @@ def modifica_profilo(account):
                 return "la nuova età non può essere uguale a quella vecchia"
             try:
                 r = connect_go_server('modifyage', modify)
-            except TypeError as e:
+            except Exception as e:
                 return f"Errore: {e}"
         if account['newpreferredmuscles']!="":
             if account['newpreferredmuscles']==account['preferredmuscles']:
                 return "i nuovi muscoli preferiti non possono essere uguali a quelli vecchi"
             try:
                 r = connect_go_server('modifypreferredmuscles', modify)
-            except TypeError as e:
+            except Exception as e:
                 return f"Errore: {e}"
         return r
         
@@ -104,26 +105,26 @@ def get_name(email):
             nome = connect_go_server('getName', email)
             print(nome)
             return nome
-        except TypeError as e:
+        except Exception as e:
             return f"Errore: {e}"
         
 def getInfo(email):
     if email['email']!="":
         try:
-            utente = connect_go_server('getInfo', email)
+            utente = json.loads(connect_go_server('getInfo', email))
             print(utente)
             if utente['id']==-1:
                 return "errore"
             return utente
-        except TypeError as e:
+        except Exception as e:
             return f"Errore: {e}"
         
 def get_exercise(account):
     if is_valid_email(account):
         try:
             r = connect_go_server('getWorkoutPlan', account)
-            return r
-        except TypeError as e:
+            return json.loads(r)
+        except Exception as e:
             return f"Errore: {e}"
     else:
         return "email utente non valida"
@@ -132,9 +133,9 @@ def get_muscoli_preferiti(email):
     if is_valid_email(email):
         try:
             r = connect_go_server('getPreferredMuscles', email)
-        except TypeError as e:
+        except Exception as e:
             return f"Errore: {e}"
-        return r
+        return json.loads(r)
     else:
         return "email utente non valida"
 
@@ -145,7 +146,7 @@ def aggiungi_esercizio_scheda(email,esercizio):
     dict['exercise']=esercizio
     try:
         r = connect_go_server('addExerciseWorkout', dict)
-    except TypeError as e:
+    except Exception as e:
         return f"Errore: {e}"
 
 #elimina dalla scheda di email l'esercizio
@@ -155,5 +156,13 @@ def elimina_esercizio_scheda(email,esercizio):
     dict['exercise']=esercizio
     try:
         r = connect_go_server('deleteExerciseWorkout', dict)
-    except TypeError as e:
+    except Exception as e:
         return f"Errore: {e}"
+
+#Verifica admin
+def authenticate_admin(email):
+    try:
+         r = connect_go_server('verifyadmin',email)
+    except Exception as e:
+        return f"Errore: {e}"
+    return json.loads(r)
