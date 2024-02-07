@@ -54,7 +54,7 @@ def modifica_profilo(account):
                         # potremmo invece fare una funzione su go che modifica in questo caso la password e, negli altri casi, usare funzioni che modificano i campi corrispondenti?
                         # perché verrebbe più comodo, per esempio, fare una funzione che modifica la password in go, e una che modifica il nome in go, ecc. e python gestisce la chiamata a queste funzioni in base a quali campi sono stati modificati
                         # per la lista dei muscoli preferiti, invece, potremmo fare una funzione che aggiunge o toglie un muscolo preferito in go, o in un altro modo dipende da come l'hai pensato tu da C#
-                        r = connect_go_server('modifyprofile', modify)
+                        r = connect_go_server('modifypassword', modify)
                     except TypeError as e:
                         return f"Errore: {e}"
                 else:
@@ -62,10 +62,46 @@ def modifica_profilo(account):
             except TypeError as e:
                 return f"Errore: {e}"
     else: #in questo caso non c'è la necessità di verificare la password
-        try:
-            r = connect_go_server('modifyprofile', modify)
-        except TypeError as e:
-            return f"Errore: {e}"
+        if account['newemail']!="":
+            if account['newemail']==account['email']:
+                return "la nuova email non può essere uguale a quella vecchia"
+            else:
+                if is_valid_email(account['newemail']):
+                    try:
+                        r = connect_go_server('modifyemail', modify)
+                    except TypeError as e:
+                        return f"Errore: {e}"
+                else:
+                    return "email non valida"
+        if account['newname']!="":
+            if account['newname']==account['name']:
+                return "il nuovo nome non può essere uguale a quello vecchio"
+            try:
+                r = connect_go_server('modifyname', modify)
+            except TypeError as e:
+                return f"Errore: {e}"
+        if account['newsurname']!="":
+            if account['newsurname']==account['surname']:
+                return "il nuovo cognome non può essere uguale a quello vecchio"
+            try:
+                r = connect_go_server('modifysurname', modify)
+            except TypeError as e:
+                return f"Errore: {e}"
+        # Gli altri campi modifica la chiave se non è giusta, se ne mancano altri aggiungili
+        if account['newage']!="":
+            if account['newage']==account['age']:
+                return "la nuova età non può essere uguale a quella vecchia"
+            try:
+                r = connect_go_server('modifyage', modify)
+            except TypeError as e:
+                return f"Errore: {e}"
+        if account['newpreferredmuscles']!="":
+            if account['newpreferredmuscles']==account['preferredmuscles']:
+                return "i nuovi muscoli preferiti non possono essere uguali a quelli vecchi"
+            try:
+                r = connect_go_server('modifypreferredmuscles', modify)
+            except TypeError as e:
+                return f"Errore: {e}"
         
 def get_name(email):
     if email['email']!="":

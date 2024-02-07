@@ -169,6 +169,101 @@ func getUserName(email string, name chan<- string) {
 	name <- user_name
 }
 
+func modifyPassword(user_email, new_pw string, usr chan<- string) {
+	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
+	editQuery := "UPDATE users SET pass = ? WHERE email = ?"
+	_, err = db.Exec(editQuery, new_pw, user_email)
+	if err != nil {
+		log.Println(err)
+		usr <- "failure"
+		return
+	}
+	fmt.Println("Password updated successfully!")
+
+	usr <- user_email
+}
+
+func modifyEmail(old_email, new_email string, usr chan<- string) {
+	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
+	editQuery := "UPDATE users SET email = ? WHERE email = ?"
+	_, err = db.Exec(editQuery, new_email, old_email)
+	if err != nil {
+		log.Println(err)
+		usr <- "failure"
+		return
+	}
+	fmt.Println("Email updated successfully!")
+
+	usr <- new_email
+}
+
+func modifyName(user_email, new_name string, usr chan<- string) {
+	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
+	editQuery := "UPDATE users SET name = ? WHERE email = ?"
+	_, err = db.Exec(editQuery, new_name, user_email)
+	if err != nil {
+		log.Println(err)
+		usr <- "failure"
+		return
+	}
+	fmt.Println("Name updated successfully!")
+
+	usr <- user_email
+}
+
+func modifySurname(user_email, new_surname string, usr chan<- string) {
+	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
+	editQuery := "UPDATE users SET surname = ? WHERE email = ?"
+	_, err = db.Exec(editQuery, new_surname, user_email)
+	if err != nil {
+		log.Println(err)
+		usr <- "failure"
+		return
+	}
+	fmt.Println("Surname updated successfully!")
+
+	usr <- user_email
+}
+
+func modifyAge(user_email, new_age string, usr chan<- string) {
+	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
+	editQuery := "UPDATE users SET age = ? WHERE email = ?"
+	_, err = db.Exec(editQuery, new_age, user_email)
+	if err != nil {
+		log.Println(err)
+		usr <- "failure"
+		return
+	}
+	fmt.Println("Age updated successfully!")
+
+	usr <- user_email
+}
+
 func getUserInfo(user_email string, usr chan<- User) {
 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
 	if err != nil {
@@ -961,4 +1056,13 @@ func getPreferredMuscles(user_email string, muscles chan<- []string) {
 	fmt.Println("Query run successfully!")
 
 	muscles <- muscle_list
+}
+
+func modifyPreferredMuscles(usr chan<- string) {
+	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
 }

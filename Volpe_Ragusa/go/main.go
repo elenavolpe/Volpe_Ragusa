@@ -53,19 +53,19 @@ func main() {
 		w.Write([]byte(s))
 	})
 
-	mux.HandleFunc("/modifyprofile", func(w http.ResponseWriter, r *http.Request) {
-		//TO_DO, riceve in input un dizionario con key e dato da modificare
-		//TO_DO hai idea se ti posso passare nel dizionario la stringa di muscoli?
-		//se va tutto bene ritornami la mail del cliente, sennò ritornami "failure"
-		// Qual' è la struttura delle informazioni che ricevo input?
-	})
+	// mux.HandleFunc("/modifyprofile", func(w http.ResponseWriter, r *http.Request) {
+	// 	//TO_DO, riceve in input un dizionario con key e dato da modificare
+	// 	//TO_DO hai idea se ti posso passare nel dizionario la stringa di muscoli?
+	// 	//se va tutto bene ritornami la mail del cliente, sennò ritornami "failure"
+	// 	// Qual' è la struttura delle informazioni che ricevo input?
+	// })
 
 	// mux.HandleFunc("/verifypassword", func(w http.ResponseWriter, r *http.Request) {
 	//TO_DO, riceve in input l'email e la password, deve verificare che la password è corretta
 	// questa è la login, proprio dopo, cambio l'endpoint successivo in "ok" e ritorno una stringa "success" in caso di successo, "failure" in caso di fallimento.
 	// })
 
-	mux.HandleFunc("/verifypassword", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
 		email := r.FormValue("email")
 		password := r.FormValue("password")
 		done := make(chan bool) // Sarà il messaggio "ok" se il login è andato a buon fine, altrimenti "failure"
@@ -76,6 +76,71 @@ func main() {
 		} else {
 			s = "failure"
 		}
+		w.Write([]byte(s))
+	})
+
+	mux.HandleFunc("/verifypassword", func(w http.ResponseWriter, r *http.Request) {
+		email := r.FormValue("email")
+		password := r.FormValue("oldPassword")
+		done := make(chan bool)
+		var s string
+		go login(email, password, done)
+		if <-done {
+			s = "ok"
+		} else {
+			s = "failure"
+		}
+		w.Write([]byte(s))
+	})
+
+	// Queste 5 modify restiutiscono l'email utente in caso di successo, altrimenti "failure"
+	mux.HandleFunc("/modifypassword", func(w http.ResponseWriter, r *http.Request) {
+		email := r.FormValue("email")
+		new_pw := r.FormValue("newpassword")
+		usr := make(chan string)
+		var s string
+		go modifyPassword(email, new_pw, usr)
+		s = <-usr
+		w.Write([]byte(s))
+	})
+
+	mux.HandleFunc("/modifyemail", func(w http.ResponseWriter, r *http.Request) {
+		old_email := r.FormValue("email")
+		new_email := r.FormValue("newemail")
+		usr := make(chan string)
+		var s string
+		go modifyEmail(old_email, new_email, usr)
+		s = <-usr
+		w.Write([]byte(s))
+	})
+
+	mux.HandleFunc("/modifyname", func(w http.ResponseWriter, r *http.Request) {
+		email := r.FormValue("email")
+		new_name := r.FormValue("newname")
+		usr := make(chan string)
+		var s string
+		go modifyName(email, new_name, usr)
+		s = <-usr
+		w.Write([]byte(s))
+	})
+
+	mux.HandleFunc("/modifysurname", func(w http.ResponseWriter, r *http.Request) {
+		email := r.FormValue("email")
+		new_surname := r.FormValue("newsurname")
+		usr := make(chan string)
+		var s string
+		go modifySurname(email, new_surname, usr)
+		s = <-usr
+		w.Write([]byte(s))
+	})
+
+	mux.HandleFunc("/modifyage", func(w http.ResponseWriter, r *http.Request) {
+		email := r.FormValue("email")
+		new_age := r.FormValue("newage")
+		usr := make(chan string)
+		var s string
+		go modifyAge(email, new_age, usr)
+		s = <-usr
 		w.Write([]byte(s))
 	})
 
@@ -294,6 +359,16 @@ func main() {
 		} else {
 			s = "failure"
 		}
+		w.Write([]byte(s))
+	})
+
+	mux.HandleFunc("/modifypreferredmuscles", func(w http.ResponseWriter, r *http.Request) {
+		email := r.FormValue("email")
+		new_surname := r.FormValue("newpreferredmuscles")
+		usr := make(chan string)
+		var s string
+		go modifyPreferredMuscles(usr)
+		s = <-usr
 		w.Write([]byte(s))
 	})
 
