@@ -21,8 +21,6 @@ def signin(account):
     
     if is_valid_email(account['email']) and is_valid_password(account['password']) and account['name'] != '' and account['surname'] != '':
         try:
-            #TO_DO go deve verificare che l'email non sia già stata usata,
-            #nel caso ritorna "email già in uso"
             r = connect_go_server('signup', account)
         except TypeError as e:
             return f"Errore: {e}"
@@ -146,7 +144,6 @@ def aggiungi_esercizio_scheda(email,esercizio):
     dict['email']=email
     dict['exercise']=esercizio
     try:
-        #TO_DO da sistemare, ho visto che hai aggiunto ripetute e cose del genere
         r = connect_go_server('addExerciseWorkout', dict)
     except TypeError as e:
         return f"Errore: {e}"

@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log"
 
-	_ "github.com/go-sql-driver/mysql" // Driver per la gestione del database MySQL (l'underscore indica che il package viene importato ma non utilizzato direttamente nel codice)
+	"github.com/go-sql-driver/mysql" // Driver per la gestione del database MySQL (l'underscore indica che il package viene importato ma non utilizzato direttamente nel codice, rimosso perché utilizzo ora variabile del package (mysql) a riga 95)
 )
 
 func ConnectDB(username, password, host, port, dbName string) (*sql.DB, error) {
@@ -91,6 +91,11 @@ func signup(name, surname, email, password string, age int, usr chan<- string) {
 	_, err = db.Exec(signupQuery, name, surname, email, password, age)
 	if err != nil {
 		log.Println(err)
+		// Controllo errore "duplicate key" per MySQL (codice errore: 1062)
+		if mysqlErr, ok := err.(*mysql.MySQLError); ok && mysqlErr.Number == 1062 { // Se è vero che c'è errore di mysql (ok impostato a true) e l'errore è 1062 (mysqlErr.number == 1062) ritorno al canale che l'email è gia in uso
+			usr <- "email già in uso"
+			return
+		}
 		usr <- "failure"
 		return
 	}
