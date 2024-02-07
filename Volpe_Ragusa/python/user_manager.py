@@ -153,7 +153,6 @@ def aggiungi_esercizio_scheda(email,esercizio):
     try:
         #TO_DO da sistemare, ho visto che hai aggiunto ripetute e cose del genere
         r = connect_go_server('addExerciseWorkout', dict)
-        #devo ritornare ok
     except TypeError as e:
         return f"Errore: {e}"
 
@@ -163,8 +162,6 @@ def elimina_esercizio_scheda(email,esercizio):
     dict['email']=email
     dict['exercise']=esercizio
     try:
-        #TO_DO da sistemare anche su go
         r = connect_go_server('deleteExerciseWorkout', dict)
-        #devo ritornare ok
     except TypeError as e:
         return f"Errore: {e}"

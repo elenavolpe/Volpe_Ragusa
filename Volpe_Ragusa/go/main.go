@@ -446,7 +446,7 @@ func main() {
 		var s string
 		go addExerciseWorkoutplan(email, ex_name, ex_sets, ex_reps, done)
 		if <-done {
-			s = "success"
+			s = "ok"
 		} else {
 			s = "failure"
 		}
@@ -475,7 +475,7 @@ func main() {
 
 	mux.HandleFunc("/editExerciseRepsWorkout", func(w http.ResponseWriter, r *http.Request) {
 		email := r.FormValue("email")
-		ex_name := r.FormValue("ex_name")
+		ex_name := r.FormValue("exercise")
 		reps := r.FormValue("reps")
 		ex_reps, err := strconv.Atoi(reps)
 		if err != nil {
@@ -495,12 +495,12 @@ func main() {
 
 	mux.HandleFunc("/deleteExerciseWorkout", func(w http.ResponseWriter, r *http.Request) {
 		email := r.FormValue("email")
-		ex_name := r.FormValue("ex_name")
+		ex_name := r.FormValue("exercise")
 		done := make(chan bool)
 		var s string
 		go deleteExerciseWorkoutplan(email, ex_name, done)
 		if <-done {
-			s = "success"
+			s = "ok"
 		} else {
 			s = "failure"
 		}
