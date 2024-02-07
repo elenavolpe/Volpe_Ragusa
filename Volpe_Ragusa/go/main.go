@@ -364,11 +364,23 @@ func main() {
 
 	mux.HandleFunc("/modifypreferredmuscles", func(w http.ResponseWriter, r *http.Request) {
 		email := r.FormValue("email")
-		new_surname := r.FormValue("newpreferredmuscles")
+		old_preferred_muscles := r.FormValue("preferredmuscles")
+		new_preferred_muscles := r.FormValue("newpreferredmuscles")
+		var oPM, nPM []string
+		err := json.Unmarshal([]byte(old_preferred_muscles), &oPM)
+		if err != nil {
+			http.Error(w, "Error unmarshalling JSON list preferred muscles: "+err.Error(), http.StatusBadRequest)
+			return
+		}
+		err = json.Unmarshal([]byte(new_preferred_muscles), &nPM)
+		if err != nil {
+			http.Error(w, "Error unmarshalling JSON list new preferred muscles: "+err.Error(), http.StatusBadRequest)
+			return
+		}
 		usr := make(chan string)
 		var s string
-		go modifyPreferredMuscles(usr)
-		s = <-usr
+		go modifyPreferredMuscles(email, oPM, nPM, usr)
+		s = <-usr // email dell'utente in caso di successo, altrimenti "failure"
 		w.Write([]byte(s))
 	})
 

@@ -1058,11 +1058,69 @@ func getPreferredMuscles(user_email string, muscles chan<- []string) {
 	muscles <- muscle_list
 }
 
-func modifyPreferredMuscles(usr chan<- string) {
+func modifyPreferredMuscles(user_email string, old_preferred_muscles, new_preferred_muscles []string, usr chan<- string) {
 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer db.Close()
 
+	uid := getUID(user_email)
+	if uid == -1 {
+		log.Println("User not found!")
+		return
+	}
+
+	tx, err := db.Begin()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	removedMuscles, addedMuscles := findDifferentStrings(old_preferred_muscles, new_preferred_muscles)
+
+	if len(removedMuscles) > 0 {
+		for _, muscle := range removedMuscles {
+			mid := getMuscleID(muscle)
+			if mid == -1 {
+				log.Println("Muscle not found!")
+				continue
+			}
+			deleteQuery := "DELETE FROM preferred_muscles WHERE userid = ? AND muscleid = ?"
+			_, err = tx.Exec(deleteQuery, uid, mid)
+			if err != nil {
+				log.Println(err)
+				usr <- "failure"
+				tx.Rollback()
+				return
+			}
+		}
+	}
+
+	if len(addedMuscles) > 0 {
+		for _, muscle := range addedMuscles {
+			mid := getMuscleID(muscle)
+			if mid == -1 {
+				log.Println("Muscle not found!")
+				continue
+			}
+			deleteQuery := "INSERT INTO preferred_muscles (userid, muscleid) VALUES (?, ?)"
+			_, err = tx.Exec(deleteQuery, uid, mid)
+			if err != nil {
+				log.Println(err)
+				usr <- "failure"
+				tx.Rollback()
+				return
+			}
+		}
+	}
+
+	err = tx.Commit()
+	if err != nil {
+		log.Println(err)
+		usr <- "failure"
+		return
+	}
+	fmt.Println("Transaction completed successfully!")
+
+	usr <- user_email
 }
