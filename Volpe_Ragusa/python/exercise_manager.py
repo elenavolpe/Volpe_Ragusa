@@ -92,22 +92,39 @@ def add_exercise_admin(esercizio):
     #muscoli è una lista di stringhe
     #TO_DO deve prima verificare che l'email sia quella dell'admin,
     #quindi aggiunge al database
-    try:
-         r = connect_go_server('addExercise',esercizio)
-    except Exception as e:
-        return f"Errore: {e}"
-    return 
+    isAdmin = user_manager.authenticate_admin(email)
+    if isAdmin:
+        try:
+            r = connect_go_server('addExercise',esercizio)
+            if r!="success":
+                return "Errore nell'aggiunta dell'esercizio!"
+            for muscolo in esercizio['muscles']:
+                dict={}
+                dict['esercizio']=esercizio['nome']
+                dict['muscolo']=muscolo
+                try:
+                    r = connect_go_server('addMuscleExercise',dict)
+                except Exception as e:
+                    return f"Errore: {e}"
+        except Exception as e:
+            return f"Errore: {e}"
+        return
+    else:
+        return "Non sei autorizzato a fare questa operazione!"
 
 #elimina un esercizio dalla lista degli esercizi (admin)
 def delete_exercise_admin(email,nomeEsercizio):
     #TO_DO deve prima verificare che l'email sia quella dell'admin,
     #quindi elimina l'esercizio dal database
     isAdmin = user_manager.authenticate_admin(email)
-    dict={}
-    dict['email']=email
-    dict['name']=nomeEsercizio
-    try:
-         r = connect_go_server('deleteExercise',dict)
-    except Exception as e:
-        return f"Errore: {e}"
-    return r
+    if isAdmin:
+        dict={}
+        dict['email']=email
+        dict['name']=nomeEsercizio
+        try:
+            r = connect_go_server('deleteExercise',dict)
+        except Exception as e:
+            return f"Errore: {e}"
+        return r
+    else:
+        return "Non sei autorizzato a fare questa operazione!"

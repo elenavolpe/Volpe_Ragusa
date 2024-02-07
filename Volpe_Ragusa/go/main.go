@@ -170,13 +170,13 @@ func main() {
 
 	// Endpoints per la gestione degli esercizi
 	mux.HandleFunc("/addExercise", func(w http.ResponseWriter, r *http.Request) {
-		name := r.FormValue("name")
-		description := r.FormValue("description")
+		name := r.FormValue("nome")
+		description := r.FormValue("descrizione")
 		done := make(chan bool)
 		var s string
 		go addExercise(name, description, done)
 		if <-done {
-			s = "Success"
+			s = "success"
 		} else {
 			s = "Failure"
 		}
@@ -189,7 +189,7 @@ func main() {
 		var s string
 		go deleteExercise(name, done)
 		if <-done {
-			s = "Success"
+			s = "success"
 		} else {
 			s = "Failure"
 		}
@@ -318,8 +318,8 @@ func main() {
 
 	// Endpoints per le funzionalità di gestione dei muscoli relativi agli esercizi associati
 	mux.HandleFunc("/addMuscleExercise", func(w http.ResponseWriter, r *http.Request) {
-		ex_name := r.FormValue("exercise")
-		muscle_name := r.FormValue("muscle_name")
+		ex_name := r.FormValue("esercizio")
+		muscle_name := r.FormValue("muscolo")
 		done := make(chan bool)
 		var s string
 		go addMuscleExercise(ex_name, muscle_name, done)

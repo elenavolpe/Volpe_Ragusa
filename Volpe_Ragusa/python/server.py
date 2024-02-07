@@ -116,12 +116,12 @@ def elimina_esercizio():
 @app.route('/add_exercise', methods=['POST'])
 def add_exercise():
     if request.method == 'POST':
-        esercizio=request.get_json()
+        esercizio=request.get_json() #TO_DO da modificare come la delete_exercise successiva
         return  exercise_manager.add_exercise_admin(esercizio)
     
 #aggiunge esercizio alla lista di esercizi (admin)
 @app.route('/delete_exercise', methods=['POST'])
-def add_exercise():
+def delete_exercise():
     if request.method == 'POST':
         email = request.form.get('email')
         esercizio = request.form.get('nomeEsercizio')
