@@ -812,7 +812,7 @@ func deleteUserWorkout(user_email string, done chan<- bool) {
 }
 
 // Funzioni per la gestione dei dati relativi alle schede di allenamento
-func addExerciseWorkoutplan(user_email, ex_name string, ex_sets, ex_reps int, done chan<- bool) {
+func addExerciseWorkoutplan(user_email, ex_name string, done chan<- bool) {
 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
 	if err != nil {
 		log.Fatal(err)
@@ -831,76 +831,14 @@ func addExerciseWorkoutplan(user_email, ex_name string, ex_sets, ex_reps int, do
 		return
 	}
 
-	addQuery := "INSERT INTO user_exercises (userid, exerciseid, sets, reps) VALUES (?, ?, ?, ?)"
-	_, err = db.Exec(addQuery, uid, ex_id, ex_sets, ex_reps)
+	addQuery := "INSERT INTO user_exercises (userid, exerciseid) VALUES (?, ?)"
+	_, err = db.Exec(addQuery, uid, ex_id)
 	if err != nil {
 		log.Println(err)
 		done <- false
 		return
 	}
 	fmt.Println("Exercise added to workout plan successfully!")
-
-	done <- true
-}
-
-func editExerciseSetsWorkoutplan(user_email, ex_name string, new_ex_sets int, done chan<- bool) {
-	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer db.Close()
-
-	uid := getUID(user_email)
-	if uid == -1 {
-		done <- false
-		return
-	}
-
-	ex_id := getExerciseID(ex_name)
-	if ex_id == -1 {
-		done <- false
-		return
-	}
-
-	editQuery := "UPDATE user_exercises SET sets = ?  WHERE userid = ? AND exerciseid = ?"
-	_, err = db.Exec(editQuery, new_ex_sets, uid, ex_id)
-	if err != nil {
-		log.Println(err)
-		done <- false
-		return
-	}
-	fmt.Println("Sets of the workout plan exercise edited successfully!")
-
-	done <- true
-}
-
-func editExerciseRepsWorkoutplan(user_email, ex_name string, new_ex_reps int, done chan<- bool) {
-	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer db.Close()
-
-	uid := getUID(user_email)
-	if uid == -1 {
-		done <- false
-		return
-	}
-
-	ex_id := getExerciseID(ex_name)
-	if ex_id == -1 {
-		done <- false
-		return
-	}
-
-	editQuery := "UPDATE user_exercises SET reps = ?  WHERE userid = ? AND exerciseid = ?"
-	_, err = db.Exec(editQuery, new_ex_reps, uid, ex_id)
-	if err != nil {
-		log.Println(err)
-		done <- false
-		return
-	}
-	fmt.Println("Reps of the workout plan exercise edited successfully!")
 
 	done <- true
 }

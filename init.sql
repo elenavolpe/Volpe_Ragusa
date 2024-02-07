@@ -30,8 +30,6 @@ CREATE TABLE IF NOT EXISTS exercises (
 CREATE TABLE IF NOT EXISTS user_exercises (
     userid INT NOT NULL,
     exerciseid INT NOT NULL,
-    sets INT NOT NULL DEFAULT 0, -- Serie
-    reps INT NOT NULL DEFAULT 0, -- Ripetizioni
     PRIMARY KEY (userid, exerciseid),
     FOREIGN KEY (userid) REFERENCES users(id),
     FOREIGN KEY (exerciseid) REFERENCES exercises(id)

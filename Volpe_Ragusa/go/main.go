@@ -430,63 +430,11 @@ func main() {
 	mux.HandleFunc("/addExerciseWorkout", func(w http.ResponseWriter, r *http.Request) {
 		email := r.FormValue("email")
 		ex_name := r.FormValue("exercise")
-		sets := r.FormValue("sets")
-		reps := r.FormValue("reps")
-		ex_sets, err := strconv.Atoi(sets)
-		if err != nil {
-			http.Error(w, "Invalid parameter", http.StatusBadRequest)
-			return
-		}
-		ex_reps, err := strconv.Atoi(reps)
-		if err != nil {
-			http.Error(w, "Invalid parameter", http.StatusBadRequest)
-			return
-		}
 		done := make(chan bool)
 		var s string
-		go addExerciseWorkoutplan(email, ex_name, ex_sets, ex_reps, done)
+		go addExerciseWorkoutplan(email, ex_name, done)
 		if <-done {
 			s = "ok"
-		} else {
-			s = "failure"
-		}
-		w.Write([]byte(s))
-	})
-
-	mux.HandleFunc("/editExerciseSetsWorkout", func(w http.ResponseWriter, r *http.Request) {
-		email := r.FormValue("email")
-		ex_name := r.FormValue("exercise")
-		sets := r.FormValue("sets")
-		ex_sets, err := strconv.Atoi(sets)
-		if err != nil {
-			http.Error(w, "Invalid parameter", http.StatusBadRequest)
-			return
-		}
-		done := make(chan bool)
-		var s string
-		go editExerciseSetsWorkoutplan(email, ex_name, ex_sets, done)
-		if <-done {
-			s = "success"
-		} else {
-			s = "failure"
-		}
-		w.Write([]byte(s))
-	})
-
-	mux.HandleFunc("/editExerciseRepsWorkout", func(w http.ResponseWriter, r *http.Request) {
-		email := r.FormValue("email")
-		ex_name := r.FormValue("exercise")
-		reps := r.FormValue("reps")
-		ex_reps, err := strconv.Atoi(reps)
-		if err != nil {
-			http.Error(w, "Invalid parameter", http.StatusBadRequest)
-			return
-		}
-		done := make(chan bool)
-		var s string
-		go editExerciseRepsWorkoutplan(email, ex_name, ex_reps, done)
-		if <-done {
-			s = "success"
 		} else {
 			s = "failure"
 		}
