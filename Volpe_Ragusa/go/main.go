@@ -306,7 +306,7 @@ func main() {
 
 	// Endpoints per le funzionalità di gestione dei muscoli relativi agli esercizi associati
 	mux.HandleFunc("/addMuscleExercise", func(w http.ResponseWriter, r *http.Request) {
-		ex_name := r.FormValue("ex_name")
+		ex_name := r.FormValue("exercise")
 		muscle_name := r.FormValue("muscle_name")
 		done := make(chan bool)
 		var s string
@@ -320,7 +320,7 @@ func main() {
 	})
 
 	mux.HandleFunc("/deleteMuscleExercise", func(w http.ResponseWriter, r *http.Request) {
-		ex_name := r.FormValue("ex_name")
+		ex_name := r.FormValue("exercise")
 		muscle_name := r.FormValue("muscle_name")
 		done := make(chan bool)
 		var s string
@@ -429,7 +429,7 @@ func main() {
 	// Endpoints per le funzionalità di gestione degli esercizi nelle schede di allenamento
 	mux.HandleFunc("/addExerciseWorkout", func(w http.ResponseWriter, r *http.Request) {
 		email := r.FormValue("email")
-		ex_name := r.FormValue("ex_name")
+		ex_name := r.FormValue("exercise")
 		sets := r.FormValue("sets")
 		reps := r.FormValue("reps")
 		ex_sets, err := strconv.Atoi(sets)
@@ -455,7 +455,7 @@ func main() {
 
 	mux.HandleFunc("/editExerciseSetsWorkout", func(w http.ResponseWriter, r *http.Request) {
 		email := r.FormValue("email")
-		ex_name := r.FormValue("ex_name")
+		ex_name := r.FormValue("exercise")
 		sets := r.FormValue("sets")
 		ex_sets, err := strconv.Atoi(sets)
 		if err != nil {
