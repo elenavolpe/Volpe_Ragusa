@@ -38,7 +38,6 @@ def get_image():
 
 #modifica profilo utente
 @app.route('/modifica_profilo', methods=['POST'])
-#TO_DO federico ritornami l'email di chi ha modificato
 def modify_profile():
     if request.method == 'POST':
         account = request.get_json()
