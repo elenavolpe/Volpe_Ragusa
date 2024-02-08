@@ -26,7 +26,7 @@ def get_recent():
         return f"Errore: {e}"
     return json.loads(r)
 
-#ritorna gli esercizi consigliati in base agli esercizi preferiti
+#ritorna gli esercizi consigliati in base ai muscoli preferiti
 def get_consigliati(email):
     muscoli=json.loads(user_manager.get_muscoli_preferiti(email))
     esercizi=json.loads(get_exercises()) # probabilmente non funzionerà
