@@ -225,7 +225,7 @@ func main() {
 	})
 
 	mux.HandleFunc("/getExercises", func(w http.ResponseWriter, r *http.Request) {
-		exercises := make(chan []Exercise)
+		exercises := make(chan []ExerciseWorkout)
 		go getExercises(exercises)
 		w.Header().Set("Content-Type", "application/json")
 		err := json.NewEncoder(w).Encode(<-exercises) // Probablimente bisognerà spiegare come funziona json.NewEnconder(w).Encode()

@@ -445,7 +445,7 @@ func editExerciseDescription(old_name, new_description string, done chan<- bool)
 	done <- true
 }
 
-func getExercises(exercises chan<- []Exercise) {
+func getExercises(exercises chan<- []ExerciseWorkout) {
 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
 	if err != nil {
 		log.Fatal(err)
@@ -460,14 +460,39 @@ func getExercises(exercises chan<- []Exercise) {
 	}
 	defer rows.Close()
 
-	var exs []Exercise
+	var exs []ExerciseWorkout
 	for rows.Next() {
-		var ex Exercise
-		err := rows.Scan(&ex.Name, &ex.Description)
+		var ex ExerciseWorkout
+		err := rows.Scan(&ex.Exercise.Name, &ex.Exercise.Description)
 		if err != nil {
 			log.Println(err)
 			return
 		}
+		getMuscleQuery := "SELECT M.name from muscles AS M JOIN exercise_muscles AS EM ON EM.muscleid = M.id JOIN exercises AS E ON E.id = EM.exerciseid WHERE E.name = ?"
+		rows1, err := db.Query(getMuscleQuery, ex.Exercise.Name)
+		if err != nil {
+			log.Println(err)
+			return
+		}
+		defer rows1.Close()
+
+		for rows.Next() {
+			var muscle_name string
+			err := rows.Scan(&muscle_name)
+			if err != nil {
+				log.Println(err)
+				return
+			}
+
+			ex.Muscles = append(ex.Muscles, muscle_name)
+		}
+
+		err = rows1.Err()
+		if err != nil {
+			log.Println(err)
+			return
+		}
+
 		exs = append(exs, ex)
 	}
 	err = rows.Err()
@@ -475,6 +500,7 @@ func getExercises(exercises chan<- []Exercise) {
 		log.Println(err)
 		return
 	}
+	fmt.Println("Queries run successfully!")
 
 	exercises <- exs
 }
