@@ -244,20 +244,10 @@ func main() {
 	})
 
 	mux.HandleFunc("/getMostRecentExercises", func(w http.ResponseWriter, r *http.Request) {
-		limitParam := r.FormValue("limit")
-		limitValue := 3
-		var err error
-		if limitParam != "" {
-			limitValue, err = strconv.Atoi(limitParam)
-			if err != nil {
-				http.Error(w, "Invalid limit parameter", http.StatusBadRequest)
-				return
-			}
-		}
 		exercises := make(chan []Exercise)
-		go getMostRecentExercises(limitValue, exercises)
+		go getMostRecentExercises(exercises)
 		w.Header().Set("Content-Type", "application/json")
-		err = json.NewEncoder(w).Encode(<-exercises)
+		err := json.NewEncoder(w).Encode(<-exercises)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}

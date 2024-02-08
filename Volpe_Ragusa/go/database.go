@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"time"
 
 	"github.com/go-sql-driver/mysql" // Driver per la gestione del database MySQL (l'underscore indica che il package viene importato ma non utilizzato direttamente nel codice, rimosso perché utilizzo ora variabile del package (mysql) a riga 95)
 )
@@ -559,15 +560,17 @@ func getMostPopularExercises(limit_value int, exercises chan<- []Exercise) {
 	exercises <- exs
 }
 
-func getMostRecentExercises(limit_value int, exercises chan<- []Exercise) {
+func getMostRecentExercises(exercises chan<- []Exercise) { // Restituisce gli esercizi aggiunti (E NON AGGIORANTI!) negli ultimi due giorni
 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer db.Close()
 
-	getQuery := fmt.Sprintf("SELECT name, description FROM exercises ORDER BY created_at DESC LIMIT %d", limit_value)
-	rows, err := db.Query(getQuery)
+	twoDaysAgo := time.Now().Add(-48 * time.Hour).Format("2006-01-02 15:04:05") // Il campo Format ha una data d'esempio solo per stabilire il formato della stringa da ritornare
+
+	getQuery := "SELECT name, description FROM exercises WHERE created_at >= ? ORDER BY created_at DESC"
+	rows, err := db.Query(getQuery, twoDaysAgo)
 	if err != nil {
 		log.Println(err)
 		return
@@ -584,6 +587,8 @@ func getMostRecentExercises(limit_value int, exercises chan<- []Exercise) {
 		}
 		exs = append(exs, ex)
 	}
+
+	// Controllo errori verificatisi durante l'iterazione sulle righe
 	err = rows.Err()
 	if err != nil {
 		log.Println(err)
