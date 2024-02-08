@@ -27,9 +27,10 @@ def get_recent():
     return json.loads(r)
 
 #ritorna gli esercizi consigliati in base ai muscoli preferiti
+#Elena così ritorna una lista di esercizi consigliati che potrebbe contenere anche gli esercizi già presenti nella scheda, potremmo anche mantenerla così però, se vogliamo.
 def get_consigliati(email):
-    muscoli=json.loads(user_manager.get_muscoli_preferiti(email))
-    esercizi=json.loads(get_exercises()) # probabilmente non funzionerà la loads
+    muscoli=user_manager.get_muscoli_preferiti(email) # già la loads viene fatta in get_muscoli_preferiti
+    esercizi=get_exercises() # già la loads viene fatta in get_exercises, I made a mistake previously
     consigliati=[] #vedi
     #scorro tutti gli esercizi
     for esercizio in esercizi:
