@@ -98,9 +98,9 @@ def add_exercise_admin(esercizio):
             r = connect_go_server('addExercise',esercizio)
             if r!="success":
                 return "Errore nell'aggiunta dell'esercizio!"
+            dict={}
+            dict['esercizio']=esercizio['nome']
             for muscolo in esercizio['muscoli']:
-                dict={}
-                dict['esercizio']=esercizio['nome']
                 dict['muscolo']=muscolo
                 try:
                     r = connect_go_server('addMuscleExercise',dict)
