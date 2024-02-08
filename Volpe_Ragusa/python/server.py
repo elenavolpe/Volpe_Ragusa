@@ -64,7 +64,7 @@ def get_preferiti():
     if request.method == 'POST':
         return exercise_manager.get_preferred()
     
-#ritorna, se ci sono, esercizi aggiunti di recente (potremmo fare negli ultimi 2 giorni?)
+#ritorna, se ci sono, esercizi aggiunti di recente (potremmo fare negli ultimi 2 giorni?) Fatta la modifica
 @app.route('/get_esercizi_recenti', methods=['POST'])
 def get_recenti():
     if request.method == 'POST':
