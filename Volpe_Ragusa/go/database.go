@@ -8,10 +8,6 @@ import (
 	"github.com/go-sql-driver/mysql" // Driver per la gestione del database MySQL (l'underscore indica che il package viene importato ma non utilizzato direttamente nel codice, rimosso perché utilizzo ora variabile del package (mysql) a riga 95)
 )
 
-// TO_DO eliminare le entries di exercise_muscles quando si elimina un esercizio o un muscolo
-// TO_DO eliminare le entries di user_exercises quando si elimina un utente o un esercizio
-// TO_DO eliminare le entries di preferred_muscles quando si elimina un utente o un muscolo
-
 func ConnectDB(username, password, host, port, dbName string) (*sql.DB, error) {
 	// Inizializzazione della gestione del database per il driver go-sql-driver/mysql
 	dataSourceName := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", username, password, host, port, dbName)
@@ -35,6 +31,7 @@ func ConnectDB(username, password, host, port, dbName string) (*sql.DB, error) {
 
 // Funzioni di gestione degli utenti
 
+// Quando elimini un utente -> eliminare prima user_exercises e preferred_muscles
 func deleteAccount(email string, done chan<- bool) {
 	//admin per collegarsi a mysql
 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
@@ -56,6 +53,15 @@ func deleteAccount(email string, done chan<- bool) {
 
 	// Prima di cancellare l'utente, bisogna cancellare i dati relativi alla sua scheda
 	deleteQuery := "DELETE FROM user_exercises WHERE userid = ?"
+	_, err = tx.Exec(deleteQuery, uid)
+	if err != nil {
+		log.Println(err)
+		done <- false
+		tx.Rollback()
+		return
+	}
+
+	deleteQuery = "DELETE FROM preferred_muscles WHERE userid = ?"
 	_, err = tx.Exec(deleteQuery, uid)
 	if err != nil {
 		log.Println(err)
@@ -343,6 +349,7 @@ func addExercise(name, description string, done chan<- bool) {
 	done <- true
 }
 
+// Quando elimini un esercizio -> eliminare prima user_exercises e exercise_muscles
 func deleteExercise(name string, done chan<- bool) {
 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
 	if err != nil {
@@ -350,14 +357,52 @@ func deleteExercise(name string, done chan<- bool) {
 	}
 	defer db.Close()
 
-	deleteQuery := "DELETE FROM exercises WHERE name = ?"
-	_, err = db.Exec(deleteQuery, name)
+	ex_id := getExerciseID(name)
+	if ex_id == -1 {
+		log.Println("Exercise not found!")
+		done <- false
+		return
+	}
+
+	tx, err := db.Begin()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	deleteQuery := "DELETE FROM user_exercises WHERE exerciseid = ?"
+	_, err = tx.Exec(deleteQuery, ex_id)
+	if err != nil {
+		log.Println(err)
+		done <- false
+		tx.Rollback()
+		return
+	}
+
+	deleteQuery = "DELETE FROM exercise_muscles WHERE exerciseid = ?"
+	_, err = tx.Exec(deleteQuery, ex_id)
+	if err != nil {
+		log.Println(err)
+		done <- false
+		tx.Rollback()
+		return
+	}
+
+	deleteQuery = "DELETE FROM exercises WHERE id = ?"
+	_, err = tx.Exec(deleteQuery, ex_id)
+	if err != nil {
+		log.Println(err)
+		done <- false
+		tx.Rollback()
+		return
+	}
+
+	err = tx.Commit()
 	if err != nil {
 		log.Println(err)
 		done <- false
 		return
 	}
-	fmt.Println("Query run successfully!")
+	fmt.Println("Queries run successfully!")
 
 	done <- true
 }
@@ -583,6 +628,7 @@ func getMuscleID(muscle string) (muscle_id int) {
 	return
 }
 
+// Quando elimini un muscolo -> eliminare prima exercise_muscles e preferred_muscles
 func deleteMuscle(name string, done chan<- bool) {
 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
 	if err != nil {
@@ -602,7 +648,16 @@ func deleteMuscle(name string, done chan<- bool) {
 	}
 
 	// Prima di cancellare il muscolo scelto, bisogna cancellare gli accompiamenti con i vari esercizi in cui è presente
-	deleteQuery := "DELETE FROM exercise_muscles WHERE muscle = ?"
+	deleteQuery := "DELETE FROM exercise_muscles WHERE muscleid = ?"
+	_, err = tx.Exec(deleteQuery, muscle_id)
+	if err != nil {
+		log.Println(err)
+		done <- false
+		tx.Rollback()
+		return
+	}
+
+	deleteQuery = "DELETE FROM preferred_muscles WHERE muscleid = ?"
 	_, err = tx.Exec(deleteQuery, muscle_id)
 	if err != nil {
 		log.Println(err)
