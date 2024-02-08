@@ -29,7 +29,7 @@ def get_recent():
 #ritorna gli esercizi consigliati in base ai muscoli preferiti
 def get_consigliati(email):
     muscoli=json.loads(user_manager.get_muscoli_preferiti(email))
-    esercizi=json.loads(get_exercises()) # probabilmente non funzionerà
+    esercizi=json.loads(get_exercises()) # probabilmente non funzionerà la loads
     consigliati=[] #vedi
     #scorro tutti gli esercizi
     for esercizio in esercizi:
