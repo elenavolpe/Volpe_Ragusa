@@ -65,20 +65,6 @@ func main() {
 	// questa è la login, proprio dopo, cambio l'endpoint successivo in "ok" e ritorno una stringa "success" in caso di successo, "failure" in caso di fallimento.
 	// })
 
-	mux.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
-		email := r.FormValue("email")
-		password := r.FormValue("password")
-		done := make(chan bool) // Sarà il messaggio "ok" se il login è andato a buon fine, altrimenti "failure"
-		var s string
-		go login(email, password, done)
-		if <-done {
-			s = "ok"
-		} else {
-			s = "failure"
-		}
-		w.Write([]byte(s))
-	})
-
 	mux.HandleFunc("/verifyadmin", func(w http.ResponseWriter, r *http.Request) {
 		email := r.FormValue("email")
 		password := r.FormValue("password")
@@ -94,6 +80,9 @@ func main() {
 	mux.HandleFunc("/verifypassword", func(w http.ResponseWriter, r *http.Request) {
 		email := r.FormValue("email")
 		password := r.FormValue("oldPassword")
+		if pw := r.FormValue("password"); pw != "" {
+			password = pw
+		}
 		done := make(chan bool)
 		var s string
 		go login(email, password, done)
