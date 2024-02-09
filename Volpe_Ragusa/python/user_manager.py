@@ -25,6 +25,7 @@ def signin(account):
     if is_valid_email(account['email']) and is_valid_password(account['password']) and account['name'] != '' and account['surname'] != '':
         try:
             r = connect_go_server('signup', account)
+            #TO_DO tornami "usata" se l'email è già in uso, "failure" tornamelo lo stesso
         except Exception as e:
             return f"Errore: {e}"
     else:

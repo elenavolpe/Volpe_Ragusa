@@ -103,6 +103,7 @@
             labelErrore.Size = new Size(367, 25);
             labelErrore.TabIndex = 6;
             labelErrore.Text = "Attenzione, non possono esserci campi vuoti";
+            labelErrore.Visible=false;
             // 
             // Form1
             // 

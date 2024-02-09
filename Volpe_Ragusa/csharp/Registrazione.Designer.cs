@@ -212,6 +212,7 @@
             labelErrore.Size = new Size(367, 25);
             labelErrore.TabIndex = 17;
             labelErrore.Text = "Attenzione, non possono esserci campi vuoti";
+            labelErrore.Visible=false;
             // 
             // labelEmailUso
             // 
@@ -222,6 +223,7 @@
             labelEmailUso.Size = new Size(136, 25);
             labelEmailUso.TabIndex = 18;
             labelEmailUso.Text = "Email già in uso";
+            labelEmailUso.Visible=false;
             // 
             // Registrazione
             // 

@@ -63,6 +63,8 @@ namespace Volpe_Ragusa
                             this.Close();
                             account.Show();
                         }else{
+                            labelErrore.Text="email e/o password errati";
+                            labelErrore.Visible=true;
                             Console.WriteLine("email o password errati");
                         }
                     }
@@ -72,6 +74,9 @@ namespace Volpe_Ragusa
                         Console.WriteLine($"Errore durante la richiesta HTTP: {ex.Message}");
                     }
                 }
+            }else{
+                labelErrore.Text="Attenzione, i campi non possono essere vuoti";
+                labelErrore.Visible=true;
             }
         }
 

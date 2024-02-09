@@ -36,45 +36,79 @@ namespace Volpe_Ragusa.csharp
             //fai un eccezione su questo
             int eta = int.Parse(textBoxEta.Text);
 
-            if (IsOnlyCharacters(nome) && nome != "" && IsOnlyCharacters(cognome) && cognome != "" && IsValidEmail(email) && password != "" && conferma_password == password && eta > 0)
+            if ( nome != "" && cognome != "" && password != "" && conferma_password != "" && eta > 0)
             {
-                using (WebClient client = new WebClient())
+                if(IsOnlyCharacters(nome) && IsOnlyCharacters(cognome))
                 {
-                    try
+                    if(IsValidEmail(email))
                     {
-                        // URL del server Python
-                        string pythonServerUrl = "http://localhost:5000/registrazione"; //TO_DO da sistemare
-                        // Creare un oggetto con i dati da inviare come JSON
-                        var dataToSend = new
+                        if(conferma_password == password)
                         {
-                            nome= nome,
-                            cognome= cognome,
-                            email = email,
-                            password = password,
-                            eta= eta,
-                            muscoli= muscoli
-                        };
-                        string jsonData = JsonConvert.SerializeObject(dataToSend);
-                        // Creare il contenuto della richiesta POST
-                        StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
-                        // Impostare l'intestazione Content-Type
-                        client.Headers[HttpRequestHeader.ContentType] = "application/json";
-                        // Invio di una richiesta POST
-                        string response = client.UploadString($"{pythonServerUrl}/endpoint", "POST", jsonData);
-                        // Leggi la risposta
-                        Console.WriteLine($"Risposta dal server Python: {response}");
-                        
-                        //se va bene vado a login
-                        Form1 login= new Form1();
-                        this.Close();
-                        login.Show();
+                            using (WebClient client = new WebClient())
+                            {
+                                try
+                                {
+                                    // URL del server Python
+                                    string pythonServerUrl = "http://localhost:5000/registrazione"; //TO_DO da sistemare
+                                    // Creare un oggetto con i dati da inviare come JSON
+                                    var dataToSend = new
+                                    {
+                                        nome= nome,
+                                        cognome= cognome,
+                                        email = email,
+                                        password = password,
+                                        eta= eta,
+                                        muscoli= muscoli
+                                    };
+                                    string jsonData = JsonConvert.SerializeObject(dataToSend);
+                                    // Creare il contenuto della richiesta POST
+                                    StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+                                    // Impostare l'intestazione Content-Type
+                                    client.Headers[HttpRequestHeader.ContentType] = "application/json";
+                                    // Invio di una richiesta POST
+                                    string response = client.UploadString($"{pythonServerUrl}/endpoint", "POST", jsonData);
+                                    
+                                    Console.WriteLine($"Risposta dal server Python: {response}");
+                                    //TO_DO sistemare se email già in uso o se failure
+                                    if(response=="failure"){
+                                        labelErrore.Text="qualcosa è andato storto";
+                                        labelErrore.Visible=true;
+                                    }
+                                    else if(response==email){
+                                        Form1 login= new Form1();
+                                        this.Close();
+                                        login.Show();
+                                    }
+                                }
+                                catch (WebException ex)
+                                {
+                                    // Gestisci eventuali errori durante la richiesta HTTP
+                                    Console.WriteLine($"Errore durante la richiesta HTTP: {ex.Message}");
+                                }
+                            }
+                        }
+                        else
+                        {
+                            labelErrore.Text="Attenzione, le password non corrispondono";
+                            labelErrore.Visible=true;
+                        }
                     }
-                    catch (WebException ex)
+                    else
                     {
-                        // Gestisci eventuali errori durante la richiesta HTTP
-                        Console.WriteLine($"Errore durante la richiesta HTTP: {ex.Message}");
+                        labelErrore.Text="Attenzione, email non valida";
+                        labelErrore.Visible=true;
                     }
                 }
+                else
+                {
+                    labelErrore.Text="Attenzione, nome e cognome devono essere letterali";
+                    labelErrore.Visible=true;
+                }
+            }
+            else
+            {
+                labelErrore.Text="Attenzione, non possono esserci campi vuoti";
+                labelErrore.Visible=true;
             }
         }
 
