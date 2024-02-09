@@ -3,7 +3,6 @@ import json
 
 # (account) deve essere dizionario con i campi 'email' e 'password'
 def login(account):
-    # account=json.loads(account) se non mi sbaglio, account è già un dizionario grazie a get_json()
     if type(account) is not dict:
         return f"Errore login: account deve essere un dizionario, invece è di tipo {type(account)}"
     
@@ -18,7 +17,6 @@ def login(account):
 
 # In questo caso account deve essere un dizionario con i campi 'email', 'password', 'name', 'surname'
 def signin(account):
-    # account=json.loads(account)
     if type(account) is not dict:
         return f"Errore signin: account deve essere un dizionario, invece è di tipo {type(account)}"
     
@@ -32,7 +30,6 @@ def signin(account):
         return "Errore: formato email e/o password non validi"
     
 def modifica_profilo(account):
-    # account=json.loads(account)
     if type(account) is not dict:
         return f"Errore signin: account deve essere un dizionario, invece è di tipo {type(account)}"    
     flag=False
@@ -166,5 +163,4 @@ def authenticate_admin(email):
          r = connect_go_server('verifyadmin',email)
     except Exception as e:
         return f"Errore: {e}"
-    #return json.loads(r)
     return r

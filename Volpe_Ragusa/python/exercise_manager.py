@@ -27,11 +27,10 @@ def get_recent():
     return json.loads(r)
 
 #ritorna gli esercizi consigliati in base ai muscoli preferiti
-#Elena così ritorna una lista di esercizi consigliati che potrebbe contenere anche gli esercizi già presenti nella scheda, potremmo anche mantenerla così però, se vogliamo.
 def get_consigliati(email):
-    muscoli=user_manager.get_muscoli_preferiti(email) # già la loads viene fatta in get_muscoli_preferiti
-    esercizi=get_exercises() # già la loads viene fatta in get_exercises, I made a mistake previously
-    consigliati=[] #vedi
+    muscoli=user_manager.get_muscoli_preferiti(email)
+    esercizi=get_exercises()
+    consigliati=[]
     #scorro tutti gli esercizi
     for esercizio in esercizi:
         #muscoli dell'esercizio in questione
@@ -45,31 +44,40 @@ def get_consigliati(email):
     print(consigliati)
     return json.dumps(consigliati)
 
+#ritorna la lista di tutti i muscoli allenabili
+def getAllMuscles():
+    esercizi=get_exercises()
+    muscoli=[]
+    for esercizio in esercizi:
+        for muscolo in esercizio['muscles']:
+            if muscolo not in muscoli:
+                muscoli.append(muscolo)
+    return muscoli
+
+#recupera un dizionario di muscoli allenati (con numero di esercizi che lo allenano)
+#da un determinato utente
 def get_muscoli_allenati(email):
+    muscoliAllenati={}
     eserciziScheda=user_manager.get_exercise(email)
-    muscoliAllenati=[]
     for esercizio in eserciziScheda:
         for muscolo in esercizio['muscles']:
-            if muscolo not in muscoliAllenati:
-                #creo una lista di muscoli allenati
-                muscoliAllenati.append(muscolo)
+            if muscolo in muscoliAllenati:
+                muscoliAllenati[muscolo] += 1
+            else:
+                muscoliAllenati[muscolo] = 1
+    return muscoliAllenati
 
 #ritorna gli esercizi consigliati in base ai muscoli che stanno venendo trascurati
 def get_trascurati(email):
-    #TO_DO vedi se si possono ottenere i muscoli trascurati direttamente
-    #da get_muscle_stats
-    muscoliAllenati=get_muscoli_allenati(email)
+    #trasforma in lista le chiavi del dizionario
+    muscoliAllenati=list(get_muscoli_allenati(email).keys())
     #recupero la lista di tutti i muscoli
-    try:
-         #TO_DO Federico se mi puoi ritornare la lista di tutti i muscoli
-         allMuscles = connect_go_server('getAllMuscles')
-    except Exception as e:
-        return f"Errore: {e}"
+    allMuscles=getAllMuscles()
     #creo una lista dei muscoli trascurati
     muscoliTrascurati=list(set(allMuscles)-set(muscoliAllenati))
     #prendo tutti gli esercizi
     eserciziAll=get_exercises()
-    consigliati=[] #vedi
+    consigliati=[]
     #scorro tutti gli esercizi
     for esercizio in eserciziAll:
         #muscoli dell'esercizio in questione
@@ -85,14 +93,6 @@ def get_trascurati(email):
 
 #aggiunge un esercizio alla lista degli esercizi (admin)
 def add_exercise_admin(esercizio):
-    '''
-        email= this.email,
-        nome= nomeEsercizio,
-        descrizione = descrizioneEsercizio,
-        muscoli = muscoliSelezionati
-    '''
-    #muscoli è una lista di stringhe
-    #prima verifica che l'utente sia l'admin
     isAdmin = user_manager.authenticate_admin(esercizio['email'])
     if isAdmin:
         try:
@@ -111,13 +111,12 @@ def add_exercise_admin(esercizio):
                     return f"Errore: {e}"
         except Exception as e:
             return f"Errore: {e}"
-        return
+        return "ok"
     else:
         return "Non sei autorizzato a fare questa operazione!"
 
 #elimina un esercizio dalla lista degli esercizi (admin)
 def delete_exercise_admin(email,nomeEsercizio):
-    #prima verifica che l'utente sia l'admin
     isAdmin = user_manager.authenticate_admin(email)
     if isAdmin:
         dict={}
