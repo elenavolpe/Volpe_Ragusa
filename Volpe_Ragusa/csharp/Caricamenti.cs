@@ -404,6 +404,7 @@ public class Caricamenti{
             }
         }
 
+        //permette all'utente di aggiungere l'esercizio alla scheda
         private void aggiungiEsercizio(object sender, EventArgs e)
         {
             Button button = sender as Button;
@@ -436,6 +437,7 @@ public class Caricamenti{
             }
         }
 
+        //permette all'utente di eliminare l'esercizio dalla scheda
         private void eliminaEsercizio(object sender, EventArgs e)
         {
             Button button = sender as Button;
@@ -474,12 +476,10 @@ public class Caricamenti{
             }
         }
 
-        /*private void addEsercizio(object sender, EventArgs e)
+        //permette all'admin di inserire l'esercizio alla lista di esercizi
+        private void addEsercizio(object sender, EventArgs e)
         {
             Button button = sender as Button;
-            button.Text="elimina";
-            button.Click -= addEsercizio;
-            button.Click += deleteEsercizio;
             Control contenitore = button.Parent;
             Label label = contenitore.Controls.Find("nome", true).FirstOrDefault() as Label;
             string nomeEsercizio=label.Text;
@@ -495,20 +495,25 @@ public class Caricamenti{
                     };
                     byte[] responseBytes = client.UploadValues(url, "POST", postData);
                     string responseBody = System.Text.Encoding.UTF8.GetString(responseBytes);
+                    if(responseBody=="success"){
+                        button.Text="elimina";
+                        button.Click -= addEsercizio;
+                        button.Click += deleteEsercizio;
+                        Console.WriteLine("aggiunta avvenuta con successo");
+                        contenitore.BackColor=Color.White;
+                    }
                 }
                 catch (WebException ex)
                 {
                     Console.WriteLine($"Errore durante la richiesta HTTP: {ex.Message}");
                 }
             }
-        }*/
+        }
 
+        //permette all'admin di eliminare un esercizio dalla lista di esercizi
         private void deleteEsercizio(object sender, EventArgs e)
         {
             Button button = sender as Button;
-            //button.Text="aggiungi";
-            button.Click -= deleteEsercizio;
-            //button.Click += addEsercizio;
             Control contenitore = button.Parent;
             Label label = contenitore.Controls.Find("nome", true).FirstOrDefault() as Label;
             string nomeEsercizio=label.Text;
@@ -525,8 +530,11 @@ public class Caricamenti{
                     byte[] responseBytes = client.UploadValues(url, "POST", postData);
                     string responseBody = System.Text.Encoding.UTF8.GetString(responseBytes);
                     if(responseBody=="success"){
+                        button.Text="aggiungi";
+                        button.Click -= deleteEsercizio;
+                        button.Click += addEsercizio;
                         Console.WriteLine("eliminazione avvenuta con successo");
-                        //TO_DO nel caso sistemare il colore del bordo, o renderla grigia
+                        contenitore.BackColor=Color.OrangeRed;
                     }
                 }
                 catch (WebException ex)
