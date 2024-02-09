@@ -8,7 +8,7 @@ def get_exercises():
          r = connect_go_server('getExercises')
     except Exception as e:
         return f"Errore: {e}"
-    return json.dumps(r)
+    return r
 
 #ritorna i primi 3 esercizi più selezionati
 def get_preferred():
@@ -16,7 +16,7 @@ def get_preferred():
          r = connect_go_server('getMostPopularExercises')
     except Exception as e:
         return f"Errore: {e}"
-    return json.dumps(r)
+    return r
 
 #ritorna gli esercizi aggiunti più di recente (i primi 3?) Si ho messo limit 3 nella query di default, stessa cosa per getMostPopularExercises
 def get_recent():
@@ -24,7 +24,7 @@ def get_recent():
          r = connect_go_server('getMostRecentExercises')
     except Exception as e:
         return f"Errore: {e}"
-    return json.dumps(r)
+    return r
 
 #ritorna gli esercizi consigliati in base ai muscoli preferiti
 def get_consigliati(email):

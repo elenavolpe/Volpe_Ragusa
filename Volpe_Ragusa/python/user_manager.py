@@ -108,7 +108,7 @@ def get_name(email):
 def getInfo(email):
     if email['email']!="":
         try:
-            utente = json.dumps(connect_go_server('getInfo', email))
+            utente = connect_go_server('getInfo', email)
             print(utente)
             if utente['id']==-1:
                 return "errore"
@@ -121,7 +121,7 @@ def get_exercise(account):
     if is_valid_email(account):
         try:
             r = connect_go_server('getWorkoutPlan', account)
-            return json.dumps(r)
+            return r
         except Exception as e:
             return f"Errore: {e}"
     else:
@@ -134,7 +134,7 @@ def get_muscoli_preferiti(email):
             r = connect_go_server('getPreferredMuscles', email)
         except Exception as e:
             return f"Errore: {e}"
-        return json.dumps(r)
+        return r
     else:
         return "email utente non valida"
 
