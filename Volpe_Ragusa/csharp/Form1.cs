@@ -37,7 +37,7 @@ namespace Volpe_Ragusa
                     try
                     {
                         // URL del server Python
-                        string pythonServerUrl = "http://localhost:5000/login"; //TO_DO da sistemare
+                        string pythonServerUrl = "http://localhost:5000/login";
                         // Creare un oggetto con i dati da inviare come JSON
                         var dataToSend = new
                         {
@@ -65,7 +65,7 @@ namespace Volpe_Ragusa
                         }else{
                             labelErrore.Text="email e/o password errati";
                             labelErrore.Visible=true;
-                            Console.WriteLine("email o password errati");
+                            Console.WriteLine("email e/o password errati");
                         }
                     }
                     catch (WebException ex)

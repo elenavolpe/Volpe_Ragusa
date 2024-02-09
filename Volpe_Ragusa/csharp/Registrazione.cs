@@ -49,7 +49,7 @@ namespace Volpe_Ragusa.csharp
                                 try
                                 {
                                     // URL del server Python
-                                    string pythonServerUrl = "http://localhost:5000/registrazione"; //TO_DO da sistemare
+                                    string pythonServerUrl = "http://localhost:5000/registrazione";
                                     // Creare un oggetto con i dati da inviare come JSON
                                     var dataToSend = new
                                     {

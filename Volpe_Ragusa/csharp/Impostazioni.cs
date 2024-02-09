@@ -76,7 +76,7 @@ namespace Volpe_Ragusa.csharp
                     if(response=="ok"){
                         //se va bene vado ad account
                         Utente utente=Utente.Istanza;
-                        utente.setAddress(response); //TO_DO con email giusta
+                        utente.setAddress(email);
                         Account account1 = new Account();
                         this.Close();
                         account1.Show();

@@ -77,9 +77,6 @@ namespace Volpe_Ragusa.csharp
         private void addEsercizio(object sender, EventArgs e)
         {
             Button button = sender as Button;
-            //button.Text="elimina";
-            //button.Click -= addEsercizio;
-            //button.Click += deleteEsercizio;
             Control contenitore = button.Parent;
             TextBox box1 = contenitore.Controls.Find("nome", true).FirstOrDefault() as TextBox;
             string nomeEsercizio=box1.Text;
@@ -98,14 +95,6 @@ namespace Volpe_Ragusa.csharp
                 try
                 {
                     string url = "http://localhost:5000/add_exercise";
-                    /*NameValueCollection postData = new NameValueCollection
-                    {
-                        { "email", this.email },
-                        {"esercizio", nomeEsercizio},
-                        {"descrizione", descrizioneEsercizio},
-                        {"muscoli", muscoliSelezionati}
-                        //TO_DO prendere e passargli tutti i muscoli
-                    };*/
                     var dataToSend = new
                         {
                             email= this.email,
@@ -121,9 +110,10 @@ namespace Volpe_Ragusa.csharp
                     string response = client.UploadString($"{url}/endpoint", "POST", jsonData);
                     // Leggi la risposta
                     Console.WriteLine($"Risposta dal server Python: {response}");
-                    //se è andato tutto bene
-                    box1.Text="";
-                    box2.Text="";
+                    if(response=="ok"){
+                        box1.Text="";
+                        box2.Text="";
+                    }
                 }
                 catch (WebException ex)
                 {
