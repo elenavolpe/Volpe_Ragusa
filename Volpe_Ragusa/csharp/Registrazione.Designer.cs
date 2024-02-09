@@ -45,6 +45,8 @@
             ListBoxMuscoli = new CheckedListBox();
             labelMuscoli = new Label();
             linkLabelLogin = new LinkLabel();
+            labelErrore = new Label();
+            labelEmailUso = new Label();
             SuspendLayout();
             // 
             // label1
@@ -201,11 +203,33 @@
             linkLabelLogin.Text = "Sei già registrato?";
             linkLabelLogin.LinkClicked += linkLabelLogin_LinkClicked;
             // 
+            // labelErrore
+            // 
+            labelErrore.AutoSize = true;
+            labelErrore.ForeColor = Color.Red;
+            labelErrore.Location = new Point(424, 476);
+            labelErrore.Name = "labelErrore";
+            labelErrore.Size = new Size(367, 25);
+            labelErrore.TabIndex = 17;
+            labelErrore.Text = "Attenzione, non possono esserci campi vuoti";
+            // 
+            // labelEmailUso
+            // 
+            labelEmailUso.AutoSize = true;
+            labelEmailUso.ForeColor = Color.Red;
+            labelEmailUso.Location = new Point(552, 120);
+            labelEmailUso.Name = "labelEmailUso";
+            labelEmailUso.Size = new Size(136, 25);
+            labelEmailUso.TabIndex = 18;
+            labelEmailUso.Text = "Email già in uso";
+            // 
             // Registrazione
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 584);
+            Controls.Add(labelEmailUso);
+            Controls.Add(labelErrore);
             Controls.Add(linkLabelLogin);
             Controls.Add(labelMuscoli);
             Controls.Add(ListBoxMuscoli);
@@ -248,5 +272,7 @@
         private CheckedListBox ListBoxMuscoli;
         private Label labelMuscoli;
         private LinkLabel linkLabelLogin;
+        private Label labelErrore;
+        private Label labelEmailUso;
     }
 }

@@ -34,6 +34,7 @@
             label2 = new Label();
             buttonLogin = new Button();
             linkRegistrazione = new LinkLabel();
+            labelErrore = new Label();
             SuspendLayout();
             // 
             // label1
@@ -93,11 +94,22 @@
             linkRegistrazione.Text = "Non sei ancora registrato? Clicca qui";
             linkRegistrazione.LinkClicked += linkRegistrazione_LinkClicked;
             // 
+            // labelErrore
+            // 
+            labelErrore.AutoSize = true;
+            labelErrore.ForeColor = Color.Red;
+            labelErrore.Location = new Point(205, 251);
+            labelErrore.Name = "labelErrore";
+            labelErrore.Size = new Size(367, 25);
+            labelErrore.TabIndex = 6;
+            labelErrore.Text = "Attenzione, non possono esserci campi vuoti";
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(labelErrore);
             Controls.Add(linkRegistrazione);
             Controls.Add(buttonLogin);
             Controls.Add(textBoxPassword);
@@ -118,5 +130,6 @@
         private Label label2;
         private Button buttonLogin;
         private LinkLabel linkRegistrazione;
+        private Label labelErrore;
     }
 }
