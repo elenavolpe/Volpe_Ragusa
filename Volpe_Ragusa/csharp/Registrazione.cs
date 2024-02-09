@@ -69,15 +69,13 @@ namespace Volpe_Ragusa.csharp
                                     string response = client.UploadString($"{pythonServerUrl}/endpoint", "POST", jsonData);
                                     
                                     Console.WriteLine($"Risposta dal server Python: {response}");
-                                    //TO_DO sistemare se email già in uso o se failure
-                                    if(response=="failure"){
-                                        labelErrore.Text="qualcosa è andato storto";
-                                        labelErrore.Visible=true;
-                                    }
-                                    else if(response==email){
+                                    if(response==email){
                                         Form1 login= new Form1();
                                         this.Close();
                                         login.Show();
+                                    }else{
+                                        labelErrore.Text=response;
+                                        labelErrore.Visible=true;
                                     }
                                 }
                                 catch (WebException ex)

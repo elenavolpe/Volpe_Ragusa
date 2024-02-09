@@ -407,9 +407,6 @@ public class Caricamenti{
         private void aggiungiEsercizio(object sender, EventArgs e)
         {
             Button button = sender as Button;
-            button.Text="elimina";
-            button.Click -= aggiungiEsercizio;
-            button.Click += eliminaEsercizio;
             Control contenitore = button.Parent;
             Label label = contenitore.Controls.Find("nome", true).FirstOrDefault() as Label;
             string nomeEsercizio=label.Text;
@@ -425,6 +422,12 @@ public class Caricamenti{
                     };
                     byte[] responseBytes = client.UploadValues(url, "POST", postData);
                     string responseBody = System.Text.Encoding.UTF8.GetString(responseBytes);
+                    if(responseBody=="ok"){
+                        button.Text="elimina";
+                        button.Click -= aggiungiEsercizio;
+                        button.Click += eliminaEsercizio;
+                        Console.WriteLine("inserimento andato a buon fine");
+                    }
                 }
                 catch (WebException ex)
                 {
@@ -436,9 +439,6 @@ public class Caricamenti{
         private void eliminaEsercizio(object sender, EventArgs e)
         {
             Button button = sender as Button;
-            button.Text="aggiungi";
-            button.Click -= eliminaEsercizio;
-            button.Click += aggiungiEsercizio;
             Control contenitore = button.Parent;
             Control contenitore1=contenitore.Parent;
             Label label = contenitore.Controls.Find("nome", true).FirstOrDefault() as Label;
@@ -455,6 +455,12 @@ public class Caricamenti{
                     };
                     byte[] responseBytes = client.UploadValues(url, "POST", postData);
                     string responseBody = System.Text.Encoding.UTF8.GetString(responseBytes);
+                    if(responseBody=="ok"){
+                        button.Text="aggiungi";
+                        button.Click -= eliminaEsercizio;
+                        button.Click += aggiungiEsercizio;
+                        Console.WriteLine("eliminazione andata a buon fine");
+                    }
                 }
                 catch (WebException ex)
                 {
@@ -518,6 +524,10 @@ public class Caricamenti{
                     };
                     byte[] responseBytes = client.UploadValues(url, "POST", postData);
                     string responseBody = System.Text.Encoding.UTF8.GetString(responseBytes);
+                    if(responseBody=="success"){
+                        Console.WriteLine("eliminazione avvenuta con successo");
+                        //TO_DO nel caso sistemare il colore del bordo, o renderla grigia
+                    }
                 }
                 catch (WebException ex)
                 {
