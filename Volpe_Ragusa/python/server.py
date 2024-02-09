@@ -33,9 +33,9 @@ def get_image():
     emaildata=request.get_json()
     email=emaildata['email'] #vedi
     #prendo i muscoli allenati
-    allenati=exercise_manager.get_muscoli_allenati(email)
+    allenati=exercise_manager.get_muscoli_allenati_con_ripetuti(email)
     #TO_DO sistemare questa funzione, passargli anche allenati
-    image = generate_muscle_stats(data)
+    image = generate_muscle_stats(allenati) # rimane da testare se funziona
     return send_file(image, mimetype='image/png')
 
 #modifica profilo utente

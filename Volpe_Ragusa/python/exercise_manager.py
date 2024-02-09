@@ -67,6 +67,16 @@ def get_muscoli_allenati(email):
                 muscoliAllenati[muscolo] = 1
     return muscoliAllenati
 
+#recupera una lista di muscoli allenati da un determinato utente, ho fatto questa funzione e non ho modificato quella sopra perché la usiamo in get_trascurati e avevo paura a cambiarla senza che tu vedessi questa mia aggiunta.
+# get_muscle_stats necessita in input una lista di muscoli, con tutti i muscoli ripetuti
+def get_muscoli_allenati_con_ripetuti(email):
+    muscoliAllenati=[]
+    eserciziScheda=json.loads(user_manager.get_exercise(email))
+    for esercizio in eserciziScheda:
+        for muscolo in esercizio['muscles']:
+            muscoliAllenati.append(muscolo)
+    return muscoliAllenati
+
 #ritorna gli esercizi consigliati in base ai muscoli che stanno venendo trascurati
 def get_trascurati(email):
     #trasforma in lista le chiavi del dizionario
