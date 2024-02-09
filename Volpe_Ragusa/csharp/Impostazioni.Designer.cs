@@ -41,6 +41,7 @@
             textBoxPassword = new TextBox();
             buttonModifica = new Button();
             buttonAccount = new Button();
+            labelErrore = new Label();
             SuspendLayout();
             // 
             // labelIntro
@@ -155,11 +156,22 @@
             buttonAccount.UseVisualStyleBackColor = true;
             buttonAccount.Click += buttonAccount_Click;
             // 
+            // labelErrore
+            // 
+            labelErrore.AutoSize = true;
+            labelErrore.ForeColor = Color.Red;
+            labelErrore.Location = new Point(619, 366);
+            labelErrore.Name = "labelErrore";
+            labelErrore.Size = new Size(151, 25);
+            labelErrore.TabIndex = 13;
+            labelErrore.Text = "messaggio errore";
+            // 
             // Impostazioni
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(labelErrore);
             Controls.Add(buttonAccount);
             Controls.Add(buttonModifica);
             Controls.Add(textBoxPassword);
@@ -194,5 +206,6 @@
         private TextBox textBoxPassword;
         private Button buttonModifica;
         private Button buttonAccount;
+        private Label labelErrore;
     }
 }

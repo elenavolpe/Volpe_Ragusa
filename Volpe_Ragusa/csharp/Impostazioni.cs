@@ -23,6 +23,7 @@ namespace Volpe_Ragusa.csharp
             Utente utente=Utente.Istanza;
             this.email = utente.email;
             labelIntro.Text="Ciao "+utente.name+", qui puoi modificare il tuo profilo";
+            labelErrore.Visible=false;
         }
 
         private void labelIntro_Click(object sender, EventArgs e)
@@ -81,7 +82,8 @@ namespace Volpe_Ragusa.csharp
                         this.Close();
                         account1.Show();
                     }else{
-                        //TO_DO metti una label che stampa il contenuto in caso
+                        labelErrore.Text = response;
+                        labelErrore.Visible = true;
                         Console.WriteLine(response);
                     }
                 }
