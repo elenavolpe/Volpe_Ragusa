@@ -167,7 +167,7 @@ func main() {
 		if <-done {
 			s = "success"
 		} else {
-			s = "Failure"
+			s = "failure"
 		}
 		w.Write([]byte(s))
 	})
@@ -180,7 +180,7 @@ func main() {
 		if <-done {
 			s = "success"
 		} else {
-			s = "Failure"
+			s = "failure"
 		}
 		w.Write([]byte(s))
 	})
