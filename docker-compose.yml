@@ -3,7 +3,7 @@ version: '3'
 services:
   go:
     build:
-      context: ./go
+      context: ./Volpe_Ragusa/go
       dockerfile: Dockerfile
     container_name: go
     ports:
@@ -11,11 +11,11 @@ services:
   
   python:
     build:
-      context: ./python
+      context: ./Volpe_Ragusa/python
       dockerfile: Dockerfile
     container_name: python
     ports:
-      - "8080:8080"
+      - "5000:5000"
   
   mysql:
     image: mysql:latest
