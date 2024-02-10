@@ -1,6 +1,22 @@
 version: '3'
 
 services:
+  go:
+    build:
+      context: ./go
+      dockerfile: Dockerfile
+    container_name: go
+    ports:
+      - "8080:8080"
+  
+  python:
+    build:
+      context: ./python
+      dockerfile: Dockerfile
+    container_name: python
+    ports:
+      - "8080:8080"
+  
   mysql:
     image: mysql:latest
     container_name: mysql
@@ -16,6 +32,7 @@ services:
       - ./mysql/logs:/var/log/mysql
       - ./mysql-init-scripts:/docker-entrypoint-initdb.d
 
+# questo lo teniamo per testare il nostro database con phpmyadmin, poi lo togliamo
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:latest
     container_name: phpmyadmin

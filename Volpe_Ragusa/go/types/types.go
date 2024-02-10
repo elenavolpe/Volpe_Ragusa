@@ -1,4 +1,4 @@
-package main
+package types
 
 type Exercise struct {
 	Name        string `json:"name"` // Struct tag che serve a dire a go come esportare la variabile in formato json

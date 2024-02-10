@@ -1,4 +1,4 @@
-package main
+package utils
 
 func findDifferentStrings(slice1, slice2 []string) (s1Diff, s2Diff []string) {
 	for _, s1 := range slice1 {

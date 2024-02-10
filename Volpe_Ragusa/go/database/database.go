@@ -1,10 +1,12 @@
-package main
+package database
 
 import (
 	"database/sql"
 	"fmt"
+	"go_app/types"
 	"log"
 	"time"
+	u "go_app/utils"
 
 	"github.com/go-sql-driver/mysql" // Driver per la gestione del database MySQL (l'underscore indica che il package viene importato ma non utilizzato direttamente nel codice, rimosso perché utilizzo ora variabile del package (mysql) a riga 95)
 )
@@ -306,7 +308,7 @@ func modifyAge(user_email, new_age string, usr chan<- string) {
 	usr <- user_email
 }
 
-func getUserInfo(user_email string, usr chan<- User) {
+func getUserInfo(user_email string, usr chan<- types.User) {
 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
 	if err != nil {
 		log.Fatal(err)
@@ -314,13 +316,13 @@ func getUserInfo(user_email string, usr chan<- User) {
 	defer db.Close()
 
 	getQuery := "SELECT id, name, surname, email, age, workout_name, workout_description FROM users where email = ?"
-	var user User
+	var user types.User
 	err = db.QueryRow(getQuery, user_email).Scan(&user.Id, &user.Name, &user.Surname, &user.Email, &user.Age, &user.WorkoutName, &user.WorkoutDescription)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			fmt.Println("No User found!")
 		}
-		emptyUsr := User{-1, "", "", "", 0, "", ""}
+		emptyUsr := types.User{Id: -1, Name: "", Surname: "", Email: "", Age: 0, WorkoutName: "", WorkoutDescription: ""}
 		usr <- emptyUsr
 		return
 	}
@@ -446,7 +448,7 @@ func editExerciseDescription(old_name, new_description string, done chan<- bool)
 	done <- true
 }
 
-func getExercises(exercises chan<- []ExerciseWorkout) {
+func getExercises(exercises chan<- []types.ExerciseWorkout) {
 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
 	if err != nil {
 		log.Fatal(err)
@@ -461,9 +463,9 @@ func getExercises(exercises chan<- []ExerciseWorkout) {
 	}
 	defer rows.Close()
 
-	var exs []ExerciseWorkout
+	var exs []types.ExerciseWorkout
 	for rows.Next() {
-		var ex ExerciseWorkout
+		var ex types.ExerciseWorkout
 		err := rows.Scan(&ex.Exercise.Name, &ex.Exercise.Description)
 		if err != nil {
 			log.Println(err)
@@ -526,7 +528,7 @@ func getExerciseID(name string) (ex_id int) {
 	return
 }
 
-func getMostPopularExercises(limit_value int, exercises chan<- []Exercise) {
+func getMostPopularExercises(limit_value int, exercises chan<- []types.Exercise) {
 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
 	if err != nil {
 		log.Fatal(err)
@@ -541,9 +543,9 @@ func getMostPopularExercises(limit_value int, exercises chan<- []Exercise) {
 	}
 	defer rows.Close()
 
-	var exs []Exercise
+	var exs []types.Exercise
 	for rows.Next() {
-		var ex Exercise
+		var ex types.Exercise
 		err := rows.Scan(&ex.Name, &ex.Description)
 		if err != nil {
 			log.Println(err)
@@ -560,7 +562,7 @@ func getMostPopularExercises(limit_value int, exercises chan<- []Exercise) {
 	exercises <- exs
 }
 
-func getMostRecentExercises(exercises chan<- []Exercise) { // Restituisce gli esercizi aggiunti (E NON AGGIORANTI!) negli ultimi due giorni
+func getMostRecentExercises(exercises chan<- []types.Exercise) { // Restituisce gli esercizi aggiunti (E NON AGGIORANTI!) negli ultimi due giorni
 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
 	if err != nil {
 		log.Fatal(err)
@@ -577,9 +579,9 @@ func getMostRecentExercises(exercises chan<- []Exercise) { // Restituisce gli es
 	}
 	defer rows.Close()
 
-	var exs []Exercise
+	var exs []types.Exercise
 	for rows.Next() {
-		var ex Exercise
+		var ex types.Exercise
 		err := rows.Scan(&ex.Name, &ex.Description)
 		if err != nil {
 			log.Println(err)
@@ -1015,7 +1017,7 @@ func deleteExerciseWorkoutplan(user_email, ex_name string, done chan<- bool) {
 //     // ... more ExerciseWorkout entries if any
 // ]
 
-func getWorkoutPlan(user_email string, workout_plan chan<- []ExerciseWorkout) {
+func getWorkoutPlan(user_email string, workout_plan chan<- []types.ExerciseWorkout) {
 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
 	if err != nil {
 		log.Fatal(err)
@@ -1030,9 +1032,9 @@ func getWorkoutPlan(user_email string, workout_plan chan<- []ExerciseWorkout) {
 	}
 	defer rows.Close()
 
-	var workout []ExerciseWorkout
+	var workout []types.ExerciseWorkout
 	for rows.Next() {
-		var ex ExerciseWorkout
+		var ex types.ExerciseWorkout
 		err := rows.Scan(&ex.Exercise.Name, &ex.Exercise.Description)
 		if err != nil {
 			log.Println(err)
@@ -1135,7 +1137,7 @@ func modifyPreferredMuscles(user_email string, old_preferred_muscles, new_prefer
 		log.Fatal(err)
 	}
 
-	removedMuscles, addedMuscles := findDifferentStrings(old_preferred_muscles, new_preferred_muscles)
+	removedMuscles, addedMuscles := u.findDifferentStrings(old_preferred_muscles, new_preferred_muscles)
 
 	if len(removedMuscles) > 0 {
 		for _, muscle := range removedMuscles {
