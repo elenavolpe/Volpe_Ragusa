@@ -22,6 +22,8 @@ namespace Volpe_Ragusa.csharp
             InitializeComponent();
             // Registra l'evento CheckedChanged per la CheckBox
             checkBoxMuscoli.CheckedChanged += checkBoxMuscoli_CheckedChanged;
+            ListBoxMuscoli.Visible = false;
+            labelMuscoli.Visible = false;
         }
 
         private void buttonRegistrazione_Click(object sender, EventArgs e)
