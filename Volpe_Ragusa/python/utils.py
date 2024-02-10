@@ -23,7 +23,8 @@ def connect_go_server(endpoint, pl):
     if type(pl) is not dict:
         raise TypeError("Il payload deve essere un dizionario")
     
-    url = "http://localhost:8081/" + str(endpoint)  # TO-DO: Server Go in ascolto su porta 8081
+    #TO_DO tu avevi messo 8081, ma mi sembra che ascolta su 8080, in caso ricambia
+    url = "http://localhost:8080/" + str(endpoint)  # TO-DO: Server Go in ascolto su porta 8081
     payload = pl
     headers = {'Content-Type': 'application/json'}
 
