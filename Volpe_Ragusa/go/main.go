@@ -6,9 +6,9 @@ import (
 	"log"
 	"net/http"
 	"strconv"
-	"database/database"
-	"types/types"
-	"utils/utils"
+	"Volpe_Ragusa/go/database"
+	"Volpe_Ragusa/go/types"
+	"Volpe_Ragusa/go/utils"
 )
 
 func main() {
