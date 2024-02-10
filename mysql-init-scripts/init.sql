@@ -56,6 +56,5 @@ CREATE TABLE IF NOT EXISTS preferred_muscles (
     FOREIGN KEY (userid) REFERENCES users(id),
     FOREIGN KEY (muscleid) REFERENCES muscles(id)
 );
-)
 
 INSERT INTO users (name, surname, email, pass) VALUES ("Francesco", "Franceschini", "francesco.franceschini@fakemail.com", "password");
