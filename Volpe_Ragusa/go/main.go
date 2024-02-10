@@ -6,7 +6,9 @@ import (
 	"log"
 	"net/http"
 	"strconv"
-	"go/database"
+	"database/database"
+	"types/types"
+	"utils/utils"
 )
 
 func main() {
