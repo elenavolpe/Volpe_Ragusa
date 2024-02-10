@@ -37,7 +37,7 @@ namespace Volpe_Ragusa.csharp
             //fai un eccezione su questo
             //int eta = int.Parse(textBoxEta.Text);
 
-            if ( nome != "" && cognome != "" && password != "" && conferma_password != "" && eta > 0)
+            if ( nome != "" && cognome != "" && password != "" && conferma_password != "" && textBoxEta.Text != "")
             {
                 if(IsOnlyCharacters(nome) && IsOnlyCharacters(cognome))
                 {
