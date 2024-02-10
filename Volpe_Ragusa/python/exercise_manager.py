@@ -54,17 +54,14 @@ def getAllMuscles():
                 muscoli.append(muscolo)
     return muscoli
 
-#recupera un dizionario di muscoli allenati (con numero di esercizi che lo allenano)
-#da un determinato utente
+#ritorna la lista di muscoli allenati da un determinato utente
 def get_muscoli_allenati(email):
-    muscoliAllenati={}
+    muscoliAllenati=[]
     eserciziScheda=json.loads(user_manager.get_exercise(email))
     for esercizio in eserciziScheda:
         for muscolo in esercizio['muscles']:
-            if muscolo in muscoliAllenati:
-                muscoliAllenati[muscolo] += 1
-            else:
-                muscoliAllenati[muscolo] = 1
+            if muscolo not in muscoliAllenati:
+                muscoliAllenati.append(muscolo)
     return muscoliAllenati
 
 #recupera una lista di muscoli allenati da un determinato utente, ho fatto questa funzione e non ho modificato quella sopra perché la usiamo in get_trascurati e avevo paura a cambiarla senza che tu vedessi questa mia aggiunta.
@@ -81,8 +78,8 @@ def get_muscoli_allenati_con_ripetuti(email):
 
 #ritorna gli esercizi consigliati in base ai muscoli che stanno venendo trascurati
 def get_trascurati(email):
-    #trasforma in lista le chiavi del dizionario
-    muscoliAllenati=list(get_muscoli_allenati(email).keys())
+    #recupera la lista di muscoli allenati dall'utente
+    muscoliAllenati=get_muscoli_allenati(email)
     #recupero la lista di tutti i muscoli
     allMuscles=getAllMuscles()
     #creo una lista dei muscoli trascurati
