@@ -14,6 +14,7 @@ namespace Volpe_Ragusa
         public Form1()
         {
             InitializeComponent();
+            this.Visible=true;
         }
 
         private void textBoxEmail_TextChanged(object sender, EventArgs e)
@@ -60,8 +61,9 @@ namespace Volpe_Ragusa
                             utente.setAddress(email);
                             //Account account = new Account(email);
                             Account account = new Account();
-                            this.Close();
-                            account.Show();
+                            //this.Close();
+                            account.ShowDialog();
+                            this.Visible=false;
                         }else{
                             labelErrore.Text="email e/o password errati";
                             labelErrore.Visible=true;
@@ -82,9 +84,10 @@ namespace Volpe_Ragusa
 
         private void linkRegistrazione_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
+            Console.WriteLine("link cliccato");
             Registrazione registrazione = new Registrazione();
-            this.Close();
-            registrazione.Show();
+            this.Visible=false;
+            registrazione.ShowDialog();
         }
     }
 }

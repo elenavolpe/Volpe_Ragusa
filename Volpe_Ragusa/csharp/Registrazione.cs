@@ -31,69 +31,77 @@ namespace Volpe_Ragusa.csharp
             string email = textBoxEmail.Text;
             string password = textBoxPassword.Text;
             string conferma_password = textBoxConfermaPassword.Text;
+            int età;
 
             List<string> muscoli = getMuscoliSelezionati();
             //fai un eccezione su questo
-            int eta = int.Parse(textBoxEta.Text);
+            //int eta = int.Parse(textBoxEta.Text);
 
             if ( nome != "" && cognome != "" && password != "" && conferma_password != "" && eta > 0)
             {
                 if(IsOnlyCharacters(nome) && IsOnlyCharacters(cognome))
                 {
-                    if(IsValidEmail(email))
-                    {
-                        if(conferma_password == password)
+                    if(int.TryParse(textBoxEta.Text,out età)){
+                        if(IsValidEmail(email))
                         {
-                            using (WebClient client = new WebClient())
+                            if(conferma_password == password)
                             {
-                                try
+                                using (WebClient client = new WebClient())
                                 {
-                                    // URL del server Python
-                                    string pythonServerUrl = "http://localhost:5000/registrazione";
-                                    // Creare un oggetto con i dati da inviare come JSON
-                                    var dataToSend = new
+                                    try
                                     {
-                                        nome= nome,
-                                        cognome= cognome,
-                                        email = email,
-                                        password = password,
-                                        eta= eta,
-                                        muscoli= muscoli
-                                    };
-                                    string jsonData = JsonConvert.SerializeObject(dataToSend);
-                                    // Creare il contenuto della richiesta POST
-                                    StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
-                                    // Impostare l'intestazione Content-Type
-                                    client.Headers[HttpRequestHeader.ContentType] = "application/json";
-                                    // Invio di una richiesta POST
-                                    string response = client.UploadString($"{pythonServerUrl}/endpoint", "POST", jsonData);
-                                    
-                                    Console.WriteLine($"Risposta dal server Python: {response}");
-                                    if(response==email){
-                                        Form1 login= new Form1();
-                                        this.Close();
-                                        login.Show();
-                                    }else{
-                                        labelErrore.Text=response;
-                                        labelErrore.Visible=true;
+                                        // URL del server Python
+                                        string pythonServerUrl = "http://localhost:5000/registrazione";
+                                        // Creare un oggetto con i dati da inviare come JSON
+                                        var dataToSend = new
+                                        {
+                                            nome= nome,
+                                            cognome= cognome,
+                                            email = email,
+                                            password = password,
+                                            eta= età,
+                                            muscoli= muscoli
+                                        };
+                                        string jsonData = JsonConvert.SerializeObject(dataToSend);
+                                        // Creare il contenuto della richiesta POST
+                                        StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+                                        // Impostare l'intestazione Content-Type
+                                        client.Headers[HttpRequestHeader.ContentType] = "application/json";
+                                        // Invio di una richiesta POST
+                                        string response = client.UploadString($"{pythonServerUrl}/endpoint", "POST", jsonData);
+                                        
+                                        Console.WriteLine($"Risposta dal server Python: {response}");
+                                        if(response==email){
+                                            Form1 login= new Form1();
+                                            this.Close();
+                                            login.Show();
+                                        }else{
+                                            labelErrore.Text=response;
+                                            labelErrore.Visible=true;
+                                        }
+                                    }
+                                    catch (WebException ex)
+                                    {
+                                        // Gestisci eventuali errori durante la richiesta HTTP
+                                        Console.WriteLine($"Errore durante la richiesta HTTP: {ex.Message}");
                                     }
                                 }
-                                catch (WebException ex)
-                                {
-                                    // Gestisci eventuali errori durante la richiesta HTTP
-                                    Console.WriteLine($"Errore durante la richiesta HTTP: {ex.Message}");
-                                }
+                            }
+                            else
+                            {
+                                labelErrore.Text="Attenzione, le password non corrispondono";
+                                labelErrore.Visible=true;
                             }
                         }
                         else
                         {
-                            labelErrore.Text="Attenzione, le password non corrispondono";
+                            labelErrore.Text="Attenzione, email non valida";
                             labelErrore.Visible=true;
                         }
                     }
                     else
                     {
-                        labelErrore.Text="Attenzione, email non valida";
+                        labelErrore.Text="Attenzione, età non valida";
                         labelErrore.Visible=true;
                     }
                 }
