@@ -6,7 +6,7 @@ import (
 	"go_app/types"
 	"log"
 	"time"
-	u "go_app/utils"
+	"go_app/utils"
 
 	"github.com/go-sql-driver/mysql" // Driver per la gestione del database MySQL (l'underscore indica che il package viene importato ma non utilizzato direttamente nel codice, rimosso perché utilizzo ora variabile del package (mysql) a riga 95)
 )
@@ -1137,7 +1137,7 @@ func modifyPreferredMuscles(user_email string, old_preferred_muscles, new_prefer
 		log.Fatal(err)
 	}
 
-	removedMuscles, addedMuscles := u.findDifferentStrings(old_preferred_muscles, new_preferred_muscles)
+	removedMuscles, addedMuscles := utils.FindDifferentStrings(old_preferred_muscles, new_preferred_muscles)
 
 	if len(removedMuscles) > 0 {
 		for _, muscle := range removedMuscles {
