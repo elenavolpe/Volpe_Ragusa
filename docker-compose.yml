@@ -8,6 +8,7 @@ services:
     container_name: go
     ports:
       - "8080:8080"
+    restart: always
   
   python:
     build:
@@ -16,6 +17,7 @@ services:
     container_name: python
     ports:
       - "5000:5000"
+    restart: always
   
   mysql:
     image: mysql:latest
@@ -31,6 +33,7 @@ services:
       - ./mysql/data:/var/lib/mysql
       - ./mysql/logs:/var/log/mysql
       - ./mysql-init-scripts:/docker-entrypoint-initdb.d
+    restart: always
 
 # questo lo teniamo per testare il nostro database con phpmyadmin, poi lo togliamo
   phpmyadmin:
@@ -45,6 +48,7 @@ services:
       PMA_PASSWORD: ${PMA_PASSWORD}
     depends_on:
       - mysql
+    restart: always
 
 volumes:
   mysql-data:
