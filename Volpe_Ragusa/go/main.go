@@ -7,7 +7,6 @@ import (
 	"go_app/types"
 	"log"
 	"net/http"
-	"strconv"
 )
 
 func main() {
@@ -23,40 +22,45 @@ func main() {
 
 	// Definizione handlers richieste per le diverse routes gestite dal multiplexer/router mux
 
-	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("Welcome to the Go server!"))
-	})
-
 	// Endpoints per la gestione degli utenti
 	mux.HandleFunc("/signup", func(w http.ResponseWriter, r *http.Request) {
-		name := r.FormValue("name")
-		surname := r.FormValue("surname")
-		email := r.FormValue("email")
-		password := r.FormValue("password")
-		string_age := r.FormValue("age")
-		age, err := strconv.Atoi(string_age)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
-			return
+		if r.Method == http.MethodPost {
+			var signupReq types.SignupReq
+			err := json.NewDecoder(r.Body).Decode(&signupReq)
+			if err != nil {
+				http.Error(w, "Errore durante la decodifica del JSON: "+err.Error(), http.StatusBadRequest)
+				return
+			}
+			usr := make(chan string) // Sarà la mail dell'utente se la registrazione è andata a buon fine, altrimenti "failure"
+			var s string
+			go database.Signup(signupReq.Name, signupReq.Surname, signupReq.Email, signupReq.Password, signupReq.Age, usr)
+			s = <-usr
+			w.Write([]byte(s))
+		} else {
+			http.Error(w, "Metodo di richiesta non valido!", http.StatusMethodNotAllowed)
 		}
-		usr := make(chan string) // Sarà la mail dell'utente se la registrazione è andata a buon fine, altrimenti "failure"
-		var s string
-		go database.Signup(name, surname, email, password, age, usr)
-		s = <-usr
-		w.Write([]byte(s))
 	})
 
 	mux.HandleFunc("/deleteAccount", func(w http.ResponseWriter, r *http.Request) {
-		email := r.FormValue("email")
-		done := make(chan bool)
-		var s string
-		go database.DeleteAccount(email, done)
-		if <-done {
-			s = "success"
+		if r.Method == http.MethodPost {
+			var deleteReq types.EmailReq
+			err := json.NewDecoder(r.Body).Decode(&deleteReq)
+			if err != nil {
+				http.Error(w, "Errore durante la decodifica del JSON: "+err.Error(), http.StatusBadRequest)
+				return
+			}
+			done := make(chan bool)
+			var s string
+			go database.DeleteAccount(deleteReq.Email, done)
+			if <-done {
+				s = "success"
+			} else {
+				s = "failure"
+			}
+			w.Write([]byte(s))
 		} else {
-			s = "failure"
+			http.Error(w, "Metodo di richiesta non valido!", http.StatusMethodNotAllowed)
 		}
-		w.Write([]byte(s))
 	})
 
 	// mux.HandleFunc("/modifyprofile", func(w http.ResponseWriter, r *http.Request) {
@@ -72,151 +76,303 @@ func main() {
 	// })
 
 	mux.HandleFunc("/verifyadmin", func(w http.ResponseWriter, r *http.Request) {
-		email := r.FormValue("email")
-		password := r.FormValue("password")
-		isAdmin := make(chan bool)
-		go database.AuthAdmin(email, password, isAdmin)
-		w.Header().Set("Content-Type", "application/json")
-		err := json.NewEncoder(w).Encode(<-isAdmin)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+		if r.Method == http.MethodPost {
+			var verifyReq types.LoginReq
+			err := json.NewDecoder(r.Body).Decode(&verifyReq)
+			if err != nil {
+				http.Error(w, "Errore durante la decodifica del JSON: "+err.Error(), http.StatusBadRequest)
+				return
+			}
+			isAdmin := make(chan bool)
+			go database.AuthAdmin(verifyReq.Email, verifyReq.Password, isAdmin)
+			w.Header().Set("Content-Type", "application/json")
+			err = json.NewEncoder(w).Encode(<-isAdmin)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+			}
+		} else {
+			http.Error(w, "Metodo di richiesta non valido!", http.StatusMethodNotAllowed)
+		}
+	})
+
+	mux.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == http.MethodPost {
+			var loginReq types.LoginReq
+			err := json.NewDecoder(r.Body).Decode(&loginReq)
+			if err != nil {
+				http.Error(w, "Errore durante la decodifica del JSON: "+err.Error(), http.StatusBadRequest)
+				return
+			}
+			done := make(chan bool)
+			var s string
+			go database.Login(loginReq.Email, loginReq.Password, done)
+			if <-done {
+				s = "ok"
+			} else {
+				s = "failure"
+			}
+			w.Write([]byte(s))
+		} else {
+			http.Error(w, "Metodo di richiesta non valido!", http.StatusMethodNotAllowed)
 		}
 	})
 
 	mux.HandleFunc("/verifypassword", func(w http.ResponseWriter, r *http.Request) {
-		email := r.FormValue("email")
-		password := r.FormValue("oldPassword")
-		if pw := r.FormValue("password"); pw != "" {
-			password = pw
-		}
-		done := make(chan bool)
-		var s string
-		go database.Login(email, password, done)
-		if <-done {
-			s = "ok"
+		if r.Method == http.MethodPost {
+			type VerifyReq struct {
+				Email    string `json:"email"`
+				Password string `json:"oldPassword"`
+			}
+			var loginReq VerifyReq
+			err := json.NewDecoder(r.Body).Decode(&loginReq)
+			if err != nil {
+				http.Error(w, "Errore durante la decodifica del JSON: "+err.Error(), http.StatusBadRequest)
+				return
+			}
+			done := make(chan bool)
+			var s string
+			go database.Login(loginReq.Email, loginReq.Password, done)
+			if <-done {
+				s = "ok"
+			} else {
+				s = "failure"
+			}
+			w.Write([]byte(s))
 		} else {
-			s = "failure"
+			http.Error(w, "Metodo di richiesta non valido!", http.StatusMethodNotAllowed)
 		}
-		w.Write([]byte(s))
 	})
 
 	// Queste 5 modify restiutiscono l'email utente in caso di successo, altrimenti "failure"
 	mux.HandleFunc("/modifypassword", func(w http.ResponseWriter, r *http.Request) {
-		email := r.FormValue("email")
-		new_pw := r.FormValue("newpassword")
-		usr := make(chan string)
-		var s string
-		go database.ModifyPassword(email, new_pw, usr)
-		s = <-usr
-		w.Write([]byte(s))
+		if r.Method == http.MethodPost {
+			type ModifyReq struct {
+				Email       string `json:"email"`
+				NewPassword string `json:"newpassword"`
+			}
+			var modifyReq ModifyReq
+			err := json.NewDecoder(r.Body).Decode(&modifyReq)
+			if err != nil {
+				http.Error(w, "Errore durante la decodifica del JSON: "+err.Error(), http.StatusBadRequest)
+				return
+			}
+			usr := make(chan string)
+			var s string
+			go database.ModifyPassword(modifyReq.Email, modifyReq.NewPassword, usr)
+			s = <-usr
+			w.Write([]byte(s))
+		} else {
+			http.Error(w, "Metodo di richiesta non valido!", http.StatusMethodNotAllowed)
+		}
 	})
 
 	mux.HandleFunc("/modifyemail", func(w http.ResponseWriter, r *http.Request) {
-		old_email := r.FormValue("email")
-		new_email := r.FormValue("newemail")
-		usr := make(chan string)
-		var s string
-		go database.ModifyEmail(old_email, new_email, usr)
-		s = <-usr
-		w.Write([]byte(s))
+		if r.Method == http.MethodPost {
+			type ModifyReq struct {
+				Email    string `json:"email"`
+				NewEmail string `json:"newemail"`
+			}
+			var modifyReq ModifyReq
+			err := json.NewDecoder(r.Body).Decode(&modifyReq)
+			if err != nil {
+				http.Error(w, "Errore durante la decodifica del JSON: "+err.Error(), http.StatusBadRequest)
+				return
+			}
+			usr := make(chan string)
+			var s string
+			go database.ModifyEmail(modifyReq.Email, modifyReq.NewEmail, usr)
+			s = <-usr
+			w.Write([]byte(s))
+		} else {
+			http.Error(w, "Metodo di richiesta non valido!", http.StatusMethodNotAllowed)
+		}
 	})
 
 	mux.HandleFunc("/modifyname", func(w http.ResponseWriter, r *http.Request) {
-		email := r.FormValue("email")
-		new_name := r.FormValue("newname")
-		usr := make(chan string)
-		var s string
-		go database.ModifyName(email, new_name, usr)
-		s = <-usr
-		w.Write([]byte(s))
+		if r.Method == http.MethodPost {
+			type ModifyReq struct {
+				Email   string `json:"email"`
+				NewName string `json:"newname"`
+			}
+			var modifyReq ModifyReq
+			err := json.NewDecoder(r.Body).Decode(&modifyReq)
+			if err != nil {
+				http.Error(w, "Errore durante la decodifica del JSON: "+err.Error(), http.StatusBadRequest)
+				return
+			}
+			usr := make(chan string)
+			var s string
+			go database.ModifyName(modifyReq.Email, modifyReq.NewName, usr)
+			s = <-usr
+			w.Write([]byte(s))
+		} else {
+			http.Error(w, "Metodo di richiesta non valido!", http.StatusMethodNotAllowed)
+		}
 	})
 
 	mux.HandleFunc("/modifysurname", func(w http.ResponseWriter, r *http.Request) {
-		email := r.FormValue("email")
-		new_surname := r.FormValue("newsurname")
-		usr := make(chan string)
-		var s string
-		go database.ModifySurname(email, new_surname, usr)
-		s = <-usr
-		w.Write([]byte(s))
+		if r.Method == http.MethodPost {
+			type ModifyReq struct {
+				Email      string `json:"email"`
+				NewSurname string `json:"newsurname"`
+			}
+			var modifyReq ModifyReq
+			err := json.NewDecoder(r.Body).Decode(&modifyReq)
+			if err != nil {
+				http.Error(w, "Errore durante la decodifica del JSON: "+err.Error(), http.StatusBadRequest)
+				return
+			}
+			usr := make(chan string)
+			var s string
+			go database.ModifySurname(modifyReq.Email, modifyReq.NewSurname, usr)
+			s = <-usr
+			w.Write([]byte(s))
+		} else {
+			http.Error(w, "Metodo di richiesta non valido!", http.StatusMethodNotAllowed)
+		}
 	})
 
 	mux.HandleFunc("/modifyage", func(w http.ResponseWriter, r *http.Request) {
-		email := r.FormValue("email")
-		new_age := r.FormValue("newage")
-		usr := make(chan string)
-		var s string
-		go database.ModifyAge(email, new_age, usr)
-		s = <-usr
-		w.Write([]byte(s))
+		if r.Method == http.MethodPost {
+			type ModifyReq struct {
+				Email  string `json:"email"`
+				NewAge string `json:"newage"`
+			}
+			var modifyReq ModifyReq
+			err := json.NewDecoder(r.Body).Decode(&modifyReq)
+			if err != nil {
+				http.Error(w, "Errore durante la decodifica del JSON: "+err.Error(), http.StatusBadRequest)
+				return
+			}
+			usr := make(chan string)
+			var s string
+			go database.ModifyAge(modifyReq.Email, modifyReq.NewAge, usr)
+			s = <-usr
+			w.Write([]byte(s))
+		} else {
+			http.Error(w, "Metodo di richiesta non valido!", http.StatusMethodNotAllowed)
+		}
 	})
 
 	mux.HandleFunc("/getInfo", func(w http.ResponseWriter, r *http.Request) {
 		// Riceve l'email da python, ritorna, se non ci sono errori, tutti i dati dell'utente. Altrimenti ritorna un utente con il campo id settato a -1 e i campi stringa vuoti
-		email := r.FormValue("email")
-		usr := make(chan types.User)
-		go database.GetUserInfo(email, usr)
-		w.Header().Set("Content-Type", "application/json")
-		err := json.NewEncoder(w).Encode(<-usr) // I nomi dei campi del json di User puoi vederli in types.go
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+		if r.Method == http.MethodPost {
+			var emailReq types.EmailReq
+			err := json.NewDecoder(r.Body).Decode(&emailReq)
+			if err != nil {
+				http.Error(w, "Errore durante la decodifica del JSON: "+err.Error(), http.StatusBadRequest)
+				return
+			}
+			usr := make(chan types.User)
+			go database.GetUserInfo(emailReq.Email, usr)
+			w.Header().Set("Content-Type", "application/json")
+			err = json.NewEncoder(w).Encode(<-usr) // I nomi dei campi del json di User puoi vederli in types.go
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+			}
+		} else {
+			http.Error(w, "Metodo di richiesta non valido!", http.StatusMethodNotAllowed)
 		}
 	})
 
 	// Endpoints per la gestione degli esercizi
 	mux.HandleFunc("/addExercise", func(w http.ResponseWriter, r *http.Request) {
-		name := r.FormValue("nome")
-		description := r.FormValue("descrizione")
-		done := make(chan bool)
-		var s string
-		go database.AddExercise(name, description, done)
-		if <-done {
-			s = "success"
+		if r.Method == http.MethodPost {
+			var ex types.Exercise
+			err := json.NewDecoder(r.Body).Decode(&ex)
+			if err != nil {
+				http.Error(w, "Errore durante la decodifica del JSON: "+err.Error(), http.StatusBadRequest)
+				return
+			}
+			done := make(chan bool)
+			var s string
+			go database.AddExercise(ex.Name, ex.Description, done)
+			if <-done {
+				s = "success"
+			} else {
+				s = "failure"
+			}
+			w.Write([]byte(s))
 		} else {
-			s = "failure"
+			http.Error(w, "Metodo di richiesta non valido!", http.StatusMethodNotAllowed)
 		}
-		w.Write([]byte(s))
 	})
 
 	mux.HandleFunc("/deleteExercise", func(w http.ResponseWriter, r *http.Request) {
-		name := r.FormValue("name")
-		done := make(chan bool)
-		var s string
-		go database.DeleteExercise(name, done)
-		if <-done {
-			s = "success"
+		if r.Method == http.MethodPost {
+			type DeleteReq struct {
+				Name string `json:"name"`
+			}
+			var delReq DeleteReq
+			err := json.NewDecoder(r.Body).Decode(&delReq)
+			if err != nil {
+				http.Error(w, "Errore durante la decodifica del JSON: "+err.Error(), http.StatusBadRequest)
+				return
+			}
+			done := make(chan bool)
+			var s string
+			go database.DeleteExercise(delReq.Name, done)
+			if <-done {
+				s = "success"
+			} else {
+				s = "failure"
+			}
+			w.Write([]byte(s))
 		} else {
-			s = "failure"
+			http.Error(w, "Metodo di richiesta non valido!", http.StatusMethodNotAllowed)
 		}
-		w.Write([]byte(s))
 	})
 
 	mux.HandleFunc("/editExerciseName", func(w http.ResponseWriter, r *http.Request) {
-		oldName := r.FormValue("oldName")
-		newName := r.FormValue("newName")
-		done := make(chan bool)
-		var s string
-		go database.EditExerciseName(oldName, newName, done)
-		if <-done {
-			s = "success"
+		if r.Method == http.MethodPost {
+			type EditReq struct {
+				OldName string `json:"oldName"`
+				NewName string `json:"newName"`
+			}
+			var editReq EditReq
+			err := json.NewDecoder(r.Body).Decode(&editReq)
+			if err != nil {
+				http.Error(w, "Errore durante la decodifica del JSON: "+err.Error(), http.StatusBadRequest)
+				return
+			}
+			done := make(chan bool)
+			var s string
+			go database.EditExerciseName(editReq.OldName, editReq.NewName, done)
+			if <-done {
+				s = "success"
+			} else {
+				s = "failure"
+			}
+			w.Write([]byte(s))
 		} else {
-			s = "failure"
+			http.Error(w, "Metodo di richiesta non valido!", http.StatusMethodNotAllowed)
 		}
-		w.Write([]byte(s))
 	})
 
 	mux.HandleFunc("/editExerciseDesc", func(w http.ResponseWriter, r *http.Request) {
-		oldName := r.FormValue("oldName")
-		newDescription := r.FormValue("newDescription")
-		done := make(chan bool)
-		var s string
-		go database.EditExerciseDescription(oldName, newDescription, done)
-		if <-done {
-			s = "success"
+		if r.Method == http.MethodPost {
+			type EditReq struct {
+				OldName        string `json:"oldName"`
+				NewDescription string `json:"newDescription"`
+			}
+			var editReq EditReq
+			err := json.NewDecoder(r.Body).Decode(&editReq)
+			if err != nil {
+				http.Error(w, "Errore durante la decodifica del JSON: "+err.Error(), http.StatusBadRequest)
+				return
+			}
+			done := make(chan bool)
+			var s string
+			go database.EditExerciseDescription(editReq.OldName, editReq.NewDescription, done)
+			if <-done {
+				s = "success"
+			} else {
+				s = "failure"
+			}
+			w.Write([]byte(s))
 		} else {
-			s = "failure"
+			http.Error(w, "Metodo di richiesta non valido!", http.StatusMethodNotAllowed)
 		}
-		w.Write([]byte(s))
 	})
 
 	mux.HandleFunc("/getExercises", func(w http.ResponseWriter, r *http.Request) {
@@ -230,22 +386,26 @@ func main() {
 	})
 
 	mux.HandleFunc("/getMostPopularExercises", func(w http.ResponseWriter, r *http.Request) {
-		limitParam := r.FormValue("limit")
-		limitValue := 3
-		var err error
-		if limitParam != "" {
-			limitValue, err = strconv.Atoi(limitParam)
+		if r.Method == http.MethodPost {
+			var limitReq map[string]int
+			err := json.NewDecoder(r.Body).Decode(&limitReq)
 			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
+				http.Error(w, "Errore durante la decodifica del JSON: "+err.Error(), http.StatusBadRequest)
 				return
 			}
-		}
-		exercises := make(chan []types.Exercise)
-		go database.GetMostPopularExercises(limitValue, exercises)
-		w.Header().Set("Content-Type", "application/json")
-		err = json.NewEncoder(w).Encode(<-exercises)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			limit, exists := limitReq["limit"]
+			if !exists {
+				limit = 3
+			}
+			exercises := make(chan []types.Exercise)
+			go database.GetMostPopularExercises(limit, exercises)
+			w.Header().Set("Content-Type", "application/json")
+			err = json.NewEncoder(w).Encode(<-exercises)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+			}
+		} else {
+			http.Error(w, "Metodo di richiesta non valido!", http.StatusMethodNotAllowed)
 		}
 	})
 
@@ -262,227 +422,363 @@ func main() {
 	// Endpoints per le funzionalità di gestione dei dati relativi ai muscoli
 
 	mux.HandleFunc("/addMuscle", func(w http.ResponseWriter, r *http.Request) {
-		muscle := r.FormValue("muscle")
-		done := make(chan bool)
-		var s string
-		go database.AddMuscle(muscle, done)
-		if <-done {
-			s = "success"
+		if r.Method == http.MethodPost {
+			var muscleReq types.Muscle
+			err := json.NewDecoder(r.Body).Decode(&muscleReq)
+			if err != nil {
+				http.Error(w, "Errore durante la decodifica del JSON: "+err.Error(), http.StatusBadRequest)
+				return
+			}
+			done := make(chan bool)
+			var s string
+			go database.AddMuscle(muscleReq.Name, done)
+			if <-done {
+				s = "success"
+			} else {
+				s = "failure"
+			}
+			w.Write([]byte(s))
 		} else {
-			s = "failure"
+			http.Error(w, "Metodo di richiesta non valido!", http.StatusMethodNotAllowed)
 		}
-		w.Write([]byte(s))
 	})
 
 	mux.HandleFunc("/editMuscleName", func(w http.ResponseWriter, r *http.Request) {
-		old_muscle := r.FormValue("old_muscle")
-		new_muscle := r.FormValue("new_muscle")
-		done := make(chan bool)
-		var s string
-		go database.EditMuscleName(old_muscle, new_muscle, done)
-		if <-done {
-			s = "success"
+		if r.Method == http.MethodPost {
+			type MuscleReq struct {
+				OldMuscle string `json:"old_muscle"`
+				NewMuscle string `json:"new_muscle"`
+			}
+			var muscleReq MuscleReq
+			err := json.NewDecoder(r.Body).Decode(&muscleReq)
+			if err != nil {
+				http.Error(w, "Errore durante la decodifica del JSON: "+err.Error(), http.StatusBadRequest)
+				return
+			}
+			done := make(chan bool)
+			var s string
+			go database.EditMuscleName(muscleReq.OldMuscle, muscleReq.NewMuscle, done)
+			if <-done {
+				s = "success"
+			} else {
+				s = "failure"
+			}
+			w.Write([]byte(s))
 		} else {
-			s = "failure"
+			http.Error(w, "Metodo di richiesta non valido!", http.StatusMethodNotAllowed)
 		}
-		w.Write([]byte(s))
 	})
 
 	mux.HandleFunc("/deleteMuscle", func(w http.ResponseWriter, r *http.Request) {
-		muscle := r.FormValue("muscle")
-		done := make(chan bool)
-		var s string
-		go database.DeleteMuscle(muscle, done)
-		if <-done {
-			s = "success"
+		if r.Method == http.MethodPost {
+			var muscleReq types.Muscle
+			err := json.NewDecoder(r.Body).Decode(&muscleReq)
+			if err != nil {
+				http.Error(w, "Errore durante la decodifica del JSON: "+err.Error(), http.StatusBadRequest)
+				return
+			}
+			done := make(chan bool)
+			var s string
+			go database.DeleteMuscle(muscleReq.Name, done)
+			if <-done {
+				s = "success"
+			} else {
+				s = "failure"
+			}
+			w.Write([]byte(s))
 		} else {
-			s = "failure"
+			http.Error(w, "Metodo di richiesta non valido!", http.StatusMethodNotAllowed)
 		}
-		w.Write([]byte(s))
 	})
 
 	// Endpoints per le funzionalità di gestione dei muscoli relativi agli esercizi associati
 	mux.HandleFunc("/addMuscleExercise", func(w http.ResponseWriter, r *http.Request) {
-		ex_name := r.FormValue("esercizio")
-		muscle_name := r.FormValue("muscolo")
-		done := make(chan bool)
-		var s string
-		go database.AddMuscleExercise(ex_name, muscle_name, done)
-		if <-done {
-			s = "success"
+		if r.Method == http.MethodPost {
+			var muscleExercise types.MuscleExercise
+			err := json.NewDecoder(r.Body).Decode(&muscleExercise)
+			if err != nil {
+				http.Error(w, "Errore durante la decodifica del JSON: "+err.Error(), http.StatusBadRequest)
+				return
+			}
+			done := make(chan bool)
+			var s string
+			go database.AddMuscleExercise(muscleExercise.Exercise, muscleExercise.Muscle, done)
+			if <-done {
+				s = "success"
+			} else {
+				s = "failure"
+			}
+			w.Write([]byte(s))
 		} else {
-			s = "failure"
+			http.Error(w, "Metodo di richiesta non valido!", http.StatusMethodNotAllowed)
 		}
-		w.Write([]byte(s))
 	})
 
 	mux.HandleFunc("/deleteMuscleExercise", func(w http.ResponseWriter, r *http.Request) {
-		ex_name := r.FormValue("exercise")
-		muscle_name := r.FormValue("muscle_name")
-		done := make(chan bool)
-		var s string
-		go database.DeleteMuscleExercise(ex_name, muscle_name, done)
-		if <-done {
-			s = "success"
+		if r.Method == http.MethodPost {
+			var muscleExercise types.MuscleExercise
+			err := json.NewDecoder(r.Body).Decode(&muscleExercise)
+			if err != nil {
+				http.Error(w, "Errore durante la decodifica del JSON: "+err.Error(), http.StatusBadRequest)
+				return
+			}
+			done := make(chan bool)
+			var s string
+			go database.DeleteMuscleExercise(muscleExercise.Exercise, muscleExercise.Muscle, done)
+			if <-done {
+				s = "success"
+			} else {
+				s = "failure"
+			}
+			w.Write([]byte(s))
 		} else {
-			s = "failure"
+			http.Error(w, "Metodo di richiesta non valido!", http.StatusMethodNotAllowed)
 		}
-		w.Write([]byte(s))
 	})
 
 	// Endpoints per le funzionalità di gestione dei muscoli preferiti dell'utente
 	mux.HandleFunc("/addPreferredMuscle", func(w http.ResponseWriter, r *http.Request) {
-		email := r.FormValue("email")
-		muscle_name := r.FormValue("muscle_name")
-		done := make(chan bool)
-		var s string
-		go database.AddPreferredMuscle(email, muscle_name, done)
-		if <-done {
-			s = "success"
+		if r.Method == http.MethodPost {
+			var muscleReq types.MuscleReq
+			err := json.NewDecoder(r.Body).Decode(&muscleReq)
+			if err != nil {
+				http.Error(w, "Errore durante la decodifica del JSON: "+err.Error(), http.StatusBadRequest)
+				return
+			}
+			done := make(chan bool)
+			var s string
+			go database.AddPreferredMuscle(muscleReq.Email, muscleReq.MuscleName, done)
+			if <-done {
+				s = "success"
+			} else {
+				s = "failure"
+			}
+			w.Write([]byte(s))
 		} else {
-			s = "failure"
+			http.Error(w, "Metodo di richiesta non valido!", http.StatusMethodNotAllowed)
 		}
-		w.Write([]byte(s))
 	})
 
 	mux.HandleFunc("/deletePreferredMuscle", func(w http.ResponseWriter, r *http.Request) {
-		email := r.FormValue("email")
-		muscle_name := r.FormValue("muscle_name")
-		done := make(chan bool)
-		var s string
-		go database.DeletePreferredMuscle(email, muscle_name, done)
-		if <-done {
-			s = "success"
+		if r.Method == http.MethodPost {
+			var muscleReq types.MuscleReq
+			err := json.NewDecoder(r.Body).Decode(&muscleReq)
+			if err != nil {
+				http.Error(w, "Errore durante la decodifica del JSON: "+err.Error(), http.StatusBadRequest)
+				return
+			}
+			done := make(chan bool)
+			var s string
+			go database.DeletePreferredMuscle(muscleReq.Email, muscleReq.MuscleName, done)
+			if <-done {
+				s = "success"
+			} else {
+				s = "failure"
+			}
+			w.Write([]byte(s))
 		} else {
-			s = "failure"
+			http.Error(w, "Metodo di richiesta non valido!", http.StatusMethodNotAllowed)
 		}
-		w.Write([]byte(s))
 	})
 
 	mux.HandleFunc("/modifypreferredmuscles", func(w http.ResponseWriter, r *http.Request) {
-		email := r.FormValue("email")
-		old_preferred_muscles := r.FormValue("preferredmuscles")
-		new_preferred_muscles := r.FormValue("newpreferredmuscles")
-		var oPM, nPM []string
-		err := json.Unmarshal([]byte(old_preferred_muscles), &oPM)
-		if err != nil {
-			http.Error(w, "Error unmarshalling JSON list preferred muscles: "+err.Error(), http.StatusBadRequest)
-			return
+		if r.Method == http.MethodPost {
+			type ModifyReq struct {
+				Email               string   `json:"email"`
+				OldPreferredMuscles []string `json:"preferredmuscles"`
+				NewPreferredMuscles []string `json:"newpreferredmuscles"`
+			}
+			var modifyReq ModifyReq
+			err := json.NewDecoder(r.Body).Decode(&modifyReq)
+			if err != nil {
+				http.Error(w, "Errore durante la decodifica del JSON: "+err.Error(), http.StatusBadRequest)
+				return
+			}
+			usr := make(chan string)
+			var s string
+			go database.ModifyPreferredMuscles(modifyReq.Email, modifyReq.OldPreferredMuscles, modifyReq.NewPreferredMuscles, usr)
+			s = <-usr // email dell'utente in caso di successo, altrimenti "failure"
+			w.Write([]byte(s))
+		} else {
+			http.Error(w, "Metodo di richiesta non valido!", http.StatusMethodNotAllowed)
 		}
-		err = json.Unmarshal([]byte(new_preferred_muscles), &nPM)
-		if err != nil {
-			http.Error(w, "Error unmarshalling JSON list new preferred muscles: "+err.Error(), http.StatusBadRequest)
-			return
-		}
-		usr := make(chan string)
-		var s string
-		go database.ModifyPreferredMuscles(email, oPM, nPM, usr)
-		s = <-usr // email dell'utente in caso di successo, altrimenti "failure"
-		w.Write([]byte(s))
 	})
 
 	// Endpoints per le funzionalità di gestione delle schede degli utenti
 	mux.HandleFunc("/updateWorkoutName", func(w http.ResponseWriter, r *http.Request) {
-		email := r.FormValue("email")
-		wp_name := r.FormValue("workout_name")
-		done := make(chan bool)
-		var s string
-		go database.UpdateUserWorkoutName(email, wp_name, done)
-		if <-done {
-			s = "success"
+		if r.Method == http.MethodPost {
+			type ModifyReq struct {
+				Email       string `json:"email"`
+				WorkoutName string `json:"workout_name"`
+			}
+			var modifyReq ModifyReq
+			err := json.NewDecoder(r.Body).Decode(&modifyReq)
+			if err != nil {
+				http.Error(w, "Errore durante la decodifica del JSON: "+err.Error(), http.StatusBadRequest)
+				return
+			}
+			done := make(chan bool)
+			var s string
+			go database.UpdateUserWorkoutName(modifyReq.Email, modifyReq.WorkoutName, done)
+			if <-done {
+				s = "success"
+			} else {
+				s = "failure"
+			}
+			w.Write([]byte(s))
 		} else {
-			s = "failure"
+			http.Error(w, "Metodo di richiesta non valido!", http.StatusMethodNotAllowed)
 		}
-		w.Write([]byte(s))
 	})
 
 	mux.HandleFunc("/updateWorkoutDesc", func(w http.ResponseWriter, r *http.Request) {
-		email := r.FormValue("email")
-		wp_desc := r.FormValue("workout_desc")
-		done := make(chan bool)
-		var s string
-		go database.UpdateUserWorkoutDescription(email, wp_desc, done)
-		if <-done {
-			s = "success"
+		if r.Method == http.MethodPost {
+			type ModifyReq struct {
+				Email       string `json:"email"`
+				WorkoutDesc string `json:"workout_desc"`
+			}
+			var modifyReq ModifyReq
+			err := json.NewDecoder(r.Body).Decode(&modifyReq)
+			if err != nil {
+				http.Error(w, "Errore durante la decodifica del JSON: "+err.Error(), http.StatusBadRequest)
+				return
+			}
+			done := make(chan bool)
+			var s string
+			go database.UpdateUserWorkoutDescription(modifyReq.Email, modifyReq.WorkoutDesc, done)
+			if <-done {
+				s = "success"
+			} else {
+				s = "failure"
+			}
+			w.Write([]byte(s))
 		} else {
-			s = "failure"
+			http.Error(w, "Metodo di richiesta non valido!", http.StatusMethodNotAllowed)
 		}
-		w.Write([]byte(s))
 	})
 
 	mux.HandleFunc("/deleteUserWorkout", func(w http.ResponseWriter, r *http.Request) {
-		email := r.FormValue("email")
-		done := make(chan bool)
-		var s string
-		go database.DeleteUserWorkout(email, done)
-		if <-done {
-			s = "success"
+		if r.Method == http.MethodPost {
+			var deleteReq types.EmailReq
+			err := json.NewDecoder(r.Body).Decode(&deleteReq)
+			if err != nil {
+				http.Error(w, "Errore durante la decodifica del JSON: "+err.Error(), http.StatusBadRequest)
+				return
+			}
+			done := make(chan bool)
+			var s string
+			go database.DeleteUserWorkout(deleteReq.Email, done)
+			if <-done {
+				s = "success"
+			} else {
+				s = "failure"
+			}
+			w.Write([]byte(s))
 		} else {
-			s = "failure"
+			http.Error(w, "Metodo di richiesta non valido!", http.StatusMethodNotAllowed)
 		}
-		w.Write([]byte(s))
 	})
 
 	// Endpoints per le funzionalità di gestione degli esercizi nelle schede di allenamento
 	mux.HandleFunc("/addExerciseWorkout", func(w http.ResponseWriter, r *http.Request) {
-		email := r.FormValue("email")
-		ex_name := r.FormValue("exercise")
-		done := make(chan bool)
-		var s string
-		go database.AddExerciseWorkoutplan(email, ex_name, done)
-		if <-done {
-			s = "ok"
+		if r.Method == http.MethodPost {
+			var addReq types.UserExerciseReq
+			err := json.NewDecoder(r.Body).Decode(&addReq)
+			if err != nil {
+				http.Error(w, "Errore durante la decodifica del JSON: "+err.Error(), http.StatusBadRequest)
+				return
+			}
+			done := make(chan bool)
+			var s string
+			go database.AddExerciseWorkoutplan(addReq.Email, addReq.Exercise, done)
+			if <-done {
+				s = "ok"
+			} else {
+				s = "failure"
+			}
+			w.Write([]byte(s))
 		} else {
-			s = "failure"
+			http.Error(w, "Metodo di richiesta non valido!", http.StatusMethodNotAllowed)
 		}
-		w.Write([]byte(s))
 	})
 
 	mux.HandleFunc("/deleteExerciseWorkout", func(w http.ResponseWriter, r *http.Request) {
-		email := r.FormValue("email")
-		ex_name := r.FormValue("exercise")
-		done := make(chan bool)
-		var s string
-		go database.DeleteExerciseWorkoutplan(email, ex_name, done)
-		if <-done {
-			s = "ok"
+		if r.Method == http.MethodPost {
+			var deleteReq types.UserExerciseReq
+			err := json.NewDecoder(r.Body).Decode(&deleteReq)
+			if err != nil {
+				http.Error(w, "Errore durante la decodifica del JSON: "+err.Error(), http.StatusBadRequest)
+				return
+			}
+			done := make(chan bool)
+			var s string
+			go database.DeleteExerciseWorkoutplan(deleteReq.Email, deleteReq.Exercise, done)
+			if <-done {
+				s = "ok"
+			} else {
+				s = "failure"
+			}
+			w.Write([]byte(s))
 		} else {
-			s = "failure"
+			http.Error(w, "Metodo di richiesta non valido!", http.StatusMethodNotAllowed)
 		}
-		w.Write([]byte(s))
 	})
 
 	mux.HandleFunc("/getName", func(w http.ResponseWriter, r *http.Request) {
-		//TO_DO, riceve in input l'email e deve ritornare il nome corrispondente
-		email := r.FormValue("email")
-		name := make(chan string)
-		var s string
-		go database.GetUserName(email, name)
-		s = <-name
-		w.Write([]byte(s))
+		if r.Method == http.MethodPost {
+			var emailReq types.EmailReq
+			err := json.NewDecoder(r.Body).Decode(&emailReq)
+			if err != nil {
+				http.Error(w, "Errore durante la decodifica del JSON: "+err.Error(), http.StatusBadRequest)
+				return
+			}
+			name := make(chan string)
+			var s string
+			go database.GetUserName(emailReq.Email, name)
+			s = <-name
+			w.Write([]byte(s))
+		} else {
+			http.Error(w, "Metodo di richiesta non valido!", http.StatusMethodNotAllowed)
+		}
 	})
 
 	mux.HandleFunc("/getWorkoutPlan", func(w http.ResponseWriter, r *http.Request) {
-		//TO_DO, riceve in input l'email e ritorna il workoutPlan
-		email := r.FormValue("email")
-		w_plan := make(chan []types.ExerciseWorkout)
-		go database.GetWorkoutPlan(email, w_plan)
-		w.Header().Set("Content-Type", "application/json")
-		err := json.NewEncoder(w).Encode(<-w_plan)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+		if r.Method == http.MethodPost {
+			var emailReq types.EmailReq
+			err := json.NewDecoder(r.Body).Decode(&emailReq)
+			if err != nil {
+				http.Error(w, "Errore durante la decodifica del JSON: "+err.Error(), http.StatusBadRequest)
+				return
+			}
+			w_plan := make(chan []types.ExerciseWorkout)
+			go database.GetWorkoutPlan(emailReq.Email, w_plan)
+			w.Header().Set("Content-Type", "application/json")
+			err = json.NewEncoder(w).Encode(<-w_plan)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+			}
+		} else {
+			http.Error(w, "Metodo di richiesta non valido!", http.StatusMethodNotAllowed)
 		}
 	})
 
 	mux.HandleFunc("/getPreferredMuscles", func(w http.ResponseWriter, r *http.Request) {
-		//TO_DO, riceve in input l'email e ritorna la lista dei muscoli preferiti
-		email := r.FormValue("email")
-		muscles := make(chan []string)
-		go database.GetPreferredMuscles(email, muscles)
-		w.Header().Set("Content-Type", "application/json")
-		err := json.NewEncoder(w).Encode(<-muscles)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+		if r.Method == http.MethodPost {
+			var emailReq types.EmailReq
+			err := json.NewDecoder(r.Body).Decode(&emailReq)
+			if err != nil {
+				http.Error(w, "Errore durante la decodifica del JSON: "+err.Error(), http.StatusBadRequest)
+				return
+			}
+			muscles := make(chan []string)
+			go database.GetPreferredMuscles(emailReq.Email, muscles)
+			w.Header().Set("Content-Type", "application/json")
+			err = json.NewEncoder(w).Encode(<-muscles)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+			}
+		} else {
+			http.Error(w, "Metodo di richiesta non valido!", http.StatusMethodNotAllowed)
 		}
 	})
 

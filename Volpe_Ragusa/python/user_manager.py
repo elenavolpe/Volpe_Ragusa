@@ -1,5 +1,4 @@
 from utils import connect_go_server, is_valid_email, is_valid_password
-import json
 
 # (account) deve essere dizionario con i campi 'email' e 'password'
 def login(account):
@@ -8,7 +7,7 @@ def login(account):
     
     if is_valid_email(account['email']) and is_valid_password(account['password']):
         try:
-            r = connect_go_server('verifypassword', account)
+            r = connect_go_server('login', account)
             return r
         except Exception as e:
             return f"Errore: {e}"
