@@ -4,9 +4,9 @@ import (
 	"database/sql"
 	"fmt"
 	"go_app/types"
+	"go_app/utils"
 	"log"
 	"time"
-	"go_app/utils"
 
 	"github.com/go-sql-driver/mysql" // Driver per la gestione del database MySQL (l'underscore indica che il package viene importato ma non utilizzato direttamente nel codice, rimosso perché utilizzo ora variabile del package (mysql) a riga 95)
 )
@@ -35,7 +35,7 @@ func ConnectDB(username, password, host, port, dbName string) (*sql.DB, error) {
 // Funzioni di gestione degli utenti
 
 // Quando elimini un utente -> eliminare prima user_exercises e preferred_muscles
-func deleteAccount(email string, done chan<- bool) {
+func DeleteAccount(email string, done chan<- bool) {
 	//admin per collegarsi a mysql
 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
 	if err != nil {
@@ -93,7 +93,7 @@ func deleteAccount(email string, done chan<- bool) {
 	done <- true
 }
 
-func signup(name, surname, email, password string, age int, usr chan<- string) {
+func Signup(name, surname, email, password string, age int, usr chan<- string) {
 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
 	if err != nil {
 		log.Fatal(err)
@@ -117,7 +117,7 @@ func signup(name, surname, email, password string, age int, usr chan<- string) {
 	usr <- email
 }
 
-func login(email, password string, done chan<- bool) {
+func Login(email, password string, done chan<- bool) {
 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
 	if err != nil {
 		log.Fatal(err)
@@ -143,7 +143,7 @@ func login(email, password string, done chan<- bool) {
 	}
 }
 
-func authAdmin(user_email, password string, done chan<- bool) {
+func AuthAdmin(user_email, password string, done chan<- bool) {
 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
 	if err != nil {
 		log.Fatal(err)
@@ -190,7 +190,7 @@ func getUID(email string) (uid int) { // Funzione per ottenere l'User ID dell'ac
 	return
 }
 
-func getUserName(email string, name chan<- string) {
+func GetUserName(email string, name chan<- string) {
 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
 	if err != nil {
 		log.Fatal(err)
@@ -213,7 +213,7 @@ func getUserName(email string, name chan<- string) {
 	name <- user_name
 }
 
-func modifyPassword(user_email, new_pw string, usr chan<- string) {
+func ModifyPassword(user_email, new_pw string, usr chan<- string) {
 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
 	if err != nil {
 		log.Fatal(err)
@@ -232,7 +232,7 @@ func modifyPassword(user_email, new_pw string, usr chan<- string) {
 	usr <- user_email
 }
 
-func modifyEmail(old_email, new_email string, usr chan<- string) {
+func ModifyEmail(old_email, new_email string, usr chan<- string) {
 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
 	if err != nil {
 		log.Fatal(err)
@@ -251,7 +251,7 @@ func modifyEmail(old_email, new_email string, usr chan<- string) {
 	usr <- new_email
 }
 
-func modifyName(user_email, new_name string, usr chan<- string) {
+func ModifyName(user_email, new_name string, usr chan<- string) {
 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
 	if err != nil {
 		log.Fatal(err)
@@ -270,7 +270,7 @@ func modifyName(user_email, new_name string, usr chan<- string) {
 	usr <- user_email
 }
 
-func modifySurname(user_email, new_surname string, usr chan<- string) {
+func ModifySurname(user_email, new_surname string, usr chan<- string) {
 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
 	if err != nil {
 		log.Fatal(err)
@@ -289,7 +289,7 @@ func modifySurname(user_email, new_surname string, usr chan<- string) {
 	usr <- user_email
 }
 
-func modifyAge(user_email, new_age string, usr chan<- string) {
+func ModifyAge(user_email, new_age string, usr chan<- string) {
 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
 	if err != nil {
 		log.Fatal(err)
@@ -308,7 +308,7 @@ func modifyAge(user_email, new_age string, usr chan<- string) {
 	usr <- user_email
 }
 
-func getUserInfo(user_email string, usr chan<- types.User) {
+func GetUserInfo(user_email string, usr chan<- types.User) {
 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
 	if err != nil {
 		log.Fatal(err)
@@ -333,7 +333,7 @@ func getUserInfo(user_email string, usr chan<- types.User) {
 
 // Funzioni per la gestione dei dati relativi agli esercizi
 
-func addExercise(name, description string, done chan<- bool) {
+func AddExercise(name, description string, done chan<- bool) {
 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
 	if err != nil {
 		log.Fatal(err)
@@ -353,7 +353,7 @@ func addExercise(name, description string, done chan<- bool) {
 }
 
 // Quando elimini un esercizio -> eliminare prima user_exercises e exercise_muscles
-func deleteExercise(name string, done chan<- bool) {
+func DeleteExercise(name string, done chan<- bool) {
 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
 	if err != nil {
 		log.Fatal(err)
@@ -410,7 +410,7 @@ func deleteExercise(name string, done chan<- bool) {
 	done <- true
 }
 
-func editExerciseName(old_name, new_name string, done chan<- bool) {
+func EditExerciseName(old_name, new_name string, done chan<- bool) {
 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
 	if err != nil {
 		log.Fatal(err)
@@ -429,7 +429,7 @@ func editExerciseName(old_name, new_name string, done chan<- bool) {
 	done <- true
 }
 
-func editExerciseDescription(old_name, new_description string, done chan<- bool) {
+func EditExerciseDescription(old_name, new_description string, done chan<- bool) {
 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
 	if err != nil {
 		log.Fatal(err)
@@ -448,7 +448,7 @@ func editExerciseDescription(old_name, new_description string, done chan<- bool)
 	done <- true
 }
 
-func getExercises(exercises chan<- []types.ExerciseWorkout) {
+func GetExercises(exercises chan<- []types.ExerciseWorkout) {
 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
 	if err != nil {
 		log.Fatal(err)
@@ -528,7 +528,7 @@ func getExerciseID(name string) (ex_id int) {
 	return
 }
 
-func getMostPopularExercises(limit_value int, exercises chan<- []types.Exercise) {
+func GetMostPopularExercises(limit_value int, exercises chan<- []types.Exercise) {
 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
 	if err != nil {
 		log.Fatal(err)
@@ -562,7 +562,7 @@ func getMostPopularExercises(limit_value int, exercises chan<- []types.Exercise)
 	exercises <- exs
 }
 
-func getMostRecentExercises(exercises chan<- []types.Exercise) { // Restituisce gli esercizi aggiunti (E NON AGGIORANTI!) negli ultimi due giorni
+func GetMostRecentExercises(exercises chan<- []types.Exercise) { // Restituisce gli esercizi aggiunti (E NON AGGIORANTI!) negli ultimi due giorni
 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
 	if err != nil {
 		log.Fatal(err)
@@ -602,7 +602,7 @@ func getMostRecentExercises(exercises chan<- []types.Exercise) { // Restituisce 
 
 // Funzioni per la gestione dei dati relativi ai muscoli
 
-func addMuscle(name string, done chan<- bool) {
+func AddMuscle(name string, done chan<- bool) {
 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
 	if err != nil {
 		log.Fatal(err)
@@ -621,7 +621,7 @@ func addMuscle(name string, done chan<- bool) {
 	done <- true
 }
 
-func editMuscleName(old_name, new_name string, done chan<- bool) {
+func EditMuscleName(old_name, new_name string, done chan<- bool) {
 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
 	if err != nil {
 		log.Fatal(err)
@@ -662,7 +662,7 @@ func getMuscleID(muscle string) (muscle_id int) {
 }
 
 // Quando elimini un muscolo -> eliminare prima exercise_muscles e preferred_muscles
-func deleteMuscle(name string, done chan<- bool) {
+func DeleteMuscle(name string, done chan<- bool) {
 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
 	if err != nil {
 		log.Fatal(err)
@@ -720,7 +720,7 @@ func deleteMuscle(name string, done chan<- bool) {
 }
 
 // Funzioni per la gestione dei dati dei muscoli relativamente agli esercizi
-func addMuscleExercise(ex_name, muscle_name string, done chan<- bool) {
+func AddMuscleExercise(ex_name, muscle_name string, done chan<- bool) {
 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
 	if err != nil {
 		log.Fatal(err)
@@ -751,7 +751,7 @@ func addMuscleExercise(ex_name, muscle_name string, done chan<- bool) {
 	done <- true
 }
 
-func deleteMuscleExercise(ex_name, muscle_name string, done chan<- bool) {
+func DeleteMuscleExercise(ex_name, muscle_name string, done chan<- bool) {
 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
 	if err != nil {
 		log.Fatal(err)
@@ -783,7 +783,7 @@ func deleteMuscleExercise(ex_name, muscle_name string, done chan<- bool) {
 }
 
 // Funzioni per la gestione dei dati dei muscoli preferiti dell'utente
-func addPreferredMuscle(user_email, muscle_name string, done chan<- bool) {
+func AddPreferredMuscle(user_email, muscle_name string, done chan<- bool) {
 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
 	if err != nil {
 		log.Fatal(err)
@@ -814,7 +814,7 @@ func addPreferredMuscle(user_email, muscle_name string, done chan<- bool) {
 	done <- true
 }
 
-func deletePreferredMuscle(user_email, muscle_name string, done chan<- bool) {
+func DeletePreferredMuscle(user_email, muscle_name string, done chan<- bool) {
 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
 	if err != nil {
 		log.Fatal(err)
@@ -846,7 +846,7 @@ func deletePreferredMuscle(user_email, muscle_name string, done chan<- bool) {
 }
 
 // Funzioni per la gestione delle schede di allenamento (tabella users - campi workout_name e workout_description)
-func updateUserWorkoutName(user_email, wp_name string, done chan<- bool) {
+func UpdateUserWorkoutName(user_email, wp_name string, done chan<- bool) {
 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
 	if err != nil {
 		log.Fatal(err)
@@ -865,7 +865,7 @@ func updateUserWorkoutName(user_email, wp_name string, done chan<- bool) {
 	done <- true
 }
 
-func updateUserWorkoutDescription(user_email, wp_desc string, done chan<- bool) {
+func UpdateUserWorkoutDescription(user_email, wp_desc string, done chan<- bool) {
 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
 	if err != nil {
 		log.Fatal(err)
@@ -884,7 +884,7 @@ func updateUserWorkoutDescription(user_email, wp_desc string, done chan<- bool) 
 	done <- true
 }
 
-func deleteUserWorkout(user_email string, done chan<- bool) {
+func DeleteUserWorkout(user_email string, done chan<- bool) {
 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
 	if err != nil {
 		log.Fatal(err)
@@ -935,7 +935,7 @@ func deleteUserWorkout(user_email string, done chan<- bool) {
 }
 
 // Funzioni per la gestione dei dati relativi alle schede di allenamento
-func addExerciseWorkoutplan(user_email, ex_name string, done chan<- bool) {
+func AddExerciseWorkoutplan(user_email, ex_name string, done chan<- bool) {
 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
 	if err != nil {
 		log.Fatal(err)
@@ -966,7 +966,7 @@ func addExerciseWorkoutplan(user_email, ex_name string, done chan<- bool) {
 	done <- true
 }
 
-func deleteExerciseWorkoutplan(user_email, ex_name string, done chan<- bool) {
+func DeleteExerciseWorkoutplan(user_email, ex_name string, done chan<- bool) {
 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
 	if err != nil {
 		log.Fatal(err)
@@ -1017,7 +1017,7 @@ func deleteExerciseWorkoutplan(user_email, ex_name string, done chan<- bool) {
 //     // ... more ExerciseWorkout entries if any
 // ]
 
-func getWorkoutPlan(user_email string, workout_plan chan<- []types.ExerciseWorkout) {
+func GetWorkoutPlan(user_email string, workout_plan chan<- []types.ExerciseWorkout) {
 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
 	if err != nil {
 		log.Fatal(err)
@@ -1077,7 +1077,7 @@ func getWorkoutPlan(user_email string, workout_plan chan<- []types.ExerciseWorko
 	workout_plan <- workout
 }
 
-func getPreferredMuscles(user_email string, muscles chan<- []string) {
+func GetPreferredMuscles(user_email string, muscles chan<- []string) {
 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
 	if err != nil {
 		log.Fatal(err)
@@ -1119,7 +1119,7 @@ func getPreferredMuscles(user_email string, muscles chan<- []string) {
 	muscles <- muscle_list
 }
 
-func modifyPreferredMuscles(user_email string, old_preferred_muscles, new_preferred_muscles []string, usr chan<- string) {
+func ModifyPreferredMuscles(user_email string, old_preferred_muscles, new_preferred_muscles []string, usr chan<- string) {
 	db, err := ConnectDB("admin", "admin", "localhost", "3306", "workoutnow")
 	if err != nil {
 		log.Fatal(err)

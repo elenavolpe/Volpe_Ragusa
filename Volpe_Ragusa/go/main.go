@@ -3,12 +3,11 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"go_app/database"
+	"go_app/types"
 	"log"
 	"net/http"
 	"strconv"
-	"Volpe_Ragusa/go/database"
-	"Volpe_Ragusa/go/types"
-	"Volpe_Ragusa/go/utils"
 )
 
 func main() {
@@ -38,7 +37,7 @@ func main() {
 		}
 		usr := make(chan string) // Sarà la mail dell'utente se la registrazione è andata a buon fine, altrimenti "failure"
 		var s string
-		go signup(name, surname, email, password, age, usr)
+		go database.Signup(name, surname, email, password, age, usr)
 		s = <-usr
 		w.Write([]byte(s))
 	})
@@ -47,7 +46,7 @@ func main() {
 		email := r.FormValue("email")
 		done := make(chan bool)
 		var s string
-		go deleteAccount(email, done)
+		go database.DeleteAccount(email, done)
 		if <-done {
 			s = "success"
 		} else {
@@ -72,7 +71,7 @@ func main() {
 		email := r.FormValue("email")
 		password := r.FormValue("password")
 		isAdmin := make(chan bool)
-		go authAdmin(email, password, isAdmin)
+		go database.AuthAdmin(email, password, isAdmin)
 		w.Header().Set("Content-Type", "application/json")
 		err := json.NewEncoder(w).Encode(<-isAdmin)
 		if err != nil {
@@ -88,7 +87,7 @@ func main() {
 		}
 		done := make(chan bool)
 		var s string
-		go login(email, password, done)
+		go database.Login(email, password, done)
 		if <-done {
 			s = "ok"
 		} else {
@@ -103,7 +102,7 @@ func main() {
 		new_pw := r.FormValue("newpassword")
 		usr := make(chan string)
 		var s string
-		go modifyPassword(email, new_pw, usr)
+		go database.ModifyPassword(email, new_pw, usr)
 		s = <-usr
 		w.Write([]byte(s))
 	})
@@ -113,7 +112,7 @@ func main() {
 		new_email := r.FormValue("newemail")
 		usr := make(chan string)
 		var s string
-		go modifyEmail(old_email, new_email, usr)
+		go database.ModifyEmail(old_email, new_email, usr)
 		s = <-usr
 		w.Write([]byte(s))
 	})
@@ -123,7 +122,7 @@ func main() {
 		new_name := r.FormValue("newname")
 		usr := make(chan string)
 		var s string
-		go modifyName(email, new_name, usr)
+		go database.ModifyName(email, new_name, usr)
 		s = <-usr
 		w.Write([]byte(s))
 	})
@@ -133,7 +132,7 @@ func main() {
 		new_surname := r.FormValue("newsurname")
 		usr := make(chan string)
 		var s string
-		go modifySurname(email, new_surname, usr)
+		go database.ModifySurname(email, new_surname, usr)
 		s = <-usr
 		w.Write([]byte(s))
 	})
@@ -143,7 +142,7 @@ func main() {
 		new_age := r.FormValue("newage")
 		usr := make(chan string)
 		var s string
-		go modifyAge(email, new_age, usr)
+		go database.ModifyAge(email, new_age, usr)
 		s = <-usr
 		w.Write([]byte(s))
 	})
@@ -151,8 +150,8 @@ func main() {
 	mux.HandleFunc("/getInfo", func(w http.ResponseWriter, r *http.Request) {
 		// Riceve l'email da python, ritorna, se non ci sono errori, tutti i dati dell'utente. Altrimenti ritorna un utente con il campo id settato a -1 e i campi stringa vuoti
 		email := r.FormValue("email")
-		usr := make(chan User)
-		go getUserInfo(email, usr)
+		usr := make(chan types.User)
+		go database.GetUserInfo(email, usr)
 		w.Header().Set("Content-Type", "application/json")
 		err := json.NewEncoder(w).Encode(<-usr) // I nomi dei campi del json di User puoi vederli in types.go
 		if err != nil {
@@ -166,7 +165,7 @@ func main() {
 		description := r.FormValue("descrizione")
 		done := make(chan bool)
 		var s string
-		go addExercise(name, description, done)
+		go database.AddExercise(name, description, done)
 		if <-done {
 			s = "success"
 		} else {
@@ -179,7 +178,7 @@ func main() {
 		name := r.FormValue("name")
 		done := make(chan bool)
 		var s string
-		go deleteExercise(name, done)
+		go database.DeleteExercise(name, done)
 		if <-done {
 			s = "success"
 		} else {
@@ -193,7 +192,7 @@ func main() {
 		newName := r.FormValue("newName")
 		done := make(chan bool)
 		var s string
-		go editExerciseName(oldName, newName, done)
+		go database.EditExerciseName(oldName, newName, done)
 		if <-done {
 			s = "success"
 		} else {
@@ -207,7 +206,7 @@ func main() {
 		newDescription := r.FormValue("newDescription")
 		done := make(chan bool)
 		var s string
-		go editExerciseDescription(oldName, newDescription, done)
+		go database.EditExerciseDescription(oldName, newDescription, done)
 		if <-done {
 			s = "success"
 		} else {
@@ -217,8 +216,8 @@ func main() {
 	})
 
 	mux.HandleFunc("/getExercises", func(w http.ResponseWriter, r *http.Request) {
-		exercises := make(chan []ExerciseWorkout)
-		go getExercises(exercises)
+		exercises := make(chan []types.ExerciseWorkout)
+		go database.GetExercises(exercises)
 		w.Header().Set("Content-Type", "application/json")
 		err := json.NewEncoder(w).Encode(<-exercises) // Probablimente bisognerà spiegare come funziona json.NewEnconder(w).Encode()
 		if err != nil {
@@ -237,8 +236,8 @@ func main() {
 				return
 			}
 		}
-		exercises := make(chan []Exercise)
-		go getMostPopularExercises(limitValue, exercises)
+		exercises := make(chan []types.Exercise)
+		go database.GetMostPopularExercises(limitValue, exercises)
 		w.Header().Set("Content-Type", "application/json")
 		err = json.NewEncoder(w).Encode(<-exercises)
 		if err != nil {
@@ -247,8 +246,8 @@ func main() {
 	})
 
 	mux.HandleFunc("/getMostRecentExercises", func(w http.ResponseWriter, r *http.Request) {
-		exercises := make(chan []Exercise)
-		go getMostRecentExercises(exercises)
+		exercises := make(chan []types.Exercise)
+		go database.GetMostRecentExercises(exercises)
 		w.Header().Set("Content-Type", "application/json")
 		err := json.NewEncoder(w).Encode(<-exercises)
 		if err != nil {
@@ -262,7 +261,7 @@ func main() {
 		muscle := r.FormValue("muscle")
 		done := make(chan bool)
 		var s string
-		go addMuscle(muscle, done)
+		go database.AddMuscle(muscle, done)
 		if <-done {
 			s = "success"
 		} else {
@@ -276,7 +275,7 @@ func main() {
 		new_muscle := r.FormValue("new_muscle")
 		done := make(chan bool)
 		var s string
-		go editMuscleName(old_muscle, new_muscle, done)
+		go database.EditMuscleName(old_muscle, new_muscle, done)
 		if <-done {
 			s = "success"
 		} else {
@@ -289,7 +288,7 @@ func main() {
 		muscle := r.FormValue("muscle")
 		done := make(chan bool)
 		var s string
-		go deleteMuscle(muscle, done)
+		go database.DeleteMuscle(muscle, done)
 		if <-done {
 			s = "success"
 		} else {
@@ -304,7 +303,7 @@ func main() {
 		muscle_name := r.FormValue("muscolo")
 		done := make(chan bool)
 		var s string
-		go addMuscleExercise(ex_name, muscle_name, done)
+		go database.AddMuscleExercise(ex_name, muscle_name, done)
 		if <-done {
 			s = "success"
 		} else {
@@ -318,7 +317,7 @@ func main() {
 		muscle_name := r.FormValue("muscle_name")
 		done := make(chan bool)
 		var s string
-		go deleteMuscleExercise(ex_name, muscle_name, done)
+		go database.DeleteMuscleExercise(ex_name, muscle_name, done)
 		if <-done {
 			s = "success"
 		} else {
@@ -333,7 +332,7 @@ func main() {
 		muscle_name := r.FormValue("muscle_name")
 		done := make(chan bool)
 		var s string
-		go addPreferredMuscle(email, muscle_name, done)
+		go database.AddPreferredMuscle(email, muscle_name, done)
 		if <-done {
 			s = "success"
 		} else {
@@ -347,7 +346,7 @@ func main() {
 		muscle_name := r.FormValue("muscle_name")
 		done := make(chan bool)
 		var s string
-		go deletePreferredMuscle(email, muscle_name, done)
+		go database.DeletePreferredMuscle(email, muscle_name, done)
 		if <-done {
 			s = "success"
 		} else {
@@ -373,7 +372,7 @@ func main() {
 		}
 		usr := make(chan string)
 		var s string
-		go modifyPreferredMuscles(email, oPM, nPM, usr)
+		go database.ModifyPreferredMuscles(email, oPM, nPM, usr)
 		s = <-usr // email dell'utente in caso di successo, altrimenti "failure"
 		w.Write([]byte(s))
 	})
@@ -384,7 +383,7 @@ func main() {
 		wp_name := r.FormValue("workout_name")
 		done := make(chan bool)
 		var s string
-		go updateUserWorkoutName(email, wp_name, done)
+		go database.UpdateUserWorkoutName(email, wp_name, done)
 		if <-done {
 			s = "success"
 		} else {
@@ -398,7 +397,7 @@ func main() {
 		wp_desc := r.FormValue("workout_desc")
 		done := make(chan bool)
 		var s string
-		go updateUserWorkoutDescription(email, wp_desc, done)
+		go database.UpdateUserWorkoutDescription(email, wp_desc, done)
 		if <-done {
 			s = "success"
 		} else {
@@ -411,7 +410,7 @@ func main() {
 		email := r.FormValue("email")
 		done := make(chan bool)
 		var s string
-		go deleteUserWorkout(email, done)
+		go database.DeleteUserWorkout(email, done)
 		if <-done {
 			s = "success"
 		} else {
@@ -426,7 +425,7 @@ func main() {
 		ex_name := r.FormValue("exercise")
 		done := make(chan bool)
 		var s string
-		go addExerciseWorkoutplan(email, ex_name, done)
+		go database.AddExerciseWorkoutplan(email, ex_name, done)
 		if <-done {
 			s = "ok"
 		} else {
@@ -440,7 +439,7 @@ func main() {
 		ex_name := r.FormValue("exercise")
 		done := make(chan bool)
 		var s string
-		go deleteExerciseWorkoutplan(email, ex_name, done)
+		go database.DeleteExerciseWorkoutplan(email, ex_name, done)
 		if <-done {
 			s = "ok"
 		} else {
@@ -454,7 +453,7 @@ func main() {
 		email := r.FormValue("email")
 		name := make(chan string)
 		var s string
-		go getUserName(email, name)
+		go database.GetUserName(email, name)
 		s = <-name
 		w.Write([]byte(s))
 	})
@@ -462,8 +461,8 @@ func main() {
 	mux.HandleFunc("/getWorkoutPlan", func(w http.ResponseWriter, r *http.Request) {
 		//TO_DO, riceve in input l'email e ritorna il workoutPlan
 		email := r.FormValue("email")
-		w_plan := make(chan []ExerciseWorkout)
-		go getWorkoutPlan(email, w_plan)
+		w_plan := make(chan []types.ExerciseWorkout)
+		go database.GetWorkoutPlan(email, w_plan)
 		w.Header().Set("Content-Type", "application/json")
 		err := json.NewEncoder(w).Encode(<-w_plan)
 		if err != nil {
@@ -475,7 +474,7 @@ func main() {
 		//TO_DO, riceve in input l'email e ritorna la lista dei muscoli preferiti
 		email := r.FormValue("email")
 		muscles := make(chan []string)
-		go getPreferredMuscles(email, muscles)
+		go database.GetPreferredMuscles(email, muscles)
 		w.Header().Set("Content-Type", "application/json")
 		err := json.NewEncoder(w).Encode(<-muscles)
 		if err != nil {
