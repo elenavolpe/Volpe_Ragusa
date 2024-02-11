@@ -28,8 +28,8 @@ def get_recent():
 
 #ritorna gli esercizi consigliati in base ai muscoli preferiti
 def get_consigliati(email):
-    muscoli=json.loads(user_manager.get_muscoli_preferiti(email))
-    esercizi=json.loads(get_exercises())
+    muscoli=user_manager.get_muscoli_preferiti(email)
+    esercizi=get_exercises()
     consigliati=[]
     #scorro tutti gli esercizi
     for esercizio in esercizi:
@@ -46,7 +46,7 @@ def get_consigliati(email):
 
 #ritorna la lista di tutti i muscoli allenabili
 def getAllMuscles():
-    esercizi=json.loads(get_exercises())
+    esercizi=get_exercises()
     muscoli=[]
     for esercizio in esercizi:
         for muscolo in esercizio['muscles']:
@@ -57,7 +57,7 @@ def getAllMuscles():
 #ritorna la lista di muscoli allenati da un determinato utente
 def get_muscoli_allenati(email):
     muscoliAllenati=[]
-    eserciziScheda=json.loads(user_manager.get_exercise(email))
+    eserciziScheda=user_manager.get_exercise(email)
     for esercizio in eserciziScheda:
         for muscolo in esercizio['muscles']:
             if muscolo not in muscoliAllenati:
@@ -69,7 +69,7 @@ def get_muscoli_allenati(email):
 def get_muscoli_allenati_con_ripetuti(email):
     muscoli = {}
     muscoliAllenati=[]
-    eserciziScheda=json.loads(user_manager.get_exercise(email))
+    eserciziScheda=user_manager.get_exercise(email)
     for esercizio in eserciziScheda:
         for muscolo in esercizio['muscles']:
             muscoliAllenati.append(muscolo)
@@ -85,7 +85,7 @@ def get_trascurati(email):
     #creo una lista dei muscoli trascurati
     muscoliTrascurati=list(set(allMuscles)-set(muscoliAllenati))
     #prendo tutti gli esercizi
-    eserciziAll=json.loads(get_exercises())
+    eserciziAll=get_exercises()
     consigliati=[]
     #scorro tutti gli esercizi
     for esercizio in eserciziAll:
