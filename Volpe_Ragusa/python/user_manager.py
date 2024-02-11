@@ -2,7 +2,7 @@ from utils import connect_go_server, is_valid_email, is_valid_password
 
 # (account) deve essere dizionario con i campi 'email' e 'password'
 def login(account):
-    if type(account) is not dict:
+    if not isinstance(account, dict):
         return f"Errore login: account deve essere un dizionario, invece è di tipo {type(account)}"
     
     if is_valid_email(account['email']) and is_valid_password(account['password']):
@@ -16,7 +16,7 @@ def login(account):
 
 # In questo caso account deve essere un dizionario con i campi 'email', 'password', 'name', 'surname'
 def signin(account):
-    if type(account) is not dict:
+    if not isinstance(account, dict):
         return f"Errore signin: account deve essere un dizionario, invece è di tipo {type(account)}"
     
     if is_valid_email(account['email']) and is_valid_password(account['password']) and account['name'] != '' and account['surname'] != '':
@@ -29,7 +29,7 @@ def signin(account):
         return "Errore: formato email e/o password non validi"
     
 def modifica_profilo(account):
-    if type(account) is not dict:
+    if not isinstance(account, dict):
         return f"Errore signin: account deve essere un dizionario, invece è di tipo {type(account)}"    
     flag=False
     #nel caso in cui si vuole cambiare la password
