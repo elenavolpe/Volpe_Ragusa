@@ -34,8 +34,8 @@ def modifica_profilo(account):
     flag=False
     #nel caso in cui si vuole cambiare la password
     if 'newpassword' in account and account['newpassword']!='':
-        if account['password']=="":
-            return "inserire la password vecchia"
+        if 'password' not in account or account['password']=='':
+            return "inserire la vecchia password"
         #prima si verifica che non sia uguale a quella vecchia
         if account['newpassword']==account['password']:
             return "la nuova password non può essere uguale a quella vecchia"
