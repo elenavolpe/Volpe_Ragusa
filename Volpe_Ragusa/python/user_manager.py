@@ -93,6 +93,8 @@ def modifica_profilo(account):
                     flag=True
             except Exception as e:
                 return f"Errore: {e}"
+        else:
+            return "nessun campo da modificare"
     if flag==True:
         return "qualcosa è andato storto"
     return "ok"
