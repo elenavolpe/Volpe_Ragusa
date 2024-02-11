@@ -1119,7 +1119,7 @@ func GetPreferredMuscles(user_email string, muscles chan<- []string) {
 	muscles <- muscle_list
 }
 
-func ModifyPreferredMuscles(user_email string, old_preferred_muscles, new_preferred_muscles []string, usr chan<- string) {
+func ModifyPreferredMuscles(user_email string, new_preferred_muscles []string, usr chan<- string) {
 	db, err := ConnectDB("admin", "admin", "mysql", "3306", "workoutnow")
 	if err != nil {
 		log.Fatal(err)
@@ -1137,7 +1137,10 @@ func ModifyPreferredMuscles(user_email string, old_preferred_muscles, new_prefer
 		log.Fatal(err)
 	}
 
-	removedMuscles, addedMuscles := utils.FindDifferentStrings(old_preferred_muscles, new_preferred_muscles)
+	old_preferred_muscles := make(chan []string)
+	go GetPreferredMuscles(user_email, old_preferred_muscles)
+
+	removedMuscles, addedMuscles := utils.FindDifferentStrings(<-old_preferred_muscles, new_preferred_muscles)
 
 	if len(removedMuscles) > 0 {
 		for _, muscle := range removedMuscles {

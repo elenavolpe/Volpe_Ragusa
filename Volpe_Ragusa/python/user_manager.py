@@ -73,6 +73,16 @@ def modifica_profilo(account):
                     flag=True
             except Exception as e:
                 return f"Errore: {e}"
+        if 'cognome' in account:
+            try:
+                modify={}
+                modify['email']=account['email']
+                modify['newsurname']=account['cognome']
+                r = connect_go_server('modifysurname', modify)
+                if r=="failure":
+                    flag=True
+            except Exception as e:
+                return f"Errore: {e}"
         if 'eta' in account:
             try:
                 modify={}

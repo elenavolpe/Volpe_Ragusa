@@ -585,7 +585,6 @@ func main() {
 		if r.Method == http.MethodPost {
 			type ModifyReq struct {
 				Email               string   `json:"email"`
-				OldPreferredMuscles []string `json:"preferredmuscles"`
 				NewPreferredMuscles []string `json:"newpreferredmuscles"`
 			}
 			var modifyReq ModifyReq
@@ -596,7 +595,7 @@ func main() {
 			}
 			usr := make(chan string)
 			var s string
-			go database.ModifyPreferredMuscles(modifyReq.Email, modifyReq.OldPreferredMuscles, modifyReq.NewPreferredMuscles, usr)
+			go database.ModifyPreferredMuscles(modifyReq.Email, modifyReq.NewPreferredMuscles, usr)
 			s = <-usr // email dell'utente in caso di successo, altrimenti "failure"
 			w.Write([]byte(s))
 		} else {
