@@ -32,7 +32,7 @@ func main() {
 		string_age := r.FormValue("age")
 		age, err := strconv.Atoi(string_age)
 		if err != nil {
-			http.Error(w, "Invalid parameter", http.StatusBadRequest)
+			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 		usr := make(chan string) // Sarà la mail dell'utente se la registrazione è andata a buon fine, altrimenti "failure"
@@ -232,7 +232,7 @@ func main() {
 		if limitParam != "" {
 			limitValue, err = strconv.Atoi(limitParam)
 			if err != nil {
-				http.Error(w, "Invalid limit parameter", http.StatusBadRequest)
+				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
 		}
