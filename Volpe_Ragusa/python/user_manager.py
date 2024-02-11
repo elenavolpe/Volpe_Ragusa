@@ -110,17 +110,18 @@ def modifica_profilo(account):
     return "ok"
         
 def get_name(email):
-    if email['email']!="":
+    if 'email' in email and email['email']!="":
         try:
             nome = connect_go_server('getName', email)
             print(nome)
             return nome
         except Exception as e:
             return f"Errore: {e}"
+    return "email utente mancante"
 
 #ritorna un json con le info dell'utente        
 def getInfo(email):
-    if email['email']!="":
+    if 'email' in email and email['email']!="":
         try:
             utente = connect_go_server('getInfo', email)
             print(utente)
@@ -129,6 +130,7 @@ def getInfo(email):
             return utente
         except Exception as e:
             return f"Errore: {e}"
+    return "email utente mancante"
 
 #ritorna un json con la scheda dell'utente        
 def get_exercise(account):
