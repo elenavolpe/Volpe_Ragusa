@@ -39,11 +39,11 @@ def modifica_profilo(account):
             return "la nuova password non può essere uguale a quella vecchia"
         else:
             #poi si verifica che quella vecchia sia quella giusta
-            dict={}
-            dict['oldPassword']=account['password']
-            dict['email']=account['email']
+            dictionary={}
+            dictionary['oldPassword']=account['password']
+            dictionary['email']=account['email']
             try:
-                r = connect_go_server('verifypassword',dict)
+                r = connect_go_server('verifypassword',dictionary)
                 if r=="ok":
                     try:
                         modify={}
