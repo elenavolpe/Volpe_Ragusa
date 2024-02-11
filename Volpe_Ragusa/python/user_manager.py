@@ -93,8 +93,7 @@ def modifica_profilo(account):
                 return f"Errore: {e}"
     if flag==True:
         return "qualcosa è andato storto"
-    else:
-        return "ok"
+    return "ok"
         
 def get_name(email):
     if email['email']!="":
