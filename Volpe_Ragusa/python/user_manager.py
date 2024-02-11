@@ -33,7 +33,7 @@ def modifica_profilo(account):
         return f"Errore signin: account deve essere un dizionario, invece è di tipo {type(account)}"    
     flag=False
     #nel caso in cui si vuole cambiare la password
-    if 'newpassword' in account and account['newpassword']!='':
+    if 'newpassword' in account:
         if 'password' not in account or account['password']=='':
             return "inserire la vecchia password"
         #prima si verifica che non sia uguale a quella vecchia
@@ -61,7 +61,7 @@ def modifica_profilo(account):
             except Exception as e:
                 return f"Errore: {e}"
     else: #in questo caso non c'è la necessità di verificare la password
-        if 'nome' in account and account['nome']!='':
+        if 'nome' in account:
             try:
                 modify={}
                 modify['email']=account['email']
@@ -71,7 +71,7 @@ def modifica_profilo(account):
                     flag=True
             except Exception as e:
                 return f"Errore: {e}"
-        if 'eta' in account and account['eta']!='':
+        if 'eta' in account:
             try:
                 modify={}
                 modify['email']=account['email']
@@ -81,7 +81,7 @@ def modifica_profilo(account):
                     flag=True
             except Exception as e:
                 return f"Errore: {e}"
-        if 'muscoli' in account and account['muscoli']!='':
+        if 'muscoli' in account:
             try:
                 modify={}
                 modify['email']=account['email']
@@ -91,10 +91,10 @@ def modifica_profilo(account):
                     flag=True
             except Exception as e:
                 return f"Errore: {e}"
-        if flag==True:
-            return "qualcosa è andato storto"
-        else:
-            return "ok"
+    if flag==True:
+        return "qualcosa è andato storto"
+    else:
+        return "ok"
         
 def get_name(email):
     if email['email']!="":
