@@ -2,6 +2,7 @@ from flask import Flask, request, send_file
 import user_manager
 import exercise_manager
 from generate_muscle_stats import generate_muscle_stats
+from utils import connect_go_server
 
 # Temporaneo: dati di esempio per test
 data = {
@@ -12,6 +13,10 @@ data = {
 }
 
 app = Flask(__name__)
+
+@app.route('/goTest', methods=['GET'])
+def go_test():
+    connect_go_server('')
 
 # Route per la registrazione di un nuovo utente
 @app.route('/signin', methods=['POST'])

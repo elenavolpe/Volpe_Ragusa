@@ -23,6 +23,10 @@ func main() {
 
 	// Definizione handlers richieste per le diverse routes gestite dal multiplexer/router mux
 
+	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("Welcome to the Go server!"))
+	})
+
 	// Endpoints per la gestione degli utenti
 	mux.HandleFunc("/signup", func(w http.ResponseWriter, r *http.Request) {
 		name := r.FormValue("name")
