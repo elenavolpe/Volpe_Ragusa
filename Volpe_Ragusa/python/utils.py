@@ -20,7 +20,7 @@ def is_valid_password(password):
     
     return bool(match)
 
-def connect_go_server(endpoint, pl):
+def connect_go_server(endpoint, pl={}):
     if not isinstance(pl, dict):
         raise TypeError("Il payload deve essere un dizionario")
     
