@@ -1103,7 +1103,7 @@ func GetPreferredMuscles(user_email string, muscles chan<- []string) {
 		return
 	}
 
-	getQuery := "SELECT name FROM muscles AS M JOIN preferred_muscles AS PM ON M.id = PM.muscleid JOIN users AS U ON U.id = PM.userid  WHERE PM.userid = ?"
+	getQuery := "SELECT M.name FROM muscles AS M JOIN preferred_muscles AS PM ON M.id = PM.muscleid JOIN users AS U ON U.id = PM.userid WHERE PM.userid = ?"
 	rows, err := db.Query(getQuery, uid)
 	if err != nil {
 		log.Println(err)
