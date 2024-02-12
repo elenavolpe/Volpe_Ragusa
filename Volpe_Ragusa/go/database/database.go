@@ -732,7 +732,7 @@ func DeleteMuscle(name string, done chan<- bool) {
 	done <- true
 }
 
-func GetMuscles(muscles chan<- []types.Muscle) {
+func GetMuscles(muscles chan<- types.Muscles) {
 	db, err := ConnectDB("admin", "admin", "mysql", "3306", "workoutnow")
 	if err != nil {
 		log.Fatal(err)
@@ -747,15 +747,15 @@ func GetMuscles(muscles chan<- []types.Muscle) {
 	}
 	defer rows.Close()
 
-	var mscls []types.Muscle
+	var mscls types.Muscles
 	for rows.Next() {
-		var m types.Muscle
-		err := rows.Scan(&m.Name)
+		var m string
+		err := rows.Scan(&m)
 		if err != nil {
 			log.Println(err)
 			return
 		}
-		mscls = append(mscls, m)
+		mscls.Muscles = append(mscls.Muscles, m)
 	}
 
 	err = rows.Err()

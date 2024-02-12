@@ -14,6 +14,10 @@ type Muscle struct {
 	Name string `json:"muscle"`
 }
 
+type Muscles struct {
+	Muscles []string `json:"muscles"`
+}
+
 type MuscleExercise struct {
 	Exercise string `json:"esercizio"`
 	Muscle   string `json:"muscolo"`
