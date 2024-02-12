@@ -64,6 +64,7 @@ public class Utente
                     byte[] responseBytes = client.UploadValues(url, "POST", jsonData);
                     string responseBody = Encoding.UTF8.GetString(responseBytes);*/
                     if(responseBody!="errore"){
+                        Console.WriteLine(responseBody);
                         InfoUtente datiUtente = JsonConvert.DeserializeObject<InfoUtente>(responseBody);
                         Console.WriteLine(datiUtente);
                         this.email=datiUtente.email;

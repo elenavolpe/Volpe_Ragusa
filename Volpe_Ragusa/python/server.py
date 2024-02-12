@@ -50,7 +50,7 @@ def modify_profile():
 def get_scheda():
     if request.method == 'POST':
         account = request.get_json()
-        return json.dumps(user_manager.get_exercise(account))
+        return user_manager.get_exercise(account)
     
 #ritorna tutti gli esercizi, da mettere nella home
 @app.route('/get_esercizi', methods=['POST'])
