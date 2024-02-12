@@ -491,6 +491,20 @@ func main() {
 		}
 	})
 
+	mux.HandleFunc("/getMuscles", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == http.MethodPost {
+			muscles := make(chan []types.Muscle)
+			go database.GetMuscles(muscles)
+			w.Header().Set("Content-Type", "application/json")
+			err := json.NewEncoder(w).Encode(<-muscles)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+			}
+		} else {
+			http.Error(w, "Metodo di richiesta non valido!", http.StatusMethodNotAllowed)
+		}
+	})
+
 	// Endpoints per le funzionalità di gestione dei muscoli relativi agli esercizi associati
 	mux.HandleFunc("/addMuscleExercise", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == http.MethodPost {

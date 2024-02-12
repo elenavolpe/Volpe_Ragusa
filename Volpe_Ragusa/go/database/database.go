@@ -732,6 +732,41 @@ func DeleteMuscle(name string, done chan<- bool) {
 	done <- true
 }
 
+func GetMuscles(muscles chan<- []types.Muscle) {
+	db, err := ConnectDB("admin", "admin", "mysql", "3306", "workoutnow")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
+	getQuery := "SELECT name FROM muscles"
+	rows, err := db.Query(getQuery)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	defer rows.Close()
+
+	var mscls []types.Muscle
+	for rows.Next() {
+		var m types.Muscle
+		err := rows.Scan(&m.Name)
+		if err != nil {
+			log.Println(err)
+			return
+		}
+		mscls = append(mscls, m)
+	}
+
+	err = rows.Err()
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	muscles <- mscls
+}
+
 // Funzioni per la gestione dei dati dei muscoli relativamente agli esercizi
 func AddMuscleExercise(ex_name, muscle_name string, done chan<- bool) {
 	db, err := ConnectDB("admin", "admin", "mysql", "3306", "workoutnow")

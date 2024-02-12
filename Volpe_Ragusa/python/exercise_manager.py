@@ -46,7 +46,7 @@ def get_consigliati(email):
 
 #ritorna la lista di tutti i muscoli allenabili
 def getAllMuscles():
-    esercizi=json.loads(get_exercises())
+    esercizi=connect_go_server('')
     muscoli=[]
     for esercizio in esercizi:
         for muscolo in esercizio['muscles']:
