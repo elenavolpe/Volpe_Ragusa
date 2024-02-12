@@ -1308,7 +1308,7 @@ func GetPreferredMuscles(user_email string, muscles chan<- []string) {
 	var muscle_list []string
 	for rows.Next() {
 		var muscle string
-		err := rows.Scan()
+		err := rows.Scan(&muscle)
 		if err != nil {
 			log.Println(err)
 			errSlice := make([]string, 1)
