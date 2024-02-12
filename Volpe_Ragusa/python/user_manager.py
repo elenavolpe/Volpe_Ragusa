@@ -124,11 +124,11 @@ def get_name(email):
 def getInfo(email):
     if 'email' in email and email['email']!="":
         try:
-            utente = connect_go_server('getInfo', email)
+            utente = json.dumps(connect_go_server('getInfo', email))
             print(utente)
             if utente['id']==-1:
                 return "errore"
-            return json.dumps(utente)
+            return utente
         except Exception as e:
             return f"Errore: {e}"
     return "email utente mancante"
