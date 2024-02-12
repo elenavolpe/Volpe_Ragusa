@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS users (
     surname VARCHAR(255) NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
     pass VARCHAR(255) NOT NULL,
-    age INT UNSIGNED NOT NULL CHECK (age >= 0),
+    age INT UNSIGNED NOT NULL DEFAULT 0 CHECK (age >= 0),
     admin BOOLEAN DEFAULT FALSE,
     workout_name VARCHAR(255) DEFAULT NULL,
     workout_description VARCHAR(255) DEFAULT NULL,
@@ -56,8 +56,6 @@ CREATE TABLE IF NOT EXISTS preferred_muscles (
     FOREIGN KEY (userid) REFERENCES users(id),
     FOREIGN KEY (muscleid) REFERENCES muscles(id)
 );
-
-INSERT INTO users (name, surname, email, pass) VALUES ("Francesco", "Franceschini", "francesco.franceschini@fakemail.com", "password");
 INSERT INTO users (name, surname, email, pass, admin) VALUES ("Admin", "Admin", "Admin@mail.it", "admin", TRUE);
 
 INSERT INTO muscles(name) VALUES ("Quadricipiti");
