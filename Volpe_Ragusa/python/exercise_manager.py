@@ -47,7 +47,8 @@ def get_consigliati(email):
 #ritorna la lista di tutti i muscoli allenabili
 def getAllMuscles():
     try:
-        muscoli=connect_go_server('getMuscles')
+        dictionary=connect_go_server('getMuscles')
+        muscoli=dictionary['muscles']
     except Exception as e:
         return f"Errore: {e}"
     return muscoli
