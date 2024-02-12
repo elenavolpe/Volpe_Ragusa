@@ -74,7 +74,7 @@ def modifica_profilo(account):
                     flag=True
             except Exception as e:
                 return f"Errore: {e}"
-        if 'cognome' in account:
+        elif 'cognome' in account:
             try:
                 modify={}
                 modify['email']=account['email']
@@ -84,7 +84,7 @@ def modifica_profilo(account):
                     flag=True
             except Exception as e:
                 return f"Errore: {e}"
-        if 'eta' in account:
+        elif 'eta' in account:
             try:
                 modify={}
                 modify['email']=account['email']
@@ -94,7 +94,7 @@ def modifica_profilo(account):
                     flag=True
             except Exception as e:
                 return f"Errore: {e}"
-        if 'muscoli' in account:
+        elif 'muscoli' in account:
             try:
                 modify={}
                 modify['email']=account['email']
