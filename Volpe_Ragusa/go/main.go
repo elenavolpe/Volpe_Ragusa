@@ -236,7 +236,7 @@ func main() {
 		if r.Method == http.MethodPost {
 			type ModifyReq struct {
 				Email  string `json:"email"`
-				NewAge string `json:"newage"`
+				NewAge int    `json:"newage"`
 			}
 			var modifyReq ModifyReq
 			err := json.NewDecoder(r.Body).Decode(&modifyReq)

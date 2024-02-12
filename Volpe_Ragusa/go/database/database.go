@@ -289,7 +289,7 @@ func ModifySurname(user_email, new_surname string, usr chan<- string) {
 	usr <- user_email
 }
 
-func ModifyAge(user_email, new_age string, usr chan<- string) {
+func ModifyAge(user_email string, new_age int, usr chan<- string) {
 	db, err := ConnectDB("admin", "admin", "mysql", "3306", "workoutnow")
 	if err != nil {
 		log.Fatal(err)
