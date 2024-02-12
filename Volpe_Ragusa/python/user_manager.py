@@ -1,4 +1,5 @@
 from utils import connect_go_server, is_valid_email, is_valid_password
+import json
 
 # (account) deve essere dizionario con i campi 'email' e 'password'
 def login(account):
@@ -127,7 +128,7 @@ def getInfo(email):
             print(utente)
             if utente['id']==-1:
                 return "errore"
-            return utente
+            return json.dumps(utente)
         except Exception as e:
             return f"Errore: {e}"
     return "email utente mancante"
@@ -137,7 +138,7 @@ def get_exercise(account):
     if is_valid_email(account):
         try:
             r = connect_go_server('getWorkoutPlan', account)
-            return r
+            return json.dumps(r)
         except Exception as e:
             return f"Errore: {e}"
     else:
@@ -150,7 +151,7 @@ def get_muscoli_preferiti(email):
             r = connect_go_server('getPreferredMuscles', email)
         except Exception as e:
             return f"Errore: {e}"
-        return r
+        return json.dumps(r)
     else:
         return "email utente non valida"
 

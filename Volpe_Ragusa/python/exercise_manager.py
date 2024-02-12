@@ -8,7 +8,7 @@ def get_exercises():
          r = connect_go_server('getExercises')
     except Exception as e:
         return f"Errore: {e}"
-    return r
+    return json.dumps(r)
 
 #ritorna i primi 3 esercizi più selezionati
 def get_preferred():
@@ -16,7 +16,7 @@ def get_preferred():
          r = connect_go_server('getMostPopularExercises')
     except Exception as e:
         return f"Errore: {e}"
-    return r
+    return json.dumps(r)
 
 #ritorna gli esercizi aggiunti più di recente (i primi 3?) Si ho messo limit 3 nella query di default, stessa cosa per getMostPopularExercises
 def get_recent():
@@ -24,12 +24,12 @@ def get_recent():
          r = connect_go_server('getMostRecentExercises')
     except Exception as e:
         return f"Errore: {e}"
-    return r
+    return json.dumps(r)
 
 #ritorna gli esercizi consigliati in base ai muscoli preferiti
 def get_consigliati(email):
-    muscoli=user_manager.get_muscoli_preferiti(email)
-    esercizi=get_exercises()
+    muscoli=json.loads(user_manager.get_muscoli_preferiti(email))
+    esercizi=json.loads(get_exercises())
     consigliati=[]
     #scorro tutti gli esercizi
     for esercizio in esercizi:
@@ -46,7 +46,7 @@ def get_consigliati(email):
 
 #ritorna la lista di tutti i muscoli allenabili
 def getAllMuscles():
-    esercizi=get_exercises()
+    esercizi=json.loads(get_exercises())
     muscoli=[]
     for esercizio in esercizi:
         for muscolo in esercizio['muscles']:
@@ -57,7 +57,7 @@ def getAllMuscles():
 #ritorna la lista di muscoli allenati da un determinato utente
 def get_muscoli_allenati(email):
     muscoliAllenati=[]
-    eserciziScheda=user_manager.get_exercise(email)
+    eserciziScheda=json.loads(user_manager.get_exercise(email))
     for esercizio in eserciziScheda:
         for muscolo in esercizio['muscles']:
             if muscolo not in muscoliAllenati:
@@ -69,7 +69,7 @@ def get_muscoli_allenati(email):
 def get_muscoli_allenati_con_ripetuti(email):
     muscoli = {}
     muscoliAllenati=[]
-    eserciziScheda=user_manager.get_exercise(email)
+    eserciziScheda=json.loads(user_manager.get_exercise(email))
     for esercizio in eserciziScheda:
         for muscolo in esercizio['muscles']:
             muscoliAllenati.append(muscolo)
