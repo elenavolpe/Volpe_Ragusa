@@ -100,7 +100,7 @@ def get_trascurati(email):
 
 #aggiunge un esercizio alla lista degli esercizi (admin)
 def add_exercise_admin(esercizio):
-    isAdmin = user_manager.authenticate_admin(esercizio['email'], esercizio['password'])
+    isAdmin = user_manager.authenticate_admin(esercizio['email'], esercizio['password']) #TO_DO fede da dove la prendi la password?
     if isAdmin:
         try:
             r = connect_go_server('addExercise',esercizio)
@@ -123,14 +123,15 @@ def add_exercise_admin(esercizio):
         return "Non sei autorizzato a fare questa operazione!"
 
 #elimina un esercizio dalla lista degli esercizi (admin)
-def delete_exercise_admin(email,nomeEsercizio):
-    isAdmin = user_manager.authenticate_admin(email)
+def delete_exercise_admin(data):
+    isAdmin = user_manager.authenticate_admin(data['email'])
     if isAdmin:
-        dict={}
-        dict['email']=email
-        dict['name']=nomeEsercizio
+        #dict={}
+        #dict['email']=email
+        #dict['name']=nomeEsercizio
         try:
-            r = connect_go_server('deleteExercise',dict)
+            #TO_DO data è di tipo email,exercise
+            r = connect_go_server('deleteExercise',data)
             if r != "success":
                 return "Errore nell'eliminazione dell'esercizio!"
         except Exception as e:

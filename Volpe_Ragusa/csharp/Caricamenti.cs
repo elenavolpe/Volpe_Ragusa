@@ -481,7 +481,7 @@ public class Caricamenti{
                     var dataToSend = new
                     {
                         email = this.email,
-                        esercizio=nomeEsercizio
+                        exercise=nomeEsercizio
                     };
                     // Serializzare l'oggetto in formato JSON
                     string jsonData = JsonConvert.SerializeObject(dataToSend);
@@ -522,7 +522,7 @@ public class Caricamenti{
                     var dataToSend = new
                     {
                         email = this.email,
-                        esercizio=nomeEsercizio
+                        exercise=nomeEsercizio
                     };
                     // Serializzare l'oggetto in formato JSON
                     string jsonData = JsonConvert.SerializeObject(dataToSend);
@@ -567,7 +567,7 @@ public class Caricamenti{
                     var dataToSend = new
                     {
                         email = this.email,
-                        esercizio=nomeEsercizio
+                        exercise=nomeEsercizio
                     };
                     // Serializzare l'oggetto in formato JSON
                     string jsonData = JsonConvert.SerializeObject(dataToSend);
@@ -608,7 +608,7 @@ public class Caricamenti{
                     var dataToSend = new
                     {
                         email = this.email,
-                        esercizio=nomeEsercizio
+                        exercise=nomeEsercizio
                     };
                     // Serializzare l'oggetto in formato JSON
                     string jsonData = JsonConvert.SerializeObject(dataToSend);

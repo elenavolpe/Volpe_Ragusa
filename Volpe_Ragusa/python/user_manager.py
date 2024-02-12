@@ -157,23 +157,23 @@ def get_muscoli_preferiti(email):
     #    return "email utente non valida"
 
 #aggiunge alla scheda di email l'esercizio
-def aggiungi_esercizio_scheda(email,esercizio):
-    dict={}
-    dict['email']=email
-    dict['exercise']=esercizio
+def aggiungi_esercizio_scheda(data):
+    #dict={}
+    #dict['email']=email
+    #dict['exercise']=esercizio
     try:
-        r = connect_go_server('addExerciseWorkout', dict)
+        r = connect_go_server('addExerciseWorkout', data)
         return r
     except Exception as e:
         return f"Errore: {e}"
 
 #elimina dalla scheda di email l'esercizio
-def elimina_esercizio_scheda(email,esercizio):
-    dict={}
-    dict['email']=email
-    dict['exercise']=esercizio
+def elimina_esercizio_scheda(data):
+    #dict={}
+    #dict['email']=email
+    #dict['exercise']=esercizio
     try:
-        r = connect_go_server('deleteExerciseWorkout', dict)
+        r = connect_go_server('deleteExerciseWorkout', data)
         return r
     except Exception as e:
         return f"Errore: {e}"

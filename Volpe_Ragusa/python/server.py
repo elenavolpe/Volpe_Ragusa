@@ -102,17 +102,21 @@ def get_esercizi_trascurati():
 @app.route('/aggiungi_esercizio', methods=['POST'])
 def aggiungi_esercizio():
     if request.method == 'POST':
-        email = request.form.get('email') # Perchè non usi request.get_json() come in tutti gli altri casi? Qua non invii un json da C#?
-        esercizio = request.form.get('nomeEsercizio')
-        return  user_manager.aggiungi_esercizio_scheda(email,esercizio)
+        data=request.get_json()
+        #email = request.form.get('email') # Perchè non usi request.get_json() come in tutti gli altri casi? Qua non invii un json da C#?
+        #esercizio = request.form.get('nomeEsercizio')
+        #return  user_manager.aggiungi_esercizio_scheda(email,esercizio)
+        return  user_manager.aggiungi_esercizio_scheda(data)
 
 #elimina esercizio dalla scheda del cliente
 @app.route('/elimina_esercizio', methods=['POST'])
 def elimina_esercizio():
     if request.method == 'POST':
-        email = request.form.get('email') # Perchè non usi request.get_json() come in tutti gli altri casi? Qua non invii un json da C#?
-        esercizio = request.form.get('nomeEsercizio')
-        return  user_manager.elimina_esercizio_scheda(email,esercizio)
+        data=request.get_json()
+        #email = request.form.get('email') # Perchè non usi request.get_json() come in tutti gli altri casi? Qua non invii un json da C#?
+        #esercizio = request.form.get('nomeEsercizio')
+        #return  user_manager.elimina_esercizio_scheda(email,esercizio)
+        return  user_manager.elimina_esercizio_scheda(data)
     
 #aggiunge esercizio alla lista di esercizi (admin)
 @app.route('/add_exercise', methods=['POST'])
@@ -125,9 +129,11 @@ def add_exercise():
 @app.route('/delete_exercise', methods=['POST'])
 def delete_exercise():
     if request.method == 'POST':
-        email = request.get_json()
-        esercizio = request.form.get('nomeEsercizio')
-        return  exercise_manager.delete_exercise_admin(email,esercizio)
+        #email = request.get_json()
+        #esercizio = request.form.get('exercise')
+        data=request.get_json()
+        #return  exercise_manager.delete_exercise_admin(email,esercizio)
+        return  exercise_manager.delete_exercise_admin(data)
     
 #ritorna i preferred muscles dell'utente
 @app.route('/get_muscles', methods=['POST'])
