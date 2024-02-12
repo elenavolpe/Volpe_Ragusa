@@ -33,7 +33,7 @@ func main() {
 			}
 			usr := make(chan string) // Sarà la mail dell'utente se la registrazione è andata a buon fine, altrimenti "failure"
 			var s string
-			go database.Signup(signupReq.Name, signupReq.Surname, signupReq.Email, signupReq.Password, signupReq.Age, usr)
+			go database.Signup(signupReq.Name, signupReq.Surname, signupReq.Email, signupReq.Password, signupReq.Muscles, signupReq.Age, usr)
 			s = <-usr
 			w.Write([]byte(s))
 		} else {

@@ -93,26 +93,72 @@ func DeleteAccount(email string, done chan<- bool) {
 	done <- true
 }
 
-func Signup(name, surname, email, password string, age int, usr chan<- string) {
+func Signup(name, surname, email, password string, muscles []string, age int, usr chan<- string) {
 	db, err := ConnectDB("admin", "admin", "mysql", "3306", "workoutnow")
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer db.Close()
 
+	tx, err := db.Begin()
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	signupQuery := "INSERT INTO users (name, surname, email, pass, age) VALUES (?, ?, ?, ?, ?)"
-	_, err = db.Exec(signupQuery, name, surname, email, password, age)
+	result, err := tx.Exec(signupQuery, name, surname, email, password, age)
 	if err != nil {
 		log.Println(err)
 		// Controllo errore "duplicate key" per MySQL (codice errore: 1062)
 		if mysqlErr, ok := err.(*mysql.MySQLError); ok && mysqlErr.Number == 1062 { // Se è vero che c'è errore di mysql (ok impostato a true) e l'errore è 1062 (mysqlErr.number == 1062) ritorno al canale che l'email è gia in uso
 			usr <- "email già in uso"
+			tx.Rollback()
 			return
 		}
 		usr <- "failure"
+		tx.Rollback()
 		return
 	}
-	fmt.Println("Data inserted successfully!")
+
+	if len(muscles) > 0 {
+		uid, err := result.LastInsertId()
+		if err != nil {
+			log.Println(err)
+			usr <- "failure"
+			tx.Rollback()
+			return
+		}
+		for _, muscle := range muscles {
+			muscle_id := getMuscleID(muscle)
+			if muscle_id == -1 {
+				usr <- "failure"
+				tx.Rollback()
+				return
+			}
+			addQuery := "INSERT INTO preferred_muscles (userid, muscleid) VALUES (?, ?)"
+			_, err = tx.Exec(addQuery, uid, muscle_id)
+			if err != nil {
+				log.Println(err)
+				usr <- "failure"
+				tx.Rollback()
+				return
+			}
+		}
+		if err != nil {
+			log.Println(err)
+			usr <- "failure"
+			tx.Rollback()
+			return
+		}
+	}
+
+	err = tx.Commit()
+	if err != nil {
+		log.Println(err)
+		usr <- "failure"
+		return
+	}
+	fmt.Println("Signup run successfully!")
 
 	usr <- email
 }

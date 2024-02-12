@@ -35,11 +35,12 @@ type LoginReq struct {
 }
 
 type SignupReq struct {
-	Name     string `json:"name"`
-	Surname  string `json:"surname"`
-	Email    string `json:"email"`
-	Password string `json:"password"`
-	Age      int    `json:"age"`
+	Name     string   `json:"name"`
+	Surname  string   `json:"surname"`
+	Email    string   `json:"email"`
+	Password string   `json:"password"`
+	Age      int      `json:"age"`
+	Muscles  []string `json:"muscoli"`
 }
 
 type EmailReq struct {
