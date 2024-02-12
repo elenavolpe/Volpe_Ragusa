@@ -52,6 +52,7 @@ public class Utente
                     string responseBody = Encoding.UTF8.GetString(responseBytes);
                     if(responseBody!="errore"){
                         InfoUtente datiUtente = JsonConvert.DeserializeObject<InfoUtente>(responseBody);
+                        Console.WriteLine(datiUtente);
                         this.email=datiUtente.email;
                         this.name=datiUtente.nome;
                         this.cognome=datiUtente.cognome;
@@ -80,6 +81,7 @@ public class Utente
                     byte[] responseBytes = client.UploadValues(url, "POST", postData);
                     string responseBody = Encoding.UTF8.GetString(responseBytes);
                     if(responseBody!="errore"){
+                        Console.WriteLine(responseBody);
                         List<string> muscoli = JsonConvert.DeserializeObject<List<string>>(responseBody);
                         return muscoli;
                     }else{

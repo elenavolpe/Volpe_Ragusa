@@ -51,7 +51,7 @@ namespace Volpe_Ragusa
                         // Impostare l'intestazione Content-Type
                         client.Headers[HttpRequestHeader.ContentType] = "application/json";
                         // Invio di una richiesta POST
-                        string response = client.UploadString($"{pythonServerUrl}/endpoint", "POST", jsonData);
+                        string response = client.UploadString($"{pythonServerUrl}", "POST", jsonData);
                         // Leggi la risposta
                         Console.WriteLine($"Risposta dal server Python: {response}");
                         
