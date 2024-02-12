@@ -102,7 +102,7 @@ def get_esercizi_trascurati():
 @app.route('/aggiungi_esercizio', methods=['POST'])
 def aggiungi_esercizio():
     if request.method == 'POST':
-        email = request.form.get('email')
+        email = request.form.get('email') # Perchè non usi request.get_json() come in tutti gli altri casi? Qua non invii un json da C#?
         esercizio = request.form.get('nomeEsercizio')
         return  user_manager.aggiungi_esercizio_scheda(email,esercizio)
 
@@ -110,7 +110,7 @@ def aggiungi_esercizio():
 @app.route('/elimina_esercizio', methods=['POST'])
 def elimina_esercizio():
     if request.method == 'POST':
-        email = request.form.get('email')
+        email = request.form.get('email') # Perchè non usi request.get_json() come in tutti gli altri casi? Qua non invii un json da C#?
         esercizio = request.form.get('nomeEsercizio')
         return  user_manager.elimina_esercizio_scheda(email,esercizio)
     
