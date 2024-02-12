@@ -82,12 +82,12 @@ INSERT INTO exercise_muscles(exerciseid,muscleid) VALUES (@id,4);
 INSERT INTO exercise_muscles(exerciseid,muscleid) VALUES (@id,5);
 INSERT INTO exercise_muscles(exerciseid,muscleid) VALUES (@id,6);
 
-INSERT INTO exercises(name, description) VALUES ("Stacchi da terra (Deadlift)", "    Piegati in avanti alle anche, afferra un bilanciere e solleva il peso portando il torso in posizione eretta. Contrai i glutei alla fine del movimento.");
+INSERT INTO exercises(name, description) VALUES ("Stacchi da terra (Deadlift)", "Piegati in avanti alle anche, afferra un bilanciere e solleva il peso portando il torso in posizione eretta. Contrai i glutei alla fine del movimento.");
 SET @id = (SELECT id FROM exercises WHERE name="Stacchi da terra (Deadlift)");
 INSERT INTO exercise_muscles(exerciseid,muscleid) VALUES (@id,7);
 INSERT INTO exercise_muscles(exerciseid,muscleid) VALUES (@id,2);
 
-INSERT INTO exercises(name, description) VALUES ("Flessioni", "Posiziona le mani a terra leggermente più larghe delle spalle, abbassa e solleva il corpo piegando i gomiti. Mantieni il corpo in linea retta.");
+INSERT INTO exercises(name, description) VALUES ("Flessioni", "Posiziona le mani a terra leggermente piu' larghe delle spalle, abbassa e solleva il corpo piegando i gomiti. Mantieni il corpo in linea retta.");
 SET @id = (SELECT id FROM exercises WHERE name="Flessioni");
 INSERT INTO exercise_muscles(exerciseid,muscleid) VALUES (@id,4);
 INSERT INTO exercise_muscles(exerciseid,muscleid) VALUES (@id,5);
