@@ -885,8 +885,8 @@ func UpdateUserWorkoutDescription(user_email, wp_desc string, done chan<- bool) 
 	}
 	defer db.Close()
 
-	addQuery := "UPDATE users SET workout_description = ? WHERE email = ?"
-	_, err = db.Exec(addQuery, wp_desc, user_email)
+	editQuery := "UPDATE users SET workout_description = ? WHERE email = ?"
+	_, err = db.Exec(editQuery, wp_desc, user_email)
 	if err != nil {
 		log.Println(err)
 		done <- false
@@ -923,7 +923,6 @@ func DeleteUserWorkout(user_email string, done chan<- bool) {
 		tx.Rollback()
 		return
 	}
-	fmt.Println("All queries run successfully")
 
 	// Reset delle informazioni della scheda dell'utente (nome e descrizione a NULL)
 	updateQuery := "UPDATE users SET workout_name = NULL, workout_description = NULL WHERE id = ?"
@@ -934,7 +933,6 @@ func DeleteUserWorkout(user_email string, done chan<- bool) {
 		tx.Rollback()
 		return
 	}
-	fmt.Println("Reset User workout info done!")
 
 	err = tx.Commit()
 	if err != nil {
@@ -942,6 +940,8 @@ func DeleteUserWorkout(user_email string, done chan<- bool) {
 		done <- false
 		return
 	}
+	fmt.Println("User workout deleted successfully")
+	fmt.Println("Reset User workout info done!")
 	fmt.Println("Transaction completed successfully!")
 
 	done <- true
@@ -967,14 +967,36 @@ func AddExerciseWorkoutplan(user_email, ex_name string, done chan<- bool) {
 		return
 	}
 
+	tx, err := db.Begin()
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	addQuery := "INSERT INTO user_exercises (userid, exerciseid) VALUES (?, ?)"
-	_, err = db.Exec(addQuery, uid, ex_id)
+	_, err = tx.Exec(addQuery, uid, ex_id)
+	if err != nil {
+		log.Println(err)
+		done <- false
+		tx.Rollback()
+		return
+	}
+
+	editQuery := "UPDATE exercises SET popularity_score = popularity_score+1 WHERE id = ?"
+	_, err = tx.Exec(editQuery, ex_id)
+	if err != nil {
+		log.Println(err)
+		done <- false
+		tx.Rollback()
+		return
+	}
+
+	err = tx.Commit()
 	if err != nil {
 		log.Println(err)
 		done <- false
 		return
 	}
-	fmt.Println("Exercise added to workout plan successfully!")
+	fmt.Println("Transaction completed successfully!")
 
 	done <- true
 }
@@ -998,14 +1020,36 @@ func DeleteExerciseWorkoutplan(user_email, ex_name string, done chan<- bool) {
 		return
 	}
 
+	tx, err := db.Begin()
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	deleteQuery := "DELETE FROM user_exercises WHERE uid = ? AND ex_id = ?"
-	_, err = db.Exec(deleteQuery, uid, ex_id)
+	_, err = tx.Exec(deleteQuery, uid, ex_id)
+	if err != nil {
+		log.Println(err)
+		done <- false
+		tx.Rollback()
+		return
+	}
+
+	editQuery := "UPDATE exercises SET popularity_score = popularity_score-1 WHERE id = ?"
+	_, err = tx.Exec(editQuery, ex_id)
+	if err != nil {
+		log.Println(err)
+		done <- false
+		tx.Rollback()
+		return
+	}
+
+	err = tx.Commit()
 	if err != nil {
 		log.Println(err)
 		done <- false
 		return
 	}
-	fmt.Println("Query run successfully!")
+	fmt.Println("Transaction completed successfully!")
 
 	done <- true
 }
