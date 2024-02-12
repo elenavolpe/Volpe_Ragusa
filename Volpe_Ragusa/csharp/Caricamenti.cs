@@ -2,6 +2,7 @@ using System.Net;
 using System.Collections.Specialized;
 using Newtonsoft.Json;
 using System.Diagnostics.CodeAnalysis;
+using System.Text;
 public class Caricamenti{
     string email;
     List<string> listaEsercizi;
@@ -19,12 +20,20 @@ public class Caricamenti{
                 try
                 {
                     string url = "http://localhost:5000/get_consigliati";
-                    NameValueCollection postData = new NameValueCollection
+                    var dataToSend = new
                     {
-                        { "email", email }
+                        email = this.email
                     };
-                    byte[] responseBytes = client.UploadValues(url, "POST", postData);
-                    string responseBody = System.Text.Encoding.UTF8.GetString(responseBytes);
+                    // Serializzare l'oggetto in formato JSON
+                    string jsonData = JsonConvert.SerializeObject(dataToSend);
+                    // Convertire il JSON in un array di byte
+                    byte[] requestData = Encoding.UTF8.GetBytes(jsonData);
+                    // Impostare l'intestazione Content-Type sulla richiesta HTTP
+                    client.Headers.Add("Content-Type", "application/json");
+                    // Effettuare la richiesta POST con i dati JSON
+                    byte[] responseBytes = client.UploadData(url, "POST", requestData);
+                    // Decodificare la risposta
+                    string responseBody = Encoding.UTF8.GetString(responseBytes);
                     // Deserializza il JSON ricevuto
                     List<ExerciseData> exerciseList = JsonConvert.DeserializeObject<List<ExerciseData>>(responseBody);
                     foreach (ExerciseData exerciseData in exerciseList)
@@ -77,11 +86,18 @@ public class Caricamenti{
                 try
                 {
                     string url = "http://localhost:5000/get_muscle_stats";
-                    NameValueCollection postData = new NameValueCollection
+                    var dataToSend = new
                     {
-                        { "email", email }
+                        email = this.email
                     };
-                    byte[] responseBytes = client.UploadValues(url, "POST", postData);
+                    // Serializzare l'oggetto in formato JSON
+                    string jsonData = JsonConvert.SerializeObject(dataToSend);
+                    // Convertire il JSON in un array di byte
+                    byte[] requestData = Encoding.UTF8.GetBytes(jsonData);
+                    // Impostare l'intestazione Content-Type sulla richiesta HTTP
+                    client.Headers.Add("Content-Type", "application/json");
+                    // Effettuare la richiesta POST con i dati JSON
+                    byte[] responseBytes = client.UploadData(url, "POST", requestData);
                     //TO_DO dovrebbe tornare un immagine, quindi vediamo
                     /*string responseBody = System.Text.Encoding.UTF8.GetString(responseBytes);
                     string[] exercises = JsonConvert.DeserializeObject<string[]>(responseBody);
@@ -116,11 +132,18 @@ public class Caricamenti{
                 try
                 {
                     string url = "http://localhost:5000/get_trascurati";
-                    NameValueCollection postData = new NameValueCollection
+                    var dataToSend = new
                     {
-                        { "email", email }
+                        email = this.email
                     };
-                    byte[] responseBytes = client.UploadValues(url, "POST", postData);
+                    // Serializzare l'oggetto in formato JSON
+                    string jsonData = JsonConvert.SerializeObject(dataToSend);
+                    // Convertire il JSON in un array di byte
+                    byte[] requestData = Encoding.UTF8.GetBytes(jsonData);
+                    // Impostare l'intestazione Content-Type sulla richiesta HTTP
+                    client.Headers.Add("Content-Type", "application/json");
+                    // Effettuare la richiesta POST con i dati JSON
+                    byte[] responseBytes = client.UploadData(url, "POST", requestData);
                     string responseBody = System.Text.Encoding.UTF8.GetString(responseBytes);
                     // Deserializza il JSON ricevuto
                     List<ExerciseData> exerciseList = JsonConvert.DeserializeObject<List<ExerciseData>>(responseBody);
@@ -181,12 +204,18 @@ public class Caricamenti{
                     // URL del server Python
                     string url = "http://localhost:5000/get_esercizi";
                     // Creazione dei dati da inviare come parte della richiesta POST
-                    NameValueCollection postData = new NameValueCollection
+                    var dataToSend = new
                     {
-                        { "email", email }
+                        email = this.email
                     };
-                    // Invio della richiesta POST sincrona
-                    byte[] responseBytes = client.UploadValues(url, "POST", postData);
+                    // Serializzare l'oggetto in formato JSON
+                    string jsonData = JsonConvert.SerializeObject(dataToSend);
+                    // Convertire il JSON in un array di byte
+                    byte[] requestData = Encoding.UTF8.GetBytes(jsonData);
+                    // Impostare l'intestazione Content-Type sulla richiesta HTTP
+                    client.Headers.Add("Content-Type", "application/json");
+                    // Effettuare la richiesta POST con i dati JSON
+                    byte[] responseBytes = client.UploadData(url, "POST", requestData);
                     // Converti la risposta in una stringa
                     string responseBody = System.Text.Encoding.UTF8.GetString(responseBytes);
                     // Deserializza il JSON ricevuto
@@ -248,11 +277,18 @@ public class Caricamenti{
                 try
                 {
                     string url = "http://localhost:5000/get_esercizi_preferiti";
-                    NameValueCollection postData = new NameValueCollection
+                    var dataToSend = new
                     {
-                        { "email", this.email }
+                        email = this.email
                     };
-                    byte[] responseBytes = client.UploadValues(url, "POST", postData);
+                    // Serializzare l'oggetto in formato JSON
+                    string jsonData = JsonConvert.SerializeObject(dataToSend);
+                    // Convertire il JSON in un array di byte
+                    byte[] requestData = Encoding.UTF8.GetBytes(jsonData);
+                    // Impostare l'intestazione Content-Type sulla richiesta HTTP
+                    client.Headers.Add("Content-Type", "application/json");
+                    // Effettuare la richiesta POST con i dati JSON
+                    byte[] responseBytes = client.UploadData(url, "POST", requestData);
                     string responseBody = System.Text.Encoding.UTF8.GetString(responseBytes);
                     // Deserializza il JSON ricevuto
                     List<ExerciseData> exerciseList = JsonConvert.DeserializeObject<List<ExerciseData>>(responseBody);
@@ -306,11 +342,18 @@ public class Caricamenti{
                 try
                 {
                     string url = "http://localhost:5000/get_esercizi_recenti";
-                    NameValueCollection postData = new NameValueCollection
+                    var dataToSend = new
                     {
-                        { "email", this.email }
+                        email = this.email
                     };
-                    byte[] responseBytes = client.UploadValues(url, "POST", postData);
+                    // Serializzare l'oggetto in formato JSON
+                    string jsonData = JsonConvert.SerializeObject(dataToSend);
+                    // Convertire il JSON in un array di byte
+                    byte[] requestData = Encoding.UTF8.GetBytes(jsonData);
+                    // Impostare l'intestazione Content-Type sulla richiesta HTTP
+                    client.Headers.Add("Content-Type", "application/json");
+                    // Effettuare la richiesta POST con i dati JSON
+                    byte[] responseBytes = client.UploadData(url, "POST", requestData);
                     string responseBody = System.Text.Encoding.UTF8.GetString(responseBytes);
                     // Deserializza il JSON ricevuto
                     List<ExerciseData> exerciseList = JsonConvert.DeserializeObject<List<ExerciseData>>(responseBody);
@@ -365,11 +408,18 @@ public class Caricamenti{
                 {
                     string url = "http://localhost:5000/get_scheda";
                     // Creazione dei dati da inviare come parte della richiesta POST
-                    NameValueCollection postData = new NameValueCollection
+                    var dataToSend = new
                     {
-                        { "email", this.email }
+                        email = this.email
                     };
-                    byte[] responseBytes = client.UploadValues(url, "POST", postData);
+                    // Serializzare l'oggetto in formato JSON
+                    string jsonData = JsonConvert.SerializeObject(dataToSend);
+                    // Convertire il JSON in un array di byte
+                    byte[] requestData = Encoding.UTF8.GetBytes(jsonData);
+                    // Impostare l'intestazione Content-Type sulla richiesta HTTP
+                    client.Headers.Add("Content-Type", "application/json");
+                    // Effettuare la richiesta POST con i dati JSON
+                    byte[] responseBytes = client.UploadData(url, "POST", requestData);
                     string responseBody = System.Text.Encoding.UTF8.GetString(responseBytes);
                     // Deserializza il JSON ricevuto
                     List<ExerciseData> exerciseList = JsonConvert.DeserializeObject<List<ExerciseData>>(responseBody);
@@ -416,12 +466,19 @@ public class Caricamenti{
                 try
                 {
                     string url = "http://localhost:5000/aggiungi_esercizio";
-                    NameValueCollection postData = new NameValueCollection
+                    var dataToSend = new
                     {
-                        { "email", this.email },
-                        {"esercizio", nomeEsercizio}
+                        email = this.email,
+                        esercizio=nomeEsercizio
                     };
-                    byte[] responseBytes = client.UploadValues(url, "POST", postData);
+                    // Serializzare l'oggetto in formato JSON
+                    string jsonData = JsonConvert.SerializeObject(dataToSend);
+                    // Convertire il JSON in un array di byte
+                    byte[] requestData = Encoding.UTF8.GetBytes(jsonData);
+                    // Impostare l'intestazione Content-Type sulla richiesta HTTP
+                    client.Headers.Add("Content-Type", "application/json");
+                    // Effettuare la richiesta POST con i dati JSON
+                    byte[] responseBytes = client.UploadData(url, "POST", requestData);
                     string responseBody = System.Text.Encoding.UTF8.GetString(responseBytes);
                     if(responseBody=="ok"){
                         button.Text="elimina";
@@ -450,12 +507,19 @@ public class Caricamenti{
                 try
                 {
                     string url = "http://localhost:5000/elimina_esercizio";
-                    NameValueCollection postData = new NameValueCollection
+                    var dataToSend = new
                     {
-                        { "email", this.email },
-                        {"esercizio", nomeEsercizio}
+                        email = this.email,
+                        esercizio=nomeEsercizio
                     };
-                    byte[] responseBytes = client.UploadValues(url, "POST", postData);
+                    // Serializzare l'oggetto in formato JSON
+                    string jsonData = JsonConvert.SerializeObject(dataToSend);
+                    // Convertire il JSON in un array di byte
+                    byte[] requestData = Encoding.UTF8.GetBytes(jsonData);
+                    // Impostare l'intestazione Content-Type sulla richiesta HTTP
+                    client.Headers.Add("Content-Type", "application/json");
+                    // Effettuare la richiesta POST con i dati JSON
+                    byte[] responseBytes = client.UploadData(url, "POST", requestData);
                     string responseBody = System.Text.Encoding.UTF8.GetString(responseBytes);
                     if(responseBody=="ok"){
                         button.Text="aggiungi";
@@ -488,12 +552,19 @@ public class Caricamenti{
                 try
                 {
                     string url = "http://localhost:5000/add_exercise";
-                    NameValueCollection postData = new NameValueCollection
+                    var dataToSend = new
                     {
-                        { "email", this.email },
-                        {"esercizio", nomeEsercizio}
+                        email = this.email,
+                        esercizio=nomeEsercizio
                     };
-                    byte[] responseBytes = client.UploadValues(url, "POST", postData);
+                    // Serializzare l'oggetto in formato JSON
+                    string jsonData = JsonConvert.SerializeObject(dataToSend);
+                    // Convertire il JSON in un array di byte
+                    byte[] requestData = Encoding.UTF8.GetBytes(jsonData);
+                    // Impostare l'intestazione Content-Type sulla richiesta HTTP
+                    client.Headers.Add("Content-Type", "application/json");
+                    // Effettuare la richiesta POST con i dati JSON
+                    byte[] responseBytes = client.UploadData(url, "POST", requestData);
                     string responseBody = System.Text.Encoding.UTF8.GetString(responseBytes);
                     if(responseBody=="success"){
                         button.Text="elimina";
@@ -522,12 +593,19 @@ public class Caricamenti{
                 try
                 {
                     string url = "http://localhost:5000/delete_exercise";
-                    NameValueCollection postData = new NameValueCollection
+                    var dataToSend = new
                     {
-                        { "email", this.email },
-                        {"esercizio", nomeEsercizio}
+                        email = this.email,
+                        esercizio=nomeEsercizio
                     };
-                    byte[] responseBytes = client.UploadValues(url, "POST", postData);
+                    // Serializzare l'oggetto in formato JSON
+                    string jsonData = JsonConvert.SerializeObject(dataToSend);
+                    // Convertire il JSON in un array di byte
+                    byte[] requestData = Encoding.UTF8.GetBytes(jsonData);
+                    // Impostare l'intestazione Content-Type sulla richiesta HTTP
+                    client.Headers.Add("Content-Type", "application/json");
+                    // Effettuare la richiesta POST con i dati JSON
+                    byte[] responseBytes = client.UploadData(url, "POST", requestData);
                     string responseBody = System.Text.Encoding.UTF8.GetString(responseBytes);
                     if(responseBody=="success"){
                         button.Text="aggiungi";
@@ -552,11 +630,18 @@ public class Caricamenti{
                 {
                     string url = "http://localhost:5000/get_scheda";
                     // Creazione dei dati da inviare come parte della richiesta POST
-                    NameValueCollection postData = new NameValueCollection
+                    var dataToSend = new
                     {
-                        { "email", this.email }
+                        email = this.email
                     };
-                    byte[] responseBytes = client.UploadValues(url, "POST", postData);
+                    // Serializzare l'oggetto in formato JSON
+                    string jsonData = JsonConvert.SerializeObject(dataToSend);
+                    // Convertire il JSON in un array di byte
+                    byte[] requestData = Encoding.UTF8.GetBytes(jsonData);
+                    // Impostare l'intestazione Content-Type sulla richiesta HTTP
+                    client.Headers.Add("Content-Type", "application/json");
+                    // Effettuare la richiesta POST con i dati JSON
+                    byte[] responseBytes = client.UploadData(url, "POST", requestData);
                     string responseBody = System.Text.Encoding.UTF8.GetString(responseBytes);
                     // Deserializza il JSON ricevuto
                     List<ExerciseData> exerciseList = JsonConvert.DeserializeObject<List<ExerciseData>>(responseBody);

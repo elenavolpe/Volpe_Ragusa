@@ -87,11 +87,19 @@ public class Utente
             string url = "http://localhost:5000/get_muscles";
             using (WebClient client = new WebClient()){
                 try{
-                    NameValueCollection postData = new NameValueCollection
+                    var dataToSend = new
                     {
-                        { "email", this.email }
+                        email = this.email
                     };
-                    byte[] responseBytes = client.UploadValues(url, "POST", postData);
+                    // Serializzare l'oggetto in formato JSON
+                    string jsonData = JsonConvert.SerializeObject(dataToSend);
+                    // Convertire il JSON in un array di byte
+                    byte[] requestData = Encoding.UTF8.GetBytes(jsonData);
+                    // Impostare l'intestazione Content-Type sulla richiesta HTTP
+                    client.Headers.Add("Content-Type", "application/json");
+                    // Effettuare la richiesta POST con i dati JSON
+                    byte[] responseBytes = client.UploadData(url, "POST", requestData);
+                    // Decodificare la risposta
                     string responseBody = Encoding.UTF8.GetString(responseBytes);
                     if(responseBody!="errore"){
                         Console.WriteLine(responseBody);
