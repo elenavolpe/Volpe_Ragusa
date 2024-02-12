@@ -1151,7 +1151,7 @@ func DeleteExerciseWorkoutplan(user_email, ex_name string, done chan<- bool) {
 		log.Fatal(err)
 	}
 
-	deleteQuery := "DELETE FROM user_exercises WHERE uid = ? AND ex_id = ?"
+	deleteQuery := "DELETE FROM user_exercises WHERE userid = ? AND exerciseid = ?"
 	_, err = tx.Exec(deleteQuery, uid, ex_id)
 	if err != nil {
 		log.Println(err)
