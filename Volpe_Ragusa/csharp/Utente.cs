@@ -68,9 +68,9 @@ public class Utente
                         InfoUtente datiUtente = JsonConvert.DeserializeObject<InfoUtente>(responseBody);
                         Console.WriteLine(datiUtente);
                         this.email=datiUtente.email;
-                        this.name=datiUtente.nome;
-                        this.cognome=datiUtente.cognome;
-                        this.eta=datiUtente.età;
+                        this.name=datiUtente.name;
+                        this.cognome=datiUtente.surname;
+                        this.eta=datiUtente.age;
                     }else{
                         Console.WriteLine("errore nel recupero dati dell'utente ");
                     }

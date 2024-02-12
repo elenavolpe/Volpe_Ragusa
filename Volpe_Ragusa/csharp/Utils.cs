@@ -14,10 +14,10 @@ public class Exercise
 public class InfoUtente
 {
     public int id { get; set; }
-    public string nome { get; set; }
-    public string cognome { get; set; }
+    public string name { get; set; }
+    public string surname { get; set; }
     public string email { get; set; }
-    public int età { get; set; }
-    public string workoutname { get; set; }
-    public string workoutdescription { get; set; }
+    public int age { get; set; }
+    public string workout_name { get; set; }
+    public string workout_description { get; set; }
 }
