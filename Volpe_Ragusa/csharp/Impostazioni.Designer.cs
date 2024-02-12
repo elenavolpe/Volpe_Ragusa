@@ -98,7 +98,7 @@
             // ListBoxNewMuscoli
             // 
             ListBoxNewMuscoli.FormattingEnabled = true;
-            ListBoxNewMuscoli.Items.AddRange(new object[] { "Braccia", "Gambe", "Glutei", "Addominali", "Dorsali" });
+            ListBoxNewMuscoli.Items.AddRange(new object[] { "Quadricipiti", "Glutei", "Pettorali", "Addominali", "Deltoidi", "Schiena", "Tricipiti", "Bicipiti", "Trapezi", "Muscoli cardiovascolari", "Polpacci" });
             ListBoxNewMuscoli.Location = new Point(268, 247);
             ListBoxNewMuscoli.Name = "ListBoxNewMuscoli";
             ListBoxNewMuscoli.Size = new Size(180, 144);

@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS user_exercises (
 );
 
 CREATE TABLE IF NOT EXISTS muscles (
-    id INT PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY ,
     name VARCHAR(255) UNIQUE NOT NULL
 );
 
@@ -58,3 +58,16 @@ CREATE TABLE IF NOT EXISTS preferred_muscles (
 );
 
 INSERT INTO users (name, surname, email, pass) VALUES ("Francesco", "Franceschini", "francesco.franceschini@fakemail.com", "password");
+INSERT INTO users (name, surname, email, pass, admin) VALUES ("Admin", "Admin", "Admin@mail.it", "admin", TRUE);
+
+INSERT INTO muscles(name) VALUES ("Quadricipiti");
+INSERT INTO muscles(name) VALUES ("Glutei");
+INSERT INTO muscles(name) VALUES ("Addominali");
+INSERT INTO muscles(name) VALUES ("Pettorali");
+INSERT INTO muscles(name) VALUES ("Deltoidi");
+INSERT INTO muscles(name) VALUES ("Tricipiti");
+INSERT INTO muscles(name) VALUES ("Schiena");
+INSERT INTO muscles(name) VALUES ("Bicipiti");
+INSERT INTO muscles(name) VALUES ("Trapezi");
+INSERT INTO muscles(name) VALUES ("Muscoli cardiovascolari");
+INSERT INTO muscles(name) VALUES ("Polpacci");
