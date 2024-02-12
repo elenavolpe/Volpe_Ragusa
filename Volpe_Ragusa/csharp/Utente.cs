@@ -44,12 +44,25 @@ public class Utente
             string url = "http://localhost:5000/get_info";
             using (WebClient client = new WebClient()){
                 try{
+                    var dataToSend = new
+                    {
+                        email= this.email
+                    };
+                    string jsonData = JsonConvert.SerializeObject(dataToSend);
+                    // Creare il contenuto della richiesta POST
+                    StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+                    // Impostare l'intestazione Content-Type
+                    client.Headers[HttpRequestHeader.ContentType] = "application/json";
+                    // Invio di una richiesta POST
+                    string responseBody = client.UploadString($"{url}", "POST", jsonData);
+                    /*
                     NameValueCollection postData = new NameValueCollection
                     {
                         { "email", this.email }
                     };
-                    byte[] responseBytes = client.UploadValues(url, "POST", postData);
-                    string responseBody = Encoding.UTF8.GetString(responseBytes);
+                    string jsonData = JsonConvert.SerializeObject(postData);
+                    byte[] responseBytes = client.UploadValues(url, "POST", jsonData);
+                    string responseBody = Encoding.UTF8.GetString(responseBytes);*/
                     if(responseBody!="errore"){
                         InfoUtente datiUtente = JsonConvert.DeserializeObject<InfoUtente>(responseBody);
                         Console.WriteLine(datiUtente);

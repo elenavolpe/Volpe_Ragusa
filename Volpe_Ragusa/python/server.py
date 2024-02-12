@@ -125,7 +125,7 @@ def add_exercise():
 @app.route('/delete_exercise', methods=['POST'])
 def delete_exercise():
     if request.method == 'POST':
-        email = request.form.get('email')
+        email = request.get_json()
         esercizio = request.form.get('nomeEsercizio')
         return  exercise_manager.delete_exercise_admin(email,esercizio)
     
@@ -133,7 +133,7 @@ def delete_exercise():
 @app.route('/get_muscles', methods=['POST'])
 def get_muscles():
     if request.method == 'POST':
-        email = request.form.get('email')
+        email = request.get_json()
         return  user_manager.get_muscoli_preferiti(email)
 
 if __name__ == '__main__':
