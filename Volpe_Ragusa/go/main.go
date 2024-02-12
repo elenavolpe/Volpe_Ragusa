@@ -493,7 +493,7 @@ func main() {
 
 	mux.HandleFunc("/getMuscles", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == http.MethodPost {
-			muscles := make(chan types.Muscles)
+			muscles := make(chan []string)
 			go database.GetMuscles(muscles)
 			w.Header().Set("Content-Type", "application/json")
 			err := json.NewEncoder(w).Encode(<-muscles)
