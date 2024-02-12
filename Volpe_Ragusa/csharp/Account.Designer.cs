@@ -227,7 +227,7 @@
             // checkedListBox1
             // 
             checkedListBox1.FormattingEnabled = true;
-            checkedListBox1.Items.AddRange(new object[] { "addominali", "braccia", "gambe", "glutei", "quadricipiti" });
+            checkedListBox1.Items.AddRange(new object[] { "Quadricipiti", "Glutei", "Pettorali", "Addominali", "Deltoidi", "Schiena", "Tricipiti", "Bicipiti", "Trapezi", "Muscoli cardiovascolari", "Polpacci" });
             checkedListBox1.Location = new Point(16, 231);
             checkedListBox1.Name = "checkedListBox1";
             checkedListBox1.Size = new Size(229, 60);
