@@ -2,6 +2,7 @@ from flask import Flask, request, send_file
 import user_manager
 import exercise_manager
 from generate_muscle_stats import generate_muscle_stats
+import json
 
 # Temporaneo: dati di esempio per test
 data = {
@@ -50,25 +51,25 @@ def modify_profile():
 def get_scheda():
     if request.method == 'POST':
         account = request.get_json()
-        return user_manager.get_exercise(account)
+        return json.dumps(user_manager.get_exercise(account))
     
 #ritorna tutti gli esercizi, da mettere nella home
 @app.route('/get_esercizi', methods=['POST'])
 def get_esercizi():
     if request.method == 'POST':
-        return exercise_manager.get_exercises()
+        return json.dumps(exercise_manager.get_exercises())
 
 #ritorna gli esercizi più quotati
 @app.route('/get_esercizi_preferiti', methods=['POST'])
 def get_preferiti():
     if request.method == 'POST':
-        return exercise_manager.get_preferred()
+        return json.dumps(exercise_manager.get_preferred())
     
 #ritorna, se ci sono, esercizi aggiunti di recente (potremmo fare negli ultimi 2 giorni?) Fatta la modifica
 @app.route('/get_esercizi_recenti', methods=['POST'])
 def get_recenti():
     if request.method == 'POST':
-        return  exercise_manager.get_recent()
+        return  json.dumps(exercise_manager.get_recent())
 
 #ritorna il nome data l'email    
 @app.route('/get_name', methods=['POST'])
@@ -82,21 +83,21 @@ def get_nome():
 def get_info():
     if request.method == 'POST':
         email = request.get_json()
-        return  user_manager.getInfo(email)
+        return  json.dumps(user_manager.getInfo(email))
 
 #ritorna gli esercizi consigliati in base ai muscoli preferiti    
 @app.route('/get_consigliati', methods=['POST'])
 def get_esercizi_consigliati():
     if request.method == 'POST':
         email = request.get_json()
-        return  exercise_manager.get_consigliati(email)
+        return  json.dumps(exercise_manager.get_consigliati(email))
     
 #ritorna gli esercizi consigliati in base ai muscoli preferiti    
 @app.route('/get_trascurati', methods=['POST'])
 def get_esercizi_trascurati():
     if request.method == 'POST':
         email = request.get_json()
-        return  exercise_manager.get_trascurati(email)
+        return  json.dumps(exercise_manager.get_trascurati(email))
 
 #aggiunge esercizio alla scheda del cliente
 @app.route('/aggiungi_esercizio', methods=['POST'])
@@ -134,7 +135,7 @@ def delete_exercise():
 def get_muscles():
     if request.method == 'POST':
         email = request.get_json()
-        return  user_manager.get_muscoli_preferiti(email)
+        return  json.dumps(user_manager.get_muscoli_preferiti(email))
 
 if __name__ == '__main__':
      app.run(host='0.0.0.0', port=5000, threaded=True) # Avvio il server Flask
