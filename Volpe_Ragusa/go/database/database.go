@@ -1361,7 +1361,8 @@ func ModifyPreferredMuscles(user_email string, new_preferred_muscles []string, u
 			mid := getMuscleID(muscle)
 			if mid == -1 {
 				log.Println("Muscle not found!")
-				continue
+				usr <- "failure"
+				return
 			}
 			deleteQuery := "DELETE FROM preferred_muscles WHERE userid = ? AND muscleid = ?"
 			_, err = tx.Exec(deleteQuery, uid, mid)
@@ -1379,7 +1380,8 @@ func ModifyPreferredMuscles(user_email string, new_preferred_muscles []string, u
 			mid := getMuscleID(muscle)
 			if mid == -1 {
 				log.Println("Muscle not found!")
-				continue
+				usr <- "failure"
+				return
 			}
 			deleteQuery := "INSERT INTO preferred_muscles (userid, muscleid) VALUES (?, ?)"
 			_, err = tx.Exec(deleteQuery, uid, mid)
