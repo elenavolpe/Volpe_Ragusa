@@ -55,14 +55,6 @@ public class Utente
                     client.Headers[HttpRequestHeader.ContentType] = "application/json";
                     // Invio di una richiesta POST
                     string responseBody = client.UploadString($"{url}", "POST", jsonData);
-                    /*
-                    NameValueCollection postData = new NameValueCollection
-                    {
-                        { "email", this.email }
-                    };
-                    string jsonData = JsonConvert.SerializeObject(postData);
-                    byte[] responseBytes = client.UploadValues(url, "POST", jsonData);
-                    string responseBody = Encoding.UTF8.GetString(responseBytes);*/
                     if(responseBody!="errore"){
                         Console.WriteLine(responseBody);
                         InfoUtente datiUtente = JsonConvert.DeserializeObject<InfoUtente>(responseBody);
@@ -93,16 +85,13 @@ public class Utente
                     {
                         email = this.email
                     };
-                    // Serializzare l'oggetto in formato JSON
                     string jsonData = JsonConvert.SerializeObject(dataToSend);
-                    // Convertire il JSON in un array di byte
-                    byte[] requestData = Encoding.UTF8.GetBytes(jsonData);
-                    // Impostare l'intestazione Content-Type sulla richiesta HTTP
-                    client.Headers.Add("Content-Type", "application/json");
-                    // Effettuare la richiesta POST con i dati JSON
-                    byte[] responseBytes = client.UploadData(url, "POST", requestData);
-                    // Decodificare la risposta
-                    string responseBody = Encoding.UTF8.GetString(responseBytes);
+                    // Creare il contenuto della richiesta POST
+                    StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+                    // Impostare l'intestazione Content-Type
+                    client.Headers[HttpRequestHeader.ContentType] = "application/json";
+                    // Invio di una richiesta POST
+                    string responseBody = client.UploadString($"{url}", "POST", jsonData);
                     Console.WriteLine(responseBody);
                     if(responseBody!="errore"){
                         Console.WriteLine(responseBody);
