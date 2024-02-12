@@ -36,40 +36,42 @@ public class Caricamenti{
                     string responseBody = Encoding.UTF8.GetString(responseBytes);
                     // Deserializza il JSON ricevuto
                     List<ExerciseData> exerciseList = JsonConvert.DeserializeObject<List<ExerciseData>>(responseBody);
-                    foreach (ExerciseData exerciseData in exerciseList)
-                    {   
-                        FlowLayoutPanel panel= new FlowLayoutPanel();
-                        panel.FlowDirection=FlowDirection.TopDown;
-                        panel.AutoSize=true;
+                    if(exerciseList!=null){
+                        foreach (ExerciseData exerciseData in exerciseList)
+                        {   
+                            FlowLayoutPanel panel= new FlowLayoutPanel();
+                            panel.FlowDirection=FlowDirection.TopDown;
+                            panel.AutoSize=true;
 
-                        Label labelName = new Label();
-                        labelName.Text=exerciseData.Exercise.Name;
-                        labelName.Name="nome";
-                        panel.Controls.Add(labelName);
+                            Label labelName = new Label();
+                            labelName.Text=exerciseData.Exercise.Name;
+                            labelName.Name="nome";
+                            panel.Controls.Add(labelName);
 
-                        Label labelDescription = new Label();
-                        labelDescription.Text=exerciseData.Exercise.Description;
-                        panel.Controls.Add(labelDescription);
+                            Label labelDescription = new Label();
+                            labelDescription.Text=exerciseData.Exercise.Description;
+                            panel.Controls.Add(labelDescription);
 
-                        Label labelMuscles = new Label();
-                        foreach(string muscle in exerciseData.Muscles){
-                            labelMuscles.Text=muscle +", ";
+                            Label labelMuscles = new Label();
+                            foreach(string muscle in exerciseData.Muscles){
+                                labelMuscles.Text=muscle +", ";
+                            }
+                            panel.Controls.Add(labelMuscles);
+                            
+                            Button button = new Button();
+                            button.Size= new System.Drawing.Size(95,32);
+                            bool esiste=checkExist(exerciseData.Exercise.Name,listaEsercizi);
+                            if(esiste==false){
+                                button.Text="aggiungi";
+                                button.Click += aggiungiEsercizio;
+                            }else{
+                                button.Text="elimina";
+                                button.Click += eliminaEsercizio;
+                            }
+                            panel.Controls.Add(button);
+                            //TO_DO sistemare grandezza di questo panel
+                            //PanelNovità.Controls.Add(panel);
                         }
-                        panel.Controls.Add(labelMuscles);
-                        
-                        Button button = new Button();
-                        button.Size= new System.Drawing.Size(95,32);
-                        bool esiste=checkExist(exerciseData.Exercise.Name,listaEsercizi);
-                        if(esiste==false){
-                            button.Text="aggiungi";
-                            button.Click += aggiungiEsercizio;
-                        }else{
-                            button.Text="elimina";
-                            button.Click += eliminaEsercizio;
-                        }
-                        panel.Controls.Add(button);
-                        //TO_DO sistemare grandezza di questo panel
-                        //PanelNovità.Controls.Add(panel);
                     }
                 }
                 catch (WebException ex)
@@ -147,40 +149,42 @@ public class Caricamenti{
                     string responseBody = System.Text.Encoding.UTF8.GetString(responseBytes);
                     // Deserializza il JSON ricevuto
                     List<ExerciseData> exerciseList = JsonConvert.DeserializeObject<List<ExerciseData>>(responseBody);
-                    foreach (ExerciseData exerciseData in exerciseList)
-                    {   
-                        FlowLayoutPanel panel= new FlowLayoutPanel();
-                        panel.FlowDirection=FlowDirection.TopDown;
-                        panel.AutoSize=true;
+                    if(exerciseList!=null){
+                        foreach (ExerciseData exerciseData in exerciseList)
+                        {   
+                            FlowLayoutPanel panel= new FlowLayoutPanel();
+                            panel.FlowDirection=FlowDirection.TopDown;
+                            panel.AutoSize=true;
 
-                        Label labelName = new Label();
-                        labelName.Text=exerciseData.Exercise.Name;
-                        labelName.Name="nome";
-                        panel.Controls.Add(labelName);
+                            Label labelName = new Label();
+                            labelName.Text=exerciseData.Exercise.Name;
+                            labelName.Name="nome";
+                            panel.Controls.Add(labelName);
 
-                        Label labelDescription = new Label();
-                        labelDescription.Text=exerciseData.Exercise.Description;
-                        panel.Controls.Add(labelDescription);
+                            Label labelDescription = new Label();
+                            labelDescription.Text=exerciseData.Exercise.Description;
+                            panel.Controls.Add(labelDescription);
 
-                        Label labelMuscles = new Label();
-                        foreach(string muscle in exerciseData.Muscles){
-                            labelMuscles.Text=muscle +", ";
+                            Label labelMuscles = new Label();
+                            foreach(string muscle in exerciseData.Muscles){
+                                labelMuscles.Text=muscle +", ";
+                            }
+                            panel.Controls.Add(labelMuscles);
+                            
+                            Button button = new Button();
+                            button.Size= new System.Drawing.Size(95,32);
+                            bool esiste=checkExist(exerciseData.Exercise.Name,listaEsercizi);
+                            if(esiste==false){
+                                button.Text="aggiungi";
+                                button.Click += aggiungiEsercizio;
+                            }else{
+                                button.Text="elimina";
+                                button.Click += eliminaEsercizio;
+                            }
+                            panel.Controls.Add(button);
+                            //TO_DO sistemare grandezza di questo panel
+                            //PanelNovità.Controls.Add(panel);
                         }
-                        panel.Controls.Add(labelMuscles);
-                        
-                        Button button = new Button();
-                        button.Size= new System.Drawing.Size(95,32);
-                        bool esiste=checkExist(exerciseData.Exercise.Name,listaEsercizi);
-                        if(esiste==false){
-                            button.Text="aggiungi";
-                            button.Click += aggiungiEsercizio;
-                        }else{
-                            button.Text="elimina";
-                            button.Click += eliminaEsercizio;
-                        }
-                        panel.Controls.Add(button);
-                        //TO_DO sistemare grandezza di questo panel
-                        //PanelNovità.Controls.Add(panel);
                     }
                 }
                 catch (WebException ex)
@@ -220,46 +224,48 @@ public class Caricamenti{
                     string responseBody = System.Text.Encoding.UTF8.GetString(responseBytes);
                     // Deserializza il JSON ricevuto
                     List<ExerciseData> exerciseList = JsonConvert.DeserializeObject<List<ExerciseData>>(responseBody);
-                    foreach (ExerciseData exerciseData in exerciseList)
-                    {   
-                        FlowLayoutPanel panel= new FlowLayoutPanel();
-                        panel.FlowDirection=FlowDirection.TopDown;
-                        panel.AutoSize=true;
+                    if(exerciseList!=null){
+                        foreach (ExerciseData exerciseData in exerciseList)
+                        {   
+                            FlowLayoutPanel panel= new FlowLayoutPanel();
+                            panel.FlowDirection=FlowDirection.TopDown;
+                            panel.AutoSize=true;
 
-                        Label labelName = new Label();
-                        labelName.Text=exerciseData.Exercise.Name;
-                        labelName.Name="nome";
-                        panel.Controls.Add(labelName);
+                            Label labelName = new Label();
+                            labelName.Text=exerciseData.Exercise.Name;
+                            labelName.Name="nome";
+                            panel.Controls.Add(labelName);
 
-                        Label labelDescription = new Label();
-                        labelDescription.Text=exerciseData.Exercise.Description;
-                        panel.Controls.Add(labelDescription);
+                            Label labelDescription = new Label();
+                            labelDescription.Text=exerciseData.Exercise.Description;
+                            panel.Controls.Add(labelDescription);
 
-                        Label labelMuscles = new Label();
-                        foreach(string muscle in exerciseData.Muscles){
-                            labelMuscles.Text=muscle +", ";
-                        }
-                        panel.Controls.Add(labelMuscles);
-                        
-                        Button button = new Button();
-                        button.Size= new System.Drawing.Size(95,32);
-                        if(this.email=="admin@mail.it"){
-                            button.Text="elimina";
-                            button.Click += deleteEsercizio;
-                        }
-                        else{
-                            bool esiste=checkExist(exerciseData.Exercise.Name,listaEsercizi);
-                            if(esiste==false){
-                                button.Text="aggiungi";
-                                button.Click += aggiungiEsercizio;
-                            }else{
-                                button.Text="elimina";
-                                button.Click += eliminaEsercizio;
+                            Label labelMuscles = new Label();
+                            foreach(string muscle in exerciseData.Muscles){
+                                labelMuscles.Text=muscle +", ";
                             }
+                            panel.Controls.Add(labelMuscles);
+                            
+                            Button button = new Button();
+                            button.Size= new System.Drawing.Size(95,32);
+                            if(this.email=="admin@mail.it"){
+                                button.Text="elimina";
+                                button.Click += deleteEsercizio;
+                            }
+                            else{
+                                bool esiste=checkExist(exerciseData.Exercise.Name,listaEsercizi);
+                                if(esiste==false){
+                                    button.Text="aggiungi";
+                                    button.Click += aggiungiEsercizio;
+                                }else{
+                                    button.Text="elimina";
+                                    button.Click += eliminaEsercizio;
+                                }
+                            }
+                            panel.Controls.Add(button);
+                            //TO_DO sistemare grandezza di questo panel
+                            contenitore.Controls.Add(panel);
                         }
-                        panel.Controls.Add(button);
-                        //TO_DO sistemare grandezza di questo panel
-                        contenitore.Controls.Add(panel);
                     }
                 }
                 catch (WebException ex)
@@ -292,40 +298,42 @@ public class Caricamenti{
                     string responseBody = System.Text.Encoding.UTF8.GetString(responseBytes);
                     // Deserializza il JSON ricevuto
                     List<ExerciseData> exerciseList = JsonConvert.DeserializeObject<List<ExerciseData>>(responseBody);
-                    foreach (ExerciseData exerciseData in exerciseList)
-                    {   
-                        FlowLayoutPanel panel= new FlowLayoutPanel();
-                        panel.FlowDirection=FlowDirection.TopDown;
-                        panel.AutoSize=true;
+                    if(exerciseList!=null){
+                        foreach (ExerciseData exerciseData in exerciseList)
+                        {   
+                            FlowLayoutPanel panel= new FlowLayoutPanel();
+                            panel.FlowDirection=FlowDirection.TopDown;
+                            panel.AutoSize=true;
 
-                        Label labelName = new Label();
-                        labelName.Text=exerciseData.Exercise.Name;
-                        labelName.Name="nome";
-                        panel.Controls.Add(labelName);
+                            Label labelName = new Label();
+                            labelName.Text=exerciseData.Exercise.Name;
+                            labelName.Name="nome";
+                            panel.Controls.Add(labelName);
 
-                        Label labelDescription = new Label();
-                        labelDescription.Text=exerciseData.Exercise.Description;
-                        panel.Controls.Add(labelDescription);
+                            Label labelDescription = new Label();
+                            labelDescription.Text=exerciseData.Exercise.Description;
+                            panel.Controls.Add(labelDescription);
 
-                        Label labelMuscles = new Label();
-                        foreach(string muscle in exerciseData.Muscles){
-                            labelMuscles.Text=muscle +", ";
+                            Label labelMuscles = new Label();
+                            foreach(string muscle in exerciseData.Muscles){
+                                labelMuscles.Text=muscle +", ";
+                            }
+                            panel.Controls.Add(labelMuscles);
+                            
+                            Button button = new Button();
+                            button.Size= new System.Drawing.Size(95,32);
+                            bool esiste=checkExist(exerciseData.Exercise.Name,listaEsercizi);
+                            if(esiste==false){
+                                button.Text="aggiungi";
+                                button.Click += aggiungiEsercizio;
+                            }else{
+                                button.Text="elimina";
+                                button.Click += eliminaEsercizio;
+                            }
+                            panel.Controls.Add(button);
+                            //TO_DO sistemare grandezza di questo panel
+                            contenitore.Controls.Add(panel);
                         }
-                        panel.Controls.Add(labelMuscles);
-                        
-                        Button button = new Button();
-                        button.Size= new System.Drawing.Size(95,32);
-                        bool esiste=checkExist(exerciseData.Exercise.Name,listaEsercizi);
-                        if(esiste==false){
-                            button.Text="aggiungi";
-                            button.Click += aggiungiEsercizio;
-                        }else{
-                            button.Text="elimina";
-                            button.Click += eliminaEsercizio;
-                        }
-                        panel.Controls.Add(button);
-                        //TO_DO sistemare grandezza di questo panel
-                        contenitore.Controls.Add(panel);
                     }
                 }
                 catch (WebException ex)
@@ -357,40 +365,42 @@ public class Caricamenti{
                     string responseBody = System.Text.Encoding.UTF8.GetString(responseBytes);
                     // Deserializza il JSON ricevuto
                     List<ExerciseData> exerciseList = JsonConvert.DeserializeObject<List<ExerciseData>>(responseBody);
-                    foreach (ExerciseData exerciseData in exerciseList)
-                    {   
-                        FlowLayoutPanel panel= new FlowLayoutPanel();
-                        panel.FlowDirection=FlowDirection.TopDown;
-                        panel.AutoSize=true;
+                    if(exerciseList!=null){
+                        foreach (ExerciseData exerciseData in exerciseList)
+                        {   
+                            FlowLayoutPanel panel= new FlowLayoutPanel();
+                            panel.FlowDirection=FlowDirection.TopDown;
+                            panel.AutoSize=true;
 
-                        Label labelName = new Label();
-                        labelName.Text=exerciseData.Exercise.Name;
-                        labelName.Name="nome";
-                        panel.Controls.Add(labelName);
+                            Label labelName = new Label();
+                            labelName.Text=exerciseData.Exercise.Name;
+                            labelName.Name="nome";
+                            panel.Controls.Add(labelName);
 
-                        Label labelDescription = new Label();
-                        labelDescription.Text=exerciseData.Exercise.Description;
-                        panel.Controls.Add(labelDescription);
+                            Label labelDescription = new Label();
+                            labelDescription.Text=exerciseData.Exercise.Description;
+                            panel.Controls.Add(labelDescription);
 
-                        Label labelMuscles = new Label();
-                        foreach(string muscle in exerciseData.Muscles){
-                            labelMuscles.Text=muscle +", ";
+                            Label labelMuscles = new Label();
+                            foreach(string muscle in exerciseData.Muscles){
+                                labelMuscles.Text=muscle +", ";
+                            }
+                            panel.Controls.Add(labelMuscles);
+                            
+                            Button button = new Button();
+                            button.Size= new System.Drawing.Size(95,32);
+                            bool esiste=checkExist(exerciseData.Exercise.Name,listaEsercizi);
+                            if(esiste==false){
+                                button.Text="aggiungi";
+                                button.Click += aggiungiEsercizio;
+                            }else{
+                                button.Text="elimina";
+                                button.Click += eliminaEsercizio;
+                            }
+                            panel.Controls.Add(button);
+                            //TO_DO sistemare grandezza di questo panel
+                            contenitore.Controls.Add(panel);
                         }
-                        panel.Controls.Add(labelMuscles);
-                        
-                        Button button = new Button();
-                        button.Size= new System.Drawing.Size(95,32);
-                        bool esiste=checkExist(exerciseData.Exercise.Name,listaEsercizi);
-                        if(esiste==false){
-                            button.Text="aggiungi";
-                            button.Click += aggiungiEsercizio;
-                        }else{
-                            button.Text="elimina";
-                            button.Click += eliminaEsercizio;
-                        }
-                        panel.Controls.Add(button);
-                        //TO_DO sistemare grandezza di questo panel
-                        contenitore.Controls.Add(panel);
                     }
                 }
                 catch (WebException ex)
@@ -423,28 +433,30 @@ public class Caricamenti{
                     string responseBody = System.Text.Encoding.UTF8.GetString(responseBytes);
                     // Deserializza il JSON ricevuto
                     List<ExerciseData> exerciseList = JsonConvert.DeserializeObject<List<ExerciseData>>(responseBody);
-                    foreach (ExerciseData exerciseData in exerciseList)
-                    {   
-                        FlowLayoutPanel panel= new FlowLayoutPanel();
-                        panel.FlowDirection=FlowDirection.LeftToRight;
-                        panel.AutoSize=true;
+                    if(exerciseList!=null){
+                        foreach (ExerciseData exerciseData in exerciseList)
+                        {   
+                            FlowLayoutPanel panel= new FlowLayoutPanel();
+                            panel.FlowDirection=FlowDirection.LeftToRight;
+                            panel.AutoSize=true;
 
-                        Label labelName = new Label();
-                        labelName.Text=exerciseData.Exercise.Name;
-                        labelName.Name="nome";
-                        panel.Controls.Add(labelName);
+                            Label labelName = new Label();
+                            labelName.Text=exerciseData.Exercise.Name;
+                            labelName.Name="nome";
+                            panel.Controls.Add(labelName);
 
-                        Label labelDescription = new Label();
-                        labelDescription.Text=exerciseData.Exercise.Description;
-                        panel.Controls.Add(labelDescription);
+                            Label labelDescription = new Label();
+                            labelDescription.Text=exerciseData.Exercise.Description;
+                            panel.Controls.Add(labelDescription);
 
-                        Button button = new Button();
-                        button.Size= new System.Drawing.Size(90,30);
-                        button.Text="elimina";
-                        button.Click += eliminaEsercizio;
-                        panel.Controls.Add(button);
-                        //TO_DO sistemare grandezza di questo panel
-                        contenitore.Controls.Add(panel);
+                            Button button = new Button();
+                            button.Size= new System.Drawing.Size(90,30);
+                            button.Text="elimina";
+                            button.Click += eliminaEsercizio;
+                            panel.Controls.Add(button);
+                            //TO_DO sistemare grandezza di questo panel
+                            contenitore.Controls.Add(panel);
+                        }
                     }
                 }
                 catch (WebException ex)
@@ -645,9 +657,11 @@ public class Caricamenti{
                     string responseBody = System.Text.Encoding.UTF8.GetString(responseBytes);
                     // Deserializza il JSON ricevuto
                     List<ExerciseData> exerciseList = JsonConvert.DeserializeObject<List<ExerciseData>>(responseBody);
+                    if(exerciseList!=null){
                     foreach (ExerciseData exerciseData in exerciseList)
-                    {   
-                        esercizi.Add(exerciseData.Exercise.Name);
+                        {   
+                            esercizi.Add(exerciseData.Exercise.Name);
+                        }
                     }
                 }
                 catch (WebException ex)

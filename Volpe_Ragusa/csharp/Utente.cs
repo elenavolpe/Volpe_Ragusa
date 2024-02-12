@@ -85,6 +85,7 @@ public class Utente
 
     private List<string> getMuscles(string email)
         {
+            Console.WriteLine("sto recuperando i muscoli");
             string url = "http://localhost:5000/get_muscles";
             using (WebClient client = new WebClient()){
                 try{
@@ -102,6 +103,7 @@ public class Utente
                     byte[] responseBytes = client.UploadData(url, "POST", requestData);
                     // Decodificare la risposta
                     string responseBody = Encoding.UTF8.GetString(responseBytes);
+                    Console.WriteLine(responseBody);
                     if(responseBody!="errore"){
                         Console.WriteLine(responseBody);
                         List<string> muscoli = JsonConvert.DeserializeObject<List<string>>(responseBody);
@@ -129,6 +131,7 @@ public class Utente
         }
         else{
             getInfo(email);
+            Console.WriteLine("vediamo");
             muscoli=getMuscles(email);
         }
     }
