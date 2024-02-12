@@ -104,7 +104,7 @@ def modifica_profilo(account):
                     flag=True
             except Exception as e:
                 return f"Errore: {e}"
-        else:
+        if not account: #se il dizionario è vuoto
             return "nessun campo da modificare"
     if flag==True:
         return "qualcosa è andato storto"
