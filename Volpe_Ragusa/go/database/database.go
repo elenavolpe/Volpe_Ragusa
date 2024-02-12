@@ -317,16 +317,29 @@ func GetUserInfo(user_email string, usr chan<- types.User) {
 
 	getQuery := "SELECT id, name, surname, email, age, workout_name, workout_description FROM users where email = ?"
 	var user types.User
-	err = db.QueryRow(getQuery, user_email).Scan(&user.Id, &user.Name, &user.Surname, &user.Email, &user.Age, &user.WorkoutName, &user.WorkoutDescription)
+	var w_name, w_desc sql.NullString
+	err = db.QueryRow(getQuery, user_email).Scan(&user.Id, &user.Name, &user.Surname, &user.Email, &user.Age, &w_name, &w_desc)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			fmt.Println("No User found!")
 		}
+		log.Println(err)
 		emptyUsr := types.User{Id: -1, Name: "", Surname: "", Email: "", Age: 0, WorkoutName: "", WorkoutDescription: ""}
 		usr <- emptyUsr
 		return
 	}
 	fmt.Println("User found!")
+
+	if w_name.Valid {
+		user.WorkoutName = w_name.String
+	} else {
+		user.WorkoutName = "NULL"
+	}
+	if w_desc.Valid {
+		user.WorkoutDescription = w_desc.String
+	} else {
+		user.WorkoutDescription = "NULL"
+	}
 
 	usr <- user
 }
