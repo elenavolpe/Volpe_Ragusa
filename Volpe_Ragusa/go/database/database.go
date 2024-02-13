@@ -45,6 +45,7 @@ func DeleteAccount(email string, done chan<- bool) {
 
 	uid := getUID(email)
 	if uid == -1 {
+		log.Println("User not found!")
 		done <- false
 		return
 	}
@@ -392,21 +393,59 @@ func GetUserInfo(user_email string, usr chan<- types.User) {
 
 // Funzioni per la gestione dei dati relativi agli esercizi
 
-func AddExercise(name, description string, done chan<- bool) {
+func AddExercise(name, description string, muscles []string, done chan<- bool) {
 	db, err := ConnectDB("admin", "admin", "mysql", "3306", "workoutnow")
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer db.Close()
 
+	tx, err := db.Begin()
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	addQuery := "INSERT INTO exercises (name, description) VALUES (?, ?)"
-	_, err = db.Exec(addQuery, name, description)
+	result, err := tx.Exec(addQuery, name, description)
+	if err != nil {
+		log.Println(err)
+		done <- false
+		tx.Rollback()
+		return
+	}
+
+	ex_id, err := result.LastInsertId()
+	if err != nil {
+		log.Println(err)
+		done <- false
+		tx.Rollback()
+		return
+	}
+
+	for _, muscle := range muscles {
+		muscle_id := getMuscleID(muscle)
+		if muscle_id == -1 {
+			done <- false
+			tx.Rollback()
+			return
+		}
+		addQuery = "INSERT INTO exercise_muscles (exerciseid, muscleid) VALUES (?, ?)"
+		_, err = tx.Exec(addQuery, ex_id, muscle_id)
+		if err != nil {
+			log.Println(err)
+			done <- false
+			tx.Rollback()
+			return
+		}
+	}
+
+	err = tx.Commit()
 	if err != nil {
 		log.Println(err)
 		done <- false
 		return
 	}
-	fmt.Println("Exercise added successfully!")
+	fmt.Println("Queries run successfully!")
 
 	done <- true
 }
@@ -766,6 +805,7 @@ func DeleteMuscle(name string, done chan<- bool) {
 
 	muscle_id := getMuscleID(name)
 	if muscle_id == -1 {
+		log.Println("Muscle not found!")
 		done <- false
 		return
 	}
@@ -868,12 +908,14 @@ func AddMuscleExercise(ex_name, muscle_name string, done chan<- bool) {
 
 	ex_id := getExerciseID(ex_name)
 	if ex_id == -1 {
+		log.Println("Exercise not found!")
 		done <- false
 		return
 	}
 
 	muscle_id := getMuscleID(muscle_name)
 	if muscle_id == -1 {
+		log.Println("Muscle not found!")
 		done <- false
 		return
 	}
@@ -899,12 +941,14 @@ func DeleteMuscleExercise(ex_name, muscle_name string, done chan<- bool) {
 
 	ex_id := getExerciseID(ex_name)
 	if ex_id == -1 {
+		log.Println("Exercise not found!")
 		done <- false
 		return
 	}
 
 	muscle_id := getMuscleID(muscle_name)
 	if muscle_id == -1 {
+		log.Println("Muscle not found!")
 		done <- false
 		return
 	}
@@ -931,12 +975,14 @@ func AddPreferredMuscle(user_email, muscle_name string, done chan<- bool) {
 
 	uid := getUID(user_email)
 	if uid == -1 {
+		log.Println("User not found!")
 		done <- false
 		return
 	}
 
 	muscle_id := getMuscleID(muscle_name)
 	if muscle_id == -1 {
+		log.Println("Muscle not found!")
 		done <- false
 		return
 	}
@@ -962,12 +1008,14 @@ func DeletePreferredMuscle(user_email, muscle_name string, done chan<- bool) {
 
 	uid := getUID(user_email)
 	if uid == -1 {
+		log.Println("User not found!")
 		done <- false
 		return
 	}
 
 	muscle_id := getMuscleID(muscle_name)
 	if muscle_id == -1 {
+		log.Println("Muscle not found!")
 		done <- false
 		return
 	}
@@ -1032,6 +1080,7 @@ func DeleteUserWorkout(user_email string, done chan<- bool) {
 
 	uid := getUID(user_email)
 	if uid == -1 {
+		log.Println("User not found!")
 		done <- false
 		return
 	}
@@ -1083,12 +1132,14 @@ func AddExerciseWorkoutplan(user_email, ex_name string, done chan<- bool) {
 
 	uid := getUID(user_email)
 	if uid == -1 {
+		log.Println("User not found!")
 		done <- false
 		return
 	}
 
 	ex_id := getExerciseID(ex_name)
 	if ex_id == -1 {
+		log.Println("Exercise not found!")
 		done <- false
 		return
 	}
@@ -1136,12 +1187,14 @@ func DeleteExerciseWorkoutplan(user_email, ex_name string, done chan<- bool) {
 
 	uid := getUID(user_email)
 	if uid == -1 {
+		log.Println("User not found!")
 		done <- false
 		return
 	}
 
 	ex_id := getExerciseID(ex_name)
 	if ex_id == -1 {
+		log.Println("Exercise not found!")
 		done <- false
 		return
 	}

@@ -278,7 +278,12 @@ func main() {
 	// Endpoints per la gestione degli esercizi
 	mux.HandleFunc("/addExercise", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == http.MethodPost {
-			var ex types.Exercise
+			type ExerciseAndMuscles struct {
+				Name        string   `json:"nome"`
+				Description string   `json:"descrizione"`
+				Muscles     []string `json:"muscoli"`
+			}
+			var ex ExerciseAndMuscles
 			err := json.NewDecoder(r.Body).Decode(&ex)
 			if err != nil {
 				http.Error(w, "Errore durante la decodifica del JSON: "+err.Error(), http.StatusBadRequest)
@@ -286,7 +291,7 @@ func main() {
 			}
 			done := make(chan bool)
 			var s string
-			go database.AddExercise(ex.Name, ex.Description, done)
+			go database.AddExercise(ex.Name, ex.Description, ex.Muscles, done)
 			if <-done {
 				s = "success"
 			} else {
