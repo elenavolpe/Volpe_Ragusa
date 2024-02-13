@@ -14,7 +14,7 @@ public class Caricamenti{
         {
             TextBox textBox = new TextBox();
             textBox.Multiline = true;
-            textBox.ScrollBars = ScrollBars.Vertical;
+            //textBox.ScrollBars = ScrollBars.Vertical;
             textBox.ReadOnly = true;
             textBox.Width = 500;
             textBox.Height = 100;
@@ -61,7 +61,7 @@ public class Caricamenti{
 
                             TextBox descrizione = new TextBox();
                             descrizione.Multiline = true;
-                            descrizione.ScrollBars = ScrollBars.Vertical;
+                            //descrizione.ScrollBars = ScrollBars.Vertical;
                             descrizione.ReadOnly = true;
                             descrizione.Width = 500;
                             descrizione.Height = 100;
@@ -75,7 +75,9 @@ public class Caricamenti{
 
                             Label labelMuscles = new Label();
                             labelMuscles.AutoSize=true;
-                            labelMuscles.Text=exerciseData.Muscles.ToString();
+                            //labelMuscles.Text=exerciseData.Muscles.ToString();
+                            string stringaConVirgole = string.Join(", ", exerciseData.Muscles);
+                            labelMuscles.Text = stringaConVirgole;
                             /*foreach(string muscle in exerciseData.Muscles){
                                 labelMuscles.Text=muscle +", ";
                             }*/
@@ -124,16 +126,23 @@ public class Caricamenti{
                     client.Headers.Add("Content-Type", "application/json");
                     // Effettuare la richiesta POST con i dati JSON
                     byte[] responseBytes = client.UploadData(url, "POST", requestData);
+                    Console.WriteLine(responseBytes);
                     Image image = Image.FromStream(new MemoryStream(responseBytes));
                     
+                    FlowLayoutPanel panel = new FlowLayoutPanel();
+                    panel.AutoSize=true;
+                    panel.FlowDirection=FlowDirection.TopDown;
+                    panel.BorderStyle=BorderStyle.FixedSingle;
+                    panel.Margin = new Padding(0, 20, 0, 20);
+
                     TextBox textBox = new TextBox();
                     textBox.Multiline = true;
-                    textBox.ScrollBars = ScrollBars.Vertical;
+                    //textBox.ScrollBars = ScrollBars.Vertical;
                     textBox.ReadOnly = true;
                     textBox.Width = 500;
                     textBox.Height = 100;
                     textBox.Text = "ecco il grafico che rappresenta la % di muscoli che stai allenando in base alla tua scheda ";
-                    contenitore.Controls.Add(textBox);
+                    panel.Controls.Add(textBox);
 
                     /*Label label=new Label();
                     label.AutoSize=true;
@@ -142,8 +151,8 @@ public class Caricamenti{
 
                     PictureBox pictureBox= new PictureBox();
                     pictureBox.Image=image;
-                    contenitore.Controls.Add(pictureBox);
-                    //contenitore.Controls.Add(label);
+                    panel.Controls.Add(pictureBox);
+                    contenitore.Controls.Add(panel);
                 }
                 catch (WebException ex)
                 {
@@ -156,7 +165,7 @@ public class Caricamenti{
         {   
             TextBox textBox = new TextBox();
             textBox.Multiline = true;
-            textBox.ScrollBars = ScrollBars.Vertical;
+            //textBox.ScrollBars = ScrollBars.Vertical;
             textBox.ReadOnly = true;
             textBox.Width = 500;
             textBox.Height = 100;
@@ -203,7 +212,7 @@ public class Caricamenti{
 
                             TextBox descrizione = new TextBox();
                             descrizione.Multiline = true;
-                            descrizione.ScrollBars = ScrollBars.Vertical;
+                            //descrizione.ScrollBars = ScrollBars.Vertical;
                             descrizione.ReadOnly = true;
                             descrizione.Width = 500;
                             descrizione.Height = 100;
@@ -217,7 +226,8 @@ public class Caricamenti{
 
                             Label labelMuscles = new Label();
                             labelMuscles.AutoSize=true;
-                            labelMuscles.Text=exerciseData.Muscles.ToString();
+                            string stringaConVirgole = string.Join(", ", exerciseData.Muscles);
+                            labelMuscles.Text = stringaConVirgole;
                             /*foreach(string muscle in exerciseData.Muscles){
                                 labelMuscles.Text=muscle +", ";
                             }*/
@@ -295,7 +305,7 @@ public class Caricamenti{
 
                             TextBox descrizione = new TextBox();
                             descrizione.Multiline = true;
-                            descrizione.ScrollBars = ScrollBars.Vertical;
+                            //descrizione.ScrollBars = ScrollBars.Vertical;
                             descrizione.ReadOnly = true;
                             descrizione.Width = 500;
                             descrizione.Height = 100;
@@ -309,7 +319,8 @@ public class Caricamenti{
 
                             Label labelMuscles = new Label();
                             labelMuscles.AutoSize=true;
-                            labelMuscles.Text=exerciseData.Muscles.ToString();
+                            string stringaConVirgole = string.Join(", ", exerciseData.Muscles);
+                            labelMuscles.Text = stringaConVirgole;
                             /*foreach(string muscle in exerciseData.Muscles){
                                 labelMuscles.Text=muscle +", ";
                             }*/
@@ -384,7 +395,7 @@ public class Caricamenti{
 
                             TextBox descrizione = new TextBox();
                             descrizione.Multiline = true;
-                            descrizione.ScrollBars = ScrollBars.Vertical;
+                            //descrizione.ScrollBars = ScrollBars.Vertical;
                             descrizione.ReadOnly = true;
                             descrizione.Width = 500;
                             descrizione.Height = 100;
@@ -465,7 +476,7 @@ public class Caricamenti{
 
                             TextBox descrizione = new TextBox();
                             descrizione.Multiline = true;
-                            descrizione.ScrollBars = ScrollBars.Vertical;
+                            //descrizione.ScrollBars = ScrollBars.Vertical;
                             descrizione.ReadOnly = true;
                             descrizione.Width = 500;
                             descrizione.Height = 100;
@@ -546,7 +557,7 @@ public class Caricamenti{
 
                             TextBox descrizione = new TextBox();
                             descrizione.Multiline = true;
-                            descrizione.ScrollBars = ScrollBars.Vertical;
+                            //descrizione.ScrollBars = ScrollBars.Vertical;
                             descrizione.ReadOnly = true;
                             descrizione.Width = 500;
                             descrizione.Height = 100;
