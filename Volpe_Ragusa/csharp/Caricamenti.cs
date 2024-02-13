@@ -13,6 +13,7 @@ public class Caricamenti{
     public void carica_esercizi_consigliati(string email, FlowLayoutPanel contenitore)
         {
             Label label=new Label();
+            label.AutoSize=true;
             label.Text="Ecco gli esercizi che ti consigliamo in base ai tuoi muscoli preferiti ";
             contenitore.Controls.Add(label);
             using (WebClient client = new WebClient())
@@ -44,18 +45,23 @@ public class Caricamenti{
                             panel.AutoSize=true;
 
                             Label labelName = new Label();
+                            labelName.AutoSize=true;
                             labelName.Text=exerciseData.Exercise.Name;
                             labelName.Name="nome";
                             panel.Controls.Add(labelName);
 
                             Label labelDescription = new Label();
+                            labelDescription.AutoSize=true;
+                            //labelDescription.AutoSizeMode = AutoSizeMode.GrowAndShrink;
                             labelDescription.Text=exerciseData.Exercise.Description;
                             panel.Controls.Add(labelDescription);
 
                             Label labelMuscles = new Label();
-                            foreach(string muscle in exerciseData.Muscles){
+                            labelMuscles.AutoSize=true;
+                            labelMuscles.Text=exerciseData.Muscles.ToString();
+                            /*foreach(string muscle in exerciseData.Muscles){
                                 labelMuscles.Text=muscle +", ";
-                            }
+                            }*/
                             panel.Controls.Add(labelMuscles);
                             
                             Button button = new Button();
@@ -103,6 +109,7 @@ public class Caricamenti{
                     Image image = Image.FromStream(new MemoryStream(responseBytes));
                     
                     Label label=new Label();
+                    label.AutoSize=true;
                     label.Text="ecco il grafico che rappresenta la % di muscoli che stai allenando in base alla tua scheda ";
                     contenitore.Controls.Add(label);
 
@@ -120,6 +127,7 @@ public class Caricamenti{
         public void carica_muscoli_trascurati(string email, FlowLayoutPanel contenitore)
         {
             Label label=new Label();
+            label.AutoSize=true;
             label.Text="Perchè non aggiungi uno di questi esercizi? Sembrerebbe che stai trascurando qualche gruppo muscolare ";
             contenitore.Controls.Add(label);
             using (WebClient client = new WebClient())
@@ -150,18 +158,22 @@ public class Caricamenti{
                             panel.AutoSize=true;
 
                             Label labelName = new Label();
+                            labelName.AutoSize=true;
                             labelName.Text=exerciseData.Exercise.Name;
                             labelName.Name="nome";
                             panel.Controls.Add(labelName);
 
                             Label labelDescription = new Label();
+                            labelDescription.AutoSize=true;
                             labelDescription.Text=exerciseData.Exercise.Description;
                             panel.Controls.Add(labelDescription);
 
                             Label labelMuscles = new Label();
-                            foreach(string muscle in exerciseData.Muscles){
+                            labelMuscles.AutoSize=true;
+                            labelMuscles.Text=exerciseData.Muscles.ToString();
+                            /*foreach(string muscle in exerciseData.Muscles){
                                 labelMuscles.Text=muscle +", ";
-                            }
+                            }*/
                             panel.Controls.Add(labelMuscles);
                             
                             Button button = new Button();
@@ -191,6 +203,7 @@ public class Caricamenti{
         {
             if(this.email=="Admin@mail.it"){ //TO_DO sistemare l'email
                 Label label=new Label();
+                label.AutoSize=true;
                 label.Text="Ciao Admin, qui puoi eliminare o aggiungere esercizi dalla lista ";
                 contenitore.Controls.Add(label);
             }
@@ -225,18 +238,22 @@ public class Caricamenti{
                             panel.AutoSize=true;
 
                             Label labelName = new Label();
+                            labelName.AutoSize=true;
                             labelName.Text=exerciseData.Exercise.Name;
                             labelName.Name="nome";
                             panel.Controls.Add(labelName);
 
                             Label labelDescription = new Label();
+                            labelDescription.AutoSize=true;
                             labelDescription.Text=exerciseData.Exercise.Description;
                             panel.Controls.Add(labelDescription);
 
                             Label labelMuscles = new Label();
-                            foreach(string muscle in exerciseData.Muscles){
+                            labelMuscles.AutoSize=true;
+                            labelMuscles.Text=exerciseData.Muscles.ToString();
+                            /*foreach(string muscle in exerciseData.Muscles){
                                 labelMuscles.Text=muscle +", ";
-                            }
+                            }*/
                             panel.Controls.Add(labelMuscles);
                             
                             Button button = new Button();
@@ -299,11 +316,13 @@ public class Caricamenti{
                             panel.AutoSize=true;
 
                             Label labelName = new Label();
+                            labelName.AutoSize=true;
                             labelName.Text=exerciseData.Name;
                             labelName.Name="nome";
                             panel.Controls.Add(labelName);
 
                             Label labelDescription = new Label();
+                            labelDescription.AutoSize=true;
                             labelDescription.Text=exerciseData.Description;
                             panel.Controls.Add(labelDescription);
 
@@ -367,11 +386,13 @@ public class Caricamenti{
                             panel.AutoSize=true;
 
                             Label labelName = new Label();
+                            labelName.AutoSize=true;
                             labelName.Text=exerciseData.Name;
                             labelName.Name="nome";
                             panel.Controls.Add(labelName);
 
                             Label labelDescription = new Label();
+                            labelDescription.AutoSize=true;
                             labelDescription.Text=exerciseData.Description;
                             panel.Controls.Add(labelDescription);
 
@@ -435,11 +456,13 @@ public class Caricamenti{
                             panel.AutoSize=true;
 
                             Label labelName = new Label();
+                            labelName.AutoSize=true;
                             labelName.Text=exerciseData.Exercise.Name;
                             labelName.Name="nome";
                             panel.Controls.Add(labelName);
 
                             Label labelDescription = new Label();
+                            labelDescription.AutoSize=true;
                             labelDescription.Text=exerciseData.Exercise.Description;
                             panel.Controls.Add(labelDescription);
 

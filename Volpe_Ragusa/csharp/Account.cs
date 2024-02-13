@@ -24,26 +24,26 @@ namespace Volpe_Ragusa.csharp
             Utente utente=Utente.Istanza;
             this.email=utente.email;
             caricamenti= new Caricamenti(this.email);
-            /*flowLayoutPanel1.Controls.Clear(); 
-            flowLayoutPanel1.AutoSize=true;
-            flowLayoutPanel1.FlowDirection=FlowDirection.TopDown;*/
-            flowLayoutPanelAggiungi.Controls.Clear();
-            flowLayoutPanelAggiungi.AutoSize=true;
-            flowLayoutPanelAggiungi.FlowDirection=FlowDirection.TopDown;
+            flowLayoutPanel1.Controls.Clear(); 
+            flowLayoutPanel1.AutoSize=false;
+            flowLayoutPanel1.Size = new Size(615, 424);
+            flowLayoutPanel1.WrapContents = true;
+            flowLayoutPanel1.FlowDirection=FlowDirection.TopDown;
+            flowLayoutPanel1.AutoScroll=true;
             //da cambiare in base all'email che decidiamo per l'admin
             if(this.email=="Admin@mail.it"){
                 labelBenvenuto.Text="Benvenuto nel tuo profilo "+utente.name + ", qui puoi aggiungere o eliminare esercizi dalla lista ";
                 buttonScheda.Hide();
                 buttonImpostazioni.Hide();
-                flowLayoutPanelAggiungi.Controls.Add(label2);
-                flowLayoutPanelAggiungi.Controls.Add(labelAggiungi);
-                flowLayoutPanelAggiungi.Controls.Add(textBox1);
+                flowLayoutPanel1.Controls.Add(label2);
+                flowLayoutPanel1.Controls.Add(labelAggiungi);
+                flowLayoutPanel1.Controls.Add(textBox1);
                 textBox1.Name="nome"; //vedi
-                flowLayoutPanelAggiungi.Controls.Add(label3);
-                flowLayoutPanelAggiungi.Controls.Add(textBox2);
+                flowLayoutPanel1.Controls.Add(label3);
+                flowLayoutPanel1.Controls.Add(textBox2);
                 textBox2.Name="descrizione"; //vedi
-                flowLayoutPanelAggiungi.Controls.Add(label4);
-                flowLayoutPanelAggiungi.Controls.Add(checkedListBox1);
+                flowLayoutPanel1.Controls.Add(label4);
+                flowLayoutPanel1.Controls.Add(checkedListBox1);
                 Button buttonaggiungi= new Button();
                 buttonaggiungi.Text="aggiungi";
                 buttonaggiungi.Click+=addEsercizio;
@@ -52,16 +52,26 @@ namespace Volpe_Ragusa.csharp
             }
             else{
                 labelBenvenuto.Text="Benvenuto nel tuo profilo "+utente.name;
-                flowLayoutPanelAggiungi.Controls.Add(labelEmail);
-                labelEmail.Text=utente.email;
-                flowLayoutPanelAggiungi.Controls.Add(labelNome);
-                labelNome.Text=utente.name;
-                flowLayoutPanelAggiungi.Controls.Add(labelCognome);
-                labelCognome.Text=utente.cognome;
-                flowLayoutPanelAggiungi.Controls.Add(labelEta);
-                labelEta.Text=utente.eta.ToString();
-                flowLayoutPanelAggiungi.Controls.Add(labelMuscoli);
-                labelMuscoli.Text=utente.muscoli.ToString();
+                Label labelemail= new Label();
+                labelemail.AutoSize=true;
+                labelemail.Text="email: " + utente.email;
+                flowLayoutPanel1.Controls.Add(labelemail);
+                Label labelnome= new Label();
+                labelnome.AutoSize=true;
+                labelnome.Text="nome: " + utente.name;
+                flowLayoutPanel1.Controls.Add(labelnome);
+                Label labelcognome= new Label();
+                labelcognome.AutoSize=true;
+                labelcognome.Text="cognome: " + utente.cognome;
+                flowLayoutPanel1.Controls.Add(labelcognome);
+                Label labeleta= new Label();
+                labeleta.AutoSize=true;
+                labeleta.Text="età: " + utente.eta.ToString();
+                flowLayoutPanel1.Controls.Add(labeleta);
+                Label labelmuscoli= new Label();
+                labelmuscoli.AutoSize=true;
+                labelmuscoli.Text="muscoli preferiti: " + utente.muscoli.ToString();
+                flowLayoutPanel1.Controls.Add(labelmuscoli);
                 //get_grafico();
                 caricamenti.get_grafico(this.email,flowLayoutPanel1);
                 //carica_esercizi_consigliati();

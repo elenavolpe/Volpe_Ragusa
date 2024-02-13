@@ -29,11 +29,11 @@
         private void InitializeComponent()
         {
             labelBenvenuto = new Label();
-            labelNome = new Label();
+            /*labelNome = new Label();
             labelEmail = new Label();
             labelCognome = new Label();
             labelEta = new Label();
-            labelMuscoli = new Label();
+            labelMuscoli = new Label();*/
             buttonHome = new Button();
             buttonScheda = new Button();
             buttonLogout = new Button();
@@ -59,7 +59,7 @@
             // 
             // labelNome
             // 
-            labelNome.AutoSize = true;
+            /*labelNome.AutoSize = true;
             labelNome.Location = new Point(272, 143);
             labelNome.Name = "labelNome";
             labelNome.Size = new Size(113, 25);
@@ -105,7 +105,7 @@
             labelMuscoli.Size = new Size(209, 25);
             labelMuscoli.TabIndex = 5;
             labelMuscoli.Text = "muscoli preferiti: muscoli";
-            labelMuscoli.Visible = false;
+            labelMuscoli.Visible = false;*/
             // 
             // buttonHome
             // 
@@ -233,11 +233,11 @@
         #endregion
 
         private Label labelBenvenuto;
-        private Label labelNome;
+        /*private Label labelNome;
         private Label labelEmail;
         private Label labelCognome;
         private Label labelEta;
-        private Label labelMuscoli;
+        private Label labelMuscoli;*/
         private Button buttonHome;
         private Button buttonScheda;
         private Button buttonLogout;
