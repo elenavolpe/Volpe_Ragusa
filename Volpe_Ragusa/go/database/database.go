@@ -268,8 +268,21 @@ func ModifyPassword(user_email, new_pw string, usr chan<- string) {
 	defer db.Close()
 
 	editQuery := "UPDATE users SET pass = ? WHERE email = ?"
-	_, err = db.Exec(editQuery, new_pw, user_email)
+	result, err := db.Exec(editQuery, new_pw, user_email)
 	if err != nil {
+		log.Println(err)
+		usr <- "failure"
+		return
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		log.Println(err)
+		usr <- "failure"
+		return
+	}
+
+	if rowsAffected == 0 {
 		log.Println(err)
 		usr <- "failure"
 		return
@@ -287,8 +300,21 @@ func ModifyEmail(old_email, new_email string, usr chan<- string) {
 	defer db.Close()
 
 	editQuery := "UPDATE users SET email = ? WHERE email = ?"
-	_, err = db.Exec(editQuery, new_email, old_email)
+	result, err := db.Exec(editQuery, new_email, old_email)
 	if err != nil {
+		log.Println(err)
+		usr <- "failure"
+		return
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		log.Println(err)
+		usr <- "failure"
+		return
+	}
+
+	if rowsAffected == 0 {
 		log.Println(err)
 		usr <- "failure"
 		return
@@ -306,8 +332,21 @@ func ModifyName(user_email, new_name string, usr chan<- string) {
 	defer db.Close()
 
 	editQuery := "UPDATE users SET name = ? WHERE email = ?"
-	_, err = db.Exec(editQuery, new_name, user_email)
+	result, err := db.Exec(editQuery, new_name, user_email)
 	if err != nil {
+		log.Println(err)
+		usr <- "failure"
+		return
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		log.Println(err)
+		usr <- "failure"
+		return
+	}
+
+	if rowsAffected == 0 {
 		log.Println(err)
 		usr <- "failure"
 		return
@@ -325,8 +364,21 @@ func ModifySurname(user_email, new_surname string, usr chan<- string) {
 	defer db.Close()
 
 	editQuery := "UPDATE users SET surname = ? WHERE email = ?"
-	_, err = db.Exec(editQuery, new_surname, user_email)
+	result, err := db.Exec(editQuery, new_surname, user_email)
 	if err != nil {
+		log.Println(err)
+		usr <- "failure"
+		return
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		log.Println(err)
+		usr <- "failure"
+		return
+	}
+
+	if rowsAffected == 0 {
 		log.Println(err)
 		usr <- "failure"
 		return
@@ -344,8 +396,21 @@ func ModifyAge(user_email string, new_age int, usr chan<- string) {
 	defer db.Close()
 
 	editQuery := "UPDATE users SET age = ? WHERE email = ?"
-	_, err = db.Exec(editQuery, new_age, user_email)
+	result, err := db.Exec(editQuery, new_age, user_email)
 	if err != nil {
+		log.Println(err)
+		usr <- "failure"
+		return
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		log.Println(err)
+		usr <- "failure"
+		return
+	}
+
+	if rowsAffected == 0 {
 		log.Println(err)
 		usr <- "failure"
 		return
@@ -516,8 +581,21 @@ func EditExerciseName(old_name, new_name string, done chan<- bool) {
 	defer db.Close()
 
 	editQuery := "UPDATE exercises SET name = ? WHERE name = ?"
-	_, err = db.Exec(editQuery, new_name, old_name)
+	result, err := db.Exec(editQuery, new_name, old_name)
 	if err != nil {
+		log.Println(err)
+		done <- false
+		return
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		log.Println(err)
+		done <- false
+		return
+	}
+
+	if rowsAffected == 0 {
 		log.Println(err)
 		done <- false
 		return
@@ -535,8 +613,21 @@ func EditExerciseDescription(name, new_description string, done chan<- bool) {
 	defer db.Close()
 
 	editQuery := "UPDATE exercises SET description = ? WHERE name = ?"
-	_, err = db.Exec(editQuery, new_description, name)
+	result, err := db.Exec(editQuery, new_description, name)
 	if err != nil {
+		log.Println(err)
+		done <- false
+		return
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		log.Println(err)
+		done <- false
+		return
+	}
+
+	if rowsAffected == 0 {
 		log.Println(err)
 		done <- false
 		return
@@ -763,8 +854,21 @@ func EditMuscleName(old_name, new_name string, done chan<- bool) {
 	defer db.Close()
 
 	editQuery := "UPDATE muscles SET name = ? WHERE name = ?"
-	_, err = db.Exec(editQuery, new_name, old_name)
+	result, err := db.Exec(editQuery, new_name, old_name)
 	if err != nil {
+		log.Println(err)
+		done <- false
+		return
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		log.Println(err)
+		done <- false
+		return
+	}
+
+	if rowsAffected == 0 {
 		log.Println(err)
 		done <- false
 		return
@@ -1041,8 +1145,21 @@ func UpdateUserWorkoutName(user_email, wp_name string, done chan<- bool) {
 	defer db.Close()
 
 	addQuery := "UPDATE users SET workout_name = ? WHERE email = ?"
-	_, err = db.Exec(addQuery, wp_name, user_email)
+	result, err := db.Exec(addQuery, wp_name, user_email)
 	if err != nil {
+		log.Println(err)
+		done <- false
+		return
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		log.Println(err)
+		done <- false
+		return
+	}
+
+	if rowsAffected == 0 {
 		log.Println(err)
 		done <- false
 		return
@@ -1060,8 +1177,21 @@ func UpdateUserWorkoutDescription(user_email, wp_desc string, done chan<- bool) 
 	defer db.Close()
 
 	editQuery := "UPDATE users SET workout_description = ? WHERE email = ?"
-	_, err = db.Exec(editQuery, wp_desc, user_email)
+	result, err := db.Exec(editQuery, wp_desc, user_email)
 	if err != nil {
+		log.Println(err)
+		done <- false
+		return
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		log.Println(err)
+		done <- false
+		return
+	}
+
+	if rowsAffected == 0 {
 		log.Println(err)
 		done <- false
 		return
@@ -1101,8 +1231,23 @@ func DeleteUserWorkout(user_email string, done chan<- bool) {
 
 	// Reset delle informazioni della scheda dell'utente (nome e descrizione a NULL)
 	updateQuery := "UPDATE users SET workout_name = NULL, workout_description = NULL WHERE id = ?"
-	_, err = tx.Exec(updateQuery, uid)
+	result, err := tx.Exec(updateQuery, uid)
 	if err != nil {
+		log.Println(err)
+		done <- false
+		tx.Rollback()
+		return
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		log.Println(err)
+		done <- false
+		tx.Rollback()
+		return
+	}
+
+	if rowsAffected == 0 {
 		log.Println(err)
 		done <- false
 		tx.Rollback()
@@ -1159,11 +1304,24 @@ func AddExerciseWorkoutplan(user_email, ex_name string, done chan<- bool) {
 	}
 
 	editQuery := "UPDATE exercises SET popularity_score = popularity_score+1 WHERE id = ?"
-	_, err = tx.Exec(editQuery, ex_id)
+	result, err := tx.Exec(editQuery, ex_id)
 	if err != nil {
 		log.Println(err)
 		done <- false
 		tx.Rollback()
+		return
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		log.Println(err)
+		done <- false
+		return
+	}
+
+	if rowsAffected == 0 {
+		log.Println(err)
+		done <- false
 		return
 	}
 
@@ -1214,8 +1372,23 @@ func DeleteExerciseWorkoutplan(user_email, ex_name string, done chan<- bool) {
 	}
 
 	editQuery := "UPDATE exercises SET popularity_score = popularity_score-1 WHERE id = ?"
-	_, err = tx.Exec(editQuery, ex_id)
+	result, err := tx.Exec(editQuery, ex_id)
 	if err != nil {
+		log.Println(err)
+		done <- false
+		tx.Rollback()
+		return
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		log.Println(err)
+		done <- false
+		tx.Rollback()
+		return
+	}
+
+	if rowsAffected == 0 {
 		log.Println(err)
 		done <- false
 		tx.Rollback()
