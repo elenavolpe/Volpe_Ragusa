@@ -83,7 +83,7 @@ def get_trascurati(email):
     #creo una lista dei muscoli trascurati
     muscoliTrascurati=list(set(allMuscles)-set(muscoliAllenati))
     #prendo tutti gli esercizi
-    eserciziAll=get_exercises()
+    eserciziAll=json.loads(get_exercises())
     consigliati=[]
     #scorro tutti gli esercizi
     for esercizio in eserciziAll:
