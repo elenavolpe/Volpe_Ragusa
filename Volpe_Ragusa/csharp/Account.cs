@@ -52,26 +52,32 @@ namespace Volpe_Ragusa.csharp
             }
             else{
                 labelBenvenuto.Text="Benvenuto nel tuo profilo "+utente.name;
+                FlowLayoutPanel panel= new FlowLayoutPanel();
+                panel.AutoSize=true;
+                panel.FlowDirection=FlowDirection.TopDown;
+                panel.BorderStyle=BorderStyle.FixedSingle;
+                panel.Margin = new Padding(0, 20, 0, 0);
                 Label labelemail= new Label();
                 labelemail.AutoSize=true;
                 labelemail.Text="email: " + utente.email;
-                flowLayoutPanel1.Controls.Add(labelemail);
+                panel.Controls.Add(labelemail);
                 Label labelnome= new Label();
                 labelnome.AutoSize=true;
                 labelnome.Text="nome: " + utente.name;
-                flowLayoutPanel1.Controls.Add(labelnome);
+                panel.Controls.Add(labelnome);
                 Label labelcognome= new Label();
                 labelcognome.AutoSize=true;
                 labelcognome.Text="cognome: " + utente.cognome;
-                flowLayoutPanel1.Controls.Add(labelcognome);
+                panel.Controls.Add(labelcognome);
                 Label labeleta= new Label();
                 labeleta.AutoSize=true;
                 labeleta.Text="età: " + utente.eta.ToString();
-                flowLayoutPanel1.Controls.Add(labeleta);
+                panel.Controls.Add(labeleta);
                 Label labelmuscoli= new Label();
                 labelmuscoli.AutoSize=true;
                 labelmuscoli.Text="muscoli preferiti: " + utente.muscoli.ToString();
-                flowLayoutPanel1.Controls.Add(labelmuscoli);
+                panel.Controls.Add(labelmuscoli);
+                flowLayoutPanel1.Controls.Add(panel);
                 //get_grafico();
                 caricamenti.get_grafico(this.email,flowLayoutPanel1);
                 //carica_esercizi_consigliati();
