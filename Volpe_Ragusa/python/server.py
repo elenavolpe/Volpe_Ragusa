@@ -32,7 +32,10 @@ def login():
 def get_image():
     data=request.get_json()
     #prendo i muscoli allenati
-    allenati=exercise_manager.get_muscoli_allenati_con_ripetuti(data)
+    try:
+        allenati=exercise_manager.get_muscoli_allenati_con_ripetuti(data)
+    except Exception as e:
+        return f"Errore: {e}"
     #TO_DO sistemare questa funzione, passargli anche allenati
     image = generate_muscle_stats(allenati) # rimane da testare se funziona
     return send_file(image, mimetype='image/png')
