@@ -38,9 +38,6 @@
             buttonScheda = new Button();
             buttonLogout = new Button();
             buttonImpostazioni = new Button();
-            label1 = new Label();
-            flowLayoutPanel1 = new FlowLayoutPanel();
-            flowLayoutPanelAggiungi = new FlowLayoutPanel();
             labelAggiungi = new Label();
             label2 = new Label();
             textBox1 = new TextBox();
@@ -48,8 +45,7 @@
             textBox2 = new TextBox();
             label4 = new Label();
             checkedListBox1 = new CheckedListBox();
-            flowLayoutPanel1.SuspendLayout();
-            flowLayoutPanelAggiungi.SuspendLayout();
+            flowLayoutPanel1 = new FlowLayoutPanel();
             SuspendLayout();
             // 
             // labelBenvenuto
@@ -69,7 +65,7 @@
             labelNome.Size = new Size(113, 25);
             labelNome.TabIndex = 1;
             labelNome.Text = "nome: nome";
-            labelNome.Visible=false;
+            labelNome.Visible = false;
             // 
             // labelEmail
             // 
@@ -79,7 +75,7 @@
             labelEmail.Size = new Size(105, 25);
             labelEmail.TabIndex = 2;
             labelEmail.Text = "email: email";
-            labelEmail.Visible=false;
+            labelEmail.Visible = false;
             // 
             // labelCognome
             // 
@@ -89,7 +85,7 @@
             labelCognome.Size = new Size(173, 25);
             labelCognome.TabIndex = 3;
             labelCognome.Text = "cognome: cognome";
-            labelCognome.Visible=false;
+            labelCognome.Visible = false;
             // 
             // labelEta
             // 
@@ -99,7 +95,7 @@
             labelEta.Size = new Size(69, 25);
             labelEta.TabIndex = 4;
             labelEta.Text = "età: età";
-            labelEta.Visible=false;
+            labelEta.Visible = false;
             // 
             // labelMuscoli
             // 
@@ -109,11 +105,11 @@
             labelMuscoli.Size = new Size(209, 25);
             labelMuscoli.TabIndex = 5;
             labelMuscoli.Text = "muscoli preferiti: muscoli";
-            labelMuscoli.Visible=false;
+            labelMuscoli.Visible = false;
             // 
             // buttonHome
             // 
-            buttonHome.Location = new Point(582, 110);
+            buttonHome.Location = new Point(644, 119);
             buttonHome.Name = "buttonHome";
             buttonHome.Size = new Size(144, 34);
             buttonHome.TabIndex = 6;
@@ -123,7 +119,7 @@
             // 
             // buttonScheda
             // 
-            buttonScheda.Location = new Point(582, 166);
+            buttonScheda.Location = new Point(644, 175);
             buttonScheda.Name = "buttonScheda";
             buttonScheda.Size = new Size(144, 34);
             buttonScheda.TabIndex = 7;
@@ -133,7 +129,7 @@
             // 
             // buttonLogout
             // 
-            buttonLogout.Location = new Point(582, 276);
+            buttonLogout.Location = new Point(644, 285);
             buttonLogout.Name = "buttonLogout";
             buttonLogout.Size = new Size(144, 34);
             buttonLogout.TabIndex = 8;
@@ -143,36 +139,13 @@
             // 
             // buttonImpostazioni
             // 
-            buttonImpostazioni.Location = new Point(582, 222);
+            buttonImpostazioni.Location = new Point(644, 231);
             buttonImpostazioni.Name = "buttonImpostazioni";
             buttonImpostazioni.Size = new Size(144, 34);
             buttonImpostazioni.TabIndex = 9;
             buttonImpostazioni.Text = "Impostazioni";
             buttonImpostazioni.UseVisualStyleBackColor = true;
             buttonImpostazioni.Click += buttonImpostazioni_Click;
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Location = new Point(3, 0);
-            label1.Name = "label1";
-            label1.Size = new Size(0, 25);
-            label1.TabIndex = 10;
-            // 
-            // flowLayoutPanel1
-            // 
-            flowLayoutPanel1.Controls.Add(label1);
-            flowLayoutPanel1.Location = new Point(18, 393);
-            flowLayoutPanel1.Name = "flowLayoutPanel1";
-            flowLayoutPanel1.Size = new Size(548, 102);
-            flowLayoutPanel1.TabIndex = 11;
-            // 
-            // flowLayoutPanelAggiungi
-            // 
-            flowLayoutPanelAggiungi.Location = new Point(21, 78);
-            flowLayoutPanelAggiungi.Name = "flowLayoutPanelAggiungi";
-            flowLayoutPanelAggiungi.Size = new Size(545, 312);
-            flowLayoutPanelAggiungi.TabIndex = 12;
             // 
             // labelAggiungi
             // 
@@ -233,31 +206,26 @@
             checkedListBox1.Size = new Size(229, 60);
             checkedListBox1.TabIndex = 6;
             // 
+            // flowLayoutPanel1
+            // 
+            flowLayoutPanel1.Location = new Point(23, 62);
+            flowLayoutPanel1.Name = "flowLayoutPanel1";
+            flowLayoutPanel1.Size = new Size(615, 424);
+            flowLayoutPanel1.TabIndex = 10;
+            // 
             // Account
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 495);
-            Controls.Add(flowLayoutPanelAggiungi);
             Controls.Add(flowLayoutPanel1);
             Controls.Add(buttonImpostazioni);
             Controls.Add(buttonLogout);
             Controls.Add(buttonScheda);
             Controls.Add(buttonHome);
-            /*
-            Controls.Add(labelMuscoli);
-            Controls.Add(labelEta);
-            Controls.Add(labelCognome);
-            Controls.Add(labelEmail);
-            Controls.Add(labelNome);
-            */
             Controls.Add(labelBenvenuto);
             Name = "Account";
             Text = "Account";
-            flowLayoutPanel1.ResumeLayout(false);
-            flowLayoutPanel1.PerformLayout();
-            flowLayoutPanelAggiungi.ResumeLayout(false);
-            flowLayoutPanelAggiungi.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -274,9 +242,6 @@
         private Button buttonScheda;
         private Button buttonLogout;
         private Button buttonImpostazioni;
-        private Label label1;
-        private FlowLayoutPanel flowLayoutPanel1;
-        private FlowLayoutPanel flowLayoutPanelAggiungi;
         private Label labelAggiungi;
         private Label label2;
         private TextBox textBox1;
@@ -284,5 +249,6 @@
         private TextBox textBox2;
         private Label label4;
         private CheckedListBox checkedListBox1;
+        private FlowLayoutPanel flowLayoutPanel1;
     }
 }
