@@ -279,7 +279,7 @@ func main() {
 	mux.HandleFunc("/addExercise", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == http.MethodPost {
 			type ExerciseAndMuscles struct {
-				Name        string   `json:"nome"`
+				Name        string   `json:"esercizio"`
 				Description string   `json:"descrizione"`
 				Muscles     []string `json:"muscoli"`
 			}

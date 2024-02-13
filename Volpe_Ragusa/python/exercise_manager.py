@@ -106,6 +106,7 @@ def add_exercise_admin(esercizio):
                 return "Errore nell'aggiunta dell'esercizio!"
             dict={}
             dict['esercizio']=esercizio['nome']
+            # dict['descrizione']=esercizio['descrizione'] # Inviare la descrizione dell'esercizio al server python
             for muscolo in esercizio['muscoli']:
                 dict['muscolo']=muscolo
                 try:
