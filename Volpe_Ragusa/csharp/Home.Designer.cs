@@ -57,6 +57,7 @@
             label2.Name = "label2";
             label2.Size = new Size(374, 25);
             label2.TabIndex = 1;
+            label2.Font = new Font(label2.Font, FontStyle.Bold);
             label2.Text = "Ecco gli esercizi più gettonati dai nostri iscritti:";
             // 
             // label3
@@ -66,6 +67,7 @@
             label3.Name = "label3";
             label3.Size = new Size(124, 25);
             label3.TabIndex = 2;
+            label3.Font = new Font(label3.Font, FontStyle.Bold);
             label3.Text = "Ecco le novità:";
             // 
             // label4
@@ -75,6 +77,7 @@
             label4.Name = "label4";
             label4.Size = new Size(283, 25);
             label4.TabIndex = 3;
+            label4.Font = new Font(label4.Font, FontStyle.Bold);
             label4.Text = "Ecco la lista di tutti i nostri esercizi:";
             // 
             // button1

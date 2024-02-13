@@ -18,6 +18,7 @@ public class Caricamenti{
             textBox.ReadOnly = true;
             textBox.Width = 500;
             textBox.Height = 100;
+            textBox.Font = new Font(textBox.Font, FontStyle.Bold);
             textBox.Text = "Ecco gli esercizi che ti consigliamo in base ai tuoi muscoli preferiti ";
             /*Label label=new Label();
             label.AutoSize=true;
@@ -50,7 +51,7 @@ public class Caricamenti{
                             FlowLayoutPanel panel= new FlowLayoutPanel();
                             panel.FlowDirection=FlowDirection.TopDown;
                             panel.AutoSize=true;
-                            panel.Margin = new Padding(0, 20, 0, 0);
+                            panel.Margin = new Padding(0, 20, 0, 20);
                             panel.BorderStyle = BorderStyle.FixedSingle;
 
                             Label labelName = new Label();
@@ -141,6 +142,7 @@ public class Caricamenti{
                     textBox.ReadOnly = true;
                     textBox.Width = 500;
                     textBox.Height = 100;
+                    textBox.Font = new Font(textBox.Font, FontStyle.Bold);
                     textBox.Text = "ecco il grafico che rappresenta la % di muscoli che stai allenando in base alla tua scheda ";
                     panel.Controls.Add(textBox);
 
@@ -150,6 +152,8 @@ public class Caricamenti{
                     contenitore.Controls.Add(label);*/
 
                     PictureBox pictureBox= new PictureBox();
+                    pictureBox.Size = new Size(500, 400);
+                    pictureBox.SizeMode = PictureBoxSizeMode.Zoom;
                     pictureBox.Image=image;
                     panel.Controls.Add(pictureBox);
                     contenitore.Controls.Add(panel);
@@ -169,6 +173,7 @@ public class Caricamenti{
             textBox.ReadOnly = true;
             textBox.Width = 500;
             textBox.Height = 100;
+            textBox.Font = new Font(textBox.Font, FontStyle.Bold);
             textBox.Text = "Perchè non aggiungi uno di questi esercizi? Sembrerebbe che stai trascurando qualche gruppo muscolare ";
             contenitore.Controls.Add(textBox);
             /*Label label=new Label();
@@ -201,7 +206,7 @@ public class Caricamenti{
                             FlowLayoutPanel panel= new FlowLayoutPanel();
                             panel.FlowDirection=FlowDirection.TopDown;
                             panel.AutoSize=true;
-                            panel.Margin = new Padding(0, 20, 0, 0);
+                            panel.Margin = new Padding(0, 20, 0, 20);
                             panel.BorderStyle = BorderStyle.FixedSingle; 
 
                             Label labelName = new Label();
@@ -259,7 +264,7 @@ public class Caricamenti{
 
         public void carica_esercizi(string email, FlowLayoutPanel contenitore)
         {
-            if(this.email=="Admin@mail.it"){ //TO_DO sistemare l'email
+            if(this.email=="Admin@mail.it"){
                 Label label=new Label();
                 label.AutoSize=true;
                 label.Text="Ciao Admin, qui puoi eliminare o aggiungere esercizi dalla lista ";
@@ -294,7 +299,7 @@ public class Caricamenti{
                             FlowLayoutPanel panel= new FlowLayoutPanel();
                             panel.FlowDirection=FlowDirection.TopDown;
                             panel.AutoSize=true;
-                            panel.Margin = new Padding(0, 20, 0, 0);
+                            panel.Margin = new Padding(0, 20, 0, 20);
                             panel.BorderStyle = BorderStyle.FixedSingle; 
 
                             Label labelName = new Label();
@@ -384,7 +389,7 @@ public class Caricamenti{
                             FlowLayoutPanel panel= new FlowLayoutPanel();
                             panel.FlowDirection=FlowDirection.TopDown;
                             panel.AutoSize=true;
-                            panel.Margin = new Padding(0, 20, 0, 0);
+                            panel.Margin = new Padding(0, 20, 0, 20);
                             panel.BorderStyle = BorderStyle.FixedSingle; 
 
                             Label labelName = new Label();
@@ -465,7 +470,7 @@ public class Caricamenti{
                             FlowLayoutPanel panel= new FlowLayoutPanel();
                             panel.FlowDirection=FlowDirection.TopDown;
                             panel.AutoSize=true;
-                            panel.Margin = new Padding(0, 20, 0, 0);
+                            panel.Margin = new Padding(0, 20, 0, 20);
                             panel.BorderStyle = BorderStyle.FixedSingle; 
 
                             Label labelName = new Label();
@@ -544,9 +549,9 @@ public class Caricamenti{
                         foreach (ExerciseData exerciseData in exerciseList)
                         {   
                             FlowLayoutPanel panel= new FlowLayoutPanel();
-                            panel.FlowDirection=FlowDirection.LeftToRight;
+                            panel.FlowDirection=FlowDirection.TopDown;
                             panel.AutoSize=true;
-                            panel.Margin = new Padding(0, 20, 0, 0);
+                            panel.Margin = new Padding(0, 20, 0, 20);
                             panel.BorderStyle = BorderStyle.FixedSingle; 
 
                             Label labelName = new Label();
