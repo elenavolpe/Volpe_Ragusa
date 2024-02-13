@@ -4,14 +4,14 @@ from io import BytesIO
 
 def generate_muscle_stats(data):
     
-    # Creazione dataframe per permettere di usare i metodi di Pandas
-    df = pd.DataFrame(data)
+    # Creazione Series per permettere di usare i metodi di Pandas
+    muscle_series = pd.Series(data)
 
     # Calcolo del conteggio dei muscoli allenati
-    muscle_count = df.explode('Muscoli')['Muscoli'].value_counts()
+    muscle_count = muscle_series.value_counts()
 
     # Calcolo delle percentuali dei muscoli allenati rispetto al totale degli esercizi (len(df))
-    muscle_percentage = (muscle_count / len(df)) * 100
+    muscle_percentage = (muscle_count / len(muscle_series)) * 100
 
     # Creazione di un grafico a torta per visualizzare le percentuali dei muscoli allenati
     plt.figure(figsize=(8, 6))
