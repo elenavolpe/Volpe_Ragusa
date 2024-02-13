@@ -35,9 +35,10 @@ namespace Volpe_Ragusa.csharp
             string conferma_password = textBoxConfermaPassword.Text;
             int età;
 
-            List<string> muscoli = getMuscoliSelezionati();
-            //fai un eccezione su questo
-            //int eta = int.Parse(textBoxEta.Text);
+            List<string> muscoli = new List<string>();
+            if(checkBoxMuscoli.Checked){
+                muscoli = getMuscoliSelezionati();
+            }
 
             if ( nome != "" && cognome != "" && password != "" && conferma_password != "" && textBoxEta.Text != "")
             {
