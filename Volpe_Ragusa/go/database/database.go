@@ -1240,9 +1240,9 @@ func GetWorkoutPlan(user_email string, workout_plan chan<- []types.ExerciseWorko
 		}
 		defer rows1.Close()
 
-		for rows.Next() {
+		for rows1.Next() {
 			var muscle_name string
-			err := rows.Scan(&muscle_name)
+			err := rows1.Scan(&muscle_name)
 			if err != nil {
 				log.Println(err)
 				exs := make([]types.ExerciseWorkout, 1)
