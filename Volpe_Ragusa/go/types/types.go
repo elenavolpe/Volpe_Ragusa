@@ -39,7 +39,7 @@ type SignupReq struct {
 	Surname  string   `json:"surname"`
 	Email    string   `json:"email"`
 	Password string   `json:"password"`
-	Age      int      `json:"age"`
+	Age      int      `json:"eta"`
 	Muscles  []string `json:"muscoli"`
 }
 
