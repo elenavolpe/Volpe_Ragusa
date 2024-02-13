@@ -527,7 +527,7 @@ func EditExerciseName(old_name, new_name string, done chan<- bool) {
 	done <- true
 }
 
-func EditExerciseDescription(old_name, new_description string, done chan<- bool) {
+func EditExerciseDescription(name, new_description string, done chan<- bool) {
 	db, err := ConnectDB("admin", "admin", "mysql", "3306", "workoutnow")
 	if err != nil {
 		log.Fatal(err)
@@ -535,7 +535,7 @@ func EditExerciseDescription(old_name, new_description string, done chan<- bool)
 	defer db.Close()
 
 	editQuery := "UPDATE exercises SET description = ? WHERE name = ?"
-	_, err = db.Exec(editQuery, new_description, old_name)
+	_, err = db.Exec(editQuery, new_description, name)
 	if err != nil {
 		log.Println(err)
 		done <- false

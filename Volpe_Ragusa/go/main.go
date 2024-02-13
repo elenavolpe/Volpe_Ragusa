@@ -357,7 +357,7 @@ func main() {
 	mux.HandleFunc("/editExerciseDesc", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == http.MethodPost {
 			type EditReq struct {
-				OldName        string `json:"oldName"`
+				Name           string `json:"name"`
 				NewDescription string `json:"newDescription"`
 			}
 			var editReq EditReq
@@ -368,7 +368,7 @@ func main() {
 			}
 			done := make(chan bool)
 			var s string
-			go database.EditExerciseDescription(editReq.OldName, editReq.NewDescription, done)
+			go database.EditExerciseDescription(editReq.Name, editReq.NewDescription, done)
 			if <-done {
 				s = "success"
 			} else {
