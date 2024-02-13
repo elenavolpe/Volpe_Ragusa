@@ -519,7 +519,7 @@ func GetExercises(exercises chan<- []types.ExerciseWorkout) {
 	if err != nil {
 		log.Println(err)
 		errSlice := make([]types.ExerciseWorkout, 1)
-		errSlice[0] = types.ExerciseWorkout{Exercise: types.Exercise{Name: "failure", Description: "failure"}}
+		errSlice[0] = types.ExerciseWorkout{Exercise: types.Exercise{Name: "failure", Description: "failure"}, Muscles: []string{"failure"}}
 		exercises <- errSlice
 		return
 	}
@@ -532,7 +532,7 @@ func GetExercises(exercises chan<- []types.ExerciseWorkout) {
 		if err != nil {
 			log.Println(err)
 			errSlice := make([]types.ExerciseWorkout, 1)
-			errSlice[0] = types.ExerciseWorkout{Exercise: types.Exercise{Name: "failure", Description: "failure"}}
+			errSlice[0] = types.ExerciseWorkout{Exercise: types.Exercise{Name: "failure", Description: "failure"}, Muscles: []string{"failure"}}
 			exercises <- errSlice
 			return
 		}
@@ -541,15 +541,15 @@ func GetExercises(exercises chan<- []types.ExerciseWorkout) {
 		if err != nil {
 			log.Println(err)
 			errSlice := make([]types.ExerciseWorkout, 1)
-			errSlice[0] = types.ExerciseWorkout{Exercise: types.Exercise{Name: "failure", Description: "failure"}}
+			errSlice[0] = types.ExerciseWorkout{Exercise: types.Exercise{Name: "failure", Description: "failure"}, Muscles: []string{"failure"}}
 			exercises <- errSlice
 			return
 		}
 		defer rows1.Close()
 
-		for rows.Next() {
+		for rows1.Next() {
 			var muscle_name string
-			err := rows.Scan(&muscle_name)
+			err := rows1.Scan(&muscle_name)
 			if err != nil {
 				log.Println(err)
 				errSlice := make([]types.ExerciseWorkout, 1)
@@ -1288,9 +1288,7 @@ func GetPreferredMuscles(user_email string, muscles chan<- []string) {
 	uid := getUID(user_email)
 	if uid == -1 {
 		log.Println("User not found!")
-		errSlice := make([]string, 1)
-		errSlice[0] = "failure"
-		muscles <- errSlice
+		muscles <- []string{"failure"}
 		return
 	}
 
@@ -1298,9 +1296,7 @@ func GetPreferredMuscles(user_email string, muscles chan<- []string) {
 	rows, err := db.Query(getQuery, uid)
 	if err != nil {
 		log.Println(err)
-		errSlice := make([]string, 1)
-		errSlice[0] = "failure"
-		muscles <- errSlice
+		muscles <- []string{"failure"}
 		return
 	}
 	defer rows.Close()
@@ -1311,9 +1307,7 @@ func GetPreferredMuscles(user_email string, muscles chan<- []string) {
 		err := rows.Scan(&muscle)
 		if err != nil {
 			log.Println(err)
-			errSlice := make([]string, 1)
-			errSlice[0] = "failure"
-			muscles <- errSlice
+			muscles <- []string{"failure"}
 			return
 		}
 
@@ -1322,9 +1316,7 @@ func GetPreferredMuscles(user_email string, muscles chan<- []string) {
 	err = rows.Err()
 	if err != nil {
 		log.Println(err)
-		errSlice := make([]string, 1)
-		errSlice[0] = "failure"
-		muscles <- errSlice
+		muscles <- []string{"failure"}
 		return
 	}
 	fmt.Println("Query run successfully!")
