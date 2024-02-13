@@ -77,14 +77,14 @@ func main() {
 
 	mux.HandleFunc("/verifyadmin", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == http.MethodPost {
-			var verifyReq types.LoginReq
+			var verifyReq types.EmailReq
 			err := json.NewDecoder(r.Body).Decode(&verifyReq)
 			if err != nil {
 				http.Error(w, "Errore durante la decodifica del JSON: "+err.Error(), http.StatusBadRequest)
 				return
 			}
 			isAdmin := make(chan bool)
-			go database.AuthAdmin(verifyReq.Email, verifyReq.Password, isAdmin)
+			go database.AuthAdmin(verifyReq.Email, isAdmin)
 			w.Header().Set("Content-Type", "application/json")
 			err = json.NewEncoder(w).Encode(<-isAdmin)
 			if err != nil {

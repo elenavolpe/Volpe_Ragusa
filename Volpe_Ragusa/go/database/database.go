@@ -189,16 +189,16 @@ func Login(email, password string, done chan<- bool) {
 	}
 }
 
-func AuthAdmin(user_email, password string, adm chan<- bool) {
+func AuthAdmin(user_email string, adm chan<- bool) {
 	db, err := ConnectDB("admin", "admin", "mysql", "3306", "workoutnow")
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer db.Close()
 
-	loginQuery := "SELECT admin FROM users WHERE email = ? AND pass = ?"
+	loginQuery := "SELECT admin FROM users WHERE email = ?"
 	var isAdmin bool
-	err = db.QueryRow(loginQuery, user_email, password).Scan(&isAdmin)
+	err = db.QueryRow(loginQuery, user_email).Scan(&isAdmin)
 	if err == nil {
 		if isAdmin {
 			fmt.Println("User is an admin!")
