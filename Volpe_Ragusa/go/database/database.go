@@ -580,7 +580,7 @@ func EditExerciseName(old_name, new_name string, done chan<- bool) {
 	}
 	defer db.Close()
 
-	editQuery := "UPDATE exercises SET name = ? WHERE name = ?"
+	editQuery := "UPDATE exercises SET name = ? WHERE BINARY name = ?"
 	result, err := db.Exec(editQuery, new_name, old_name)
 	if err != nil {
 		log.Println(err)
@@ -612,7 +612,7 @@ func EditExerciseDescription(name, new_description string, done chan<- bool) {
 	}
 	defer db.Close()
 
-	editQuery := "UPDATE exercises SET description = ? WHERE name = ?"
+	editQuery := "UPDATE exercises SET description = ? WHERE BINARY name = ?"
 	result, err := db.Exec(editQuery, new_description, name)
 	if err != nil {
 		log.Println(err)
@@ -853,7 +853,7 @@ func EditMuscleName(old_name, new_name string, done chan<- bool) {
 	}
 	defer db.Close()
 
-	editQuery := "UPDATE muscles SET name = ? WHERE name = ?"
+	editQuery := "UPDATE muscles SET name = ? WHERE BINARY name = ?"
 	result, err := db.Exec(editQuery, new_name, old_name)
 	if err != nil {
 		log.Println(err)
@@ -1601,8 +1601,8 @@ func ModifyPreferredMuscles(user_email string, new_preferred_muscles []string, u
 				usr <- "failure"
 				return
 			}
-			deleteQuery := "INSERT INTO preferred_muscles (userid, muscleid) VALUES (?, ?)"
-			_, err = tx.Exec(deleteQuery, uid, mid)
+			addQuery := "INSERT INTO preferred_muscles (userid, muscleid) VALUES (?, ?)"
+			_, err = tx.Exec(addQuery, uid, mid)
 			if err != nil {
 				log.Println(err)
 				usr <- "failure"
