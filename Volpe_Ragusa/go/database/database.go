@@ -57,16 +57,31 @@ func DeleteAccount(email string, done chan<- bool) {
 
 	// Prima di cancellare l'utente, bisogna cancellare i dati relativi alla sua scheda
 	deleteQuery := "DELETE FROM user_exercises WHERE userid = ?"
-	_, err = tx.Exec(deleteQuery, uid)
+	result, err := tx.Exec(deleteQuery, uid)
 	if err != nil {
 		log.Println(err)
+		done <- false
+		tx.Rollback()
+		return
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		log.Println(err)
+		done <- false
+		tx.Rollback()
+		return
+	}
+
+	if rowsAffected == 0 {
+		log.Println("Query failed: " + deleteQuery)
 		done <- false
 		tx.Rollback()
 		return
 	}
 
 	deleteQuery = "DELETE FROM preferred_muscles WHERE userid = ?"
-	_, err = tx.Exec(deleteQuery, uid)
+	result, err = tx.Exec(deleteQuery, uid)
 	if err != nil {
 		log.Println(err)
 		done <- false
@@ -74,10 +89,40 @@ func DeleteAccount(email string, done chan<- bool) {
 		return
 	}
 
-	deleteQuery = "DELETE FROM users WHERE id = ?"
-	_, err = tx.Exec(deleteQuery, uid)
+	rowsAffected, err = result.RowsAffected()
 	if err != nil {
 		log.Println(err)
+		done <- false
+		tx.Rollback()
+		return
+	}
+
+	if rowsAffected == 0 {
+		log.Println("Query failed: " + deleteQuery)
+		done <- false
+		tx.Rollback()
+		return
+	}
+
+	deleteQuery = "DELETE FROM users WHERE id = ?"
+	result, err = tx.Exec(deleteQuery, uid)
+	if err != nil {
+		log.Println(err)
+		done <- false
+		tx.Rollback()
+		return
+	}
+
+	rowsAffected, err = result.RowsAffected()
+	if err != nil {
+		log.Println(err)
+		done <- false
+		tx.Rollback()
+		return
+	}
+
+	if rowsAffected == 0 {
+		log.Println("Query failed: " + deleteQuery)
 		done <- false
 		tx.Rollback()
 		return
@@ -283,7 +328,7 @@ func ModifyPassword(user_email, new_pw string, usr chan<- string) {
 	}
 
 	if rowsAffected == 0 {
-		log.Println(err)
+		log.Println("Query failed: " + editQuery)
 		usr <- "failure"
 		return
 	}
@@ -315,7 +360,7 @@ func ModifyEmail(old_email, new_email string, usr chan<- string) {
 	}
 
 	if rowsAffected == 0 {
-		log.Println(err)
+		log.Println("Query failed: " + editQuery)
 		usr <- "failure"
 		return
 	}
@@ -347,7 +392,7 @@ func ModifyName(user_email, new_name string, usr chan<- string) {
 	}
 
 	if rowsAffected == 0 {
-		log.Println(err)
+		log.Println("Query failed: " + editQuery)
 		usr <- "failure"
 		return
 	}
@@ -379,7 +424,7 @@ func ModifySurname(user_email, new_surname string, usr chan<- string) {
 	}
 
 	if rowsAffected == 0 {
-		log.Println(err)
+		log.Println("Query failed: " + editQuery)
 		usr <- "failure"
 		return
 	}
@@ -411,7 +456,7 @@ func ModifyAge(user_email string, new_age int, usr chan<- string) {
 	}
 
 	if rowsAffected == 0 {
-		log.Println(err)
+		log.Println("Query failed: " + editQuery)
 		usr <- "failure"
 		return
 	}
@@ -536,16 +581,31 @@ func DeleteExercise(name string, done chan<- bool) {
 	}
 
 	deleteQuery := "DELETE FROM user_exercises WHERE exerciseid = ?"
-	_, err = tx.Exec(deleteQuery, ex_id)
+	result, err := tx.Exec(deleteQuery, ex_id)
 	if err != nil {
 		log.Println(err)
+		done <- false
+		tx.Rollback()
+		return
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		log.Println(err)
+		done <- false
+		tx.Rollback()
+		return
+	}
+
+	if rowsAffected == 0 {
+		log.Println("Query failed: " + deleteQuery)
 		done <- false
 		tx.Rollback()
 		return
 	}
 
 	deleteQuery = "DELETE FROM exercise_muscles WHERE exerciseid = ?"
-	_, err = tx.Exec(deleteQuery, ex_id)
+	result, err = tx.Exec(deleteQuery, ex_id)
 	if err != nil {
 		log.Println(err)
 		done <- false
@@ -553,10 +613,40 @@ func DeleteExercise(name string, done chan<- bool) {
 		return
 	}
 
-	deleteQuery = "DELETE FROM exercises WHERE id = ?"
-	_, err = tx.Exec(deleteQuery, ex_id)
+	rowsAffected, err = result.RowsAffected()
 	if err != nil {
 		log.Println(err)
+		done <- false
+		tx.Rollback()
+		return
+	}
+
+	if rowsAffected == 0 {
+		log.Println("Query failed: " + deleteQuery)
+		done <- false
+		tx.Rollback()
+		return
+	}
+
+	deleteQuery = "DELETE FROM exercises WHERE id = ?"
+	result, err = tx.Exec(deleteQuery, ex_id)
+	if err != nil {
+		log.Println(err)
+		done <- false
+		tx.Rollback()
+		return
+	}
+
+	rowsAffected, err = result.RowsAffected()
+	if err != nil {
+		log.Println(err)
+		done <- false
+		tx.Rollback()
+		return
+	}
+
+	if rowsAffected == 0 {
+		log.Println("Query failed: " + deleteQuery)
 		done <- false
 		tx.Rollback()
 		return
@@ -596,7 +686,7 @@ func EditExerciseName(old_name, new_name string, done chan<- bool) {
 	}
 
 	if rowsAffected == 0 {
-		log.Println(err)
+		log.Println("Query failed: " + editQuery)
 		done <- false
 		return
 	}
@@ -628,7 +718,7 @@ func EditExerciseDescription(name, new_description string, done chan<- bool) {
 	}
 
 	if rowsAffected == 0 {
-		log.Println(err)
+		log.Println("Query failed: " + editQuery)
 		done <- false
 		return
 	}
@@ -869,7 +959,7 @@ func EditMuscleName(old_name, new_name string, done chan<- bool) {
 	}
 
 	if rowsAffected == 0 {
-		log.Println(err)
+		log.Println("Query failed: " + editQuery)
 		done <- false
 		return
 	}
@@ -921,16 +1011,31 @@ func DeleteMuscle(name string, done chan<- bool) {
 
 	// Prima di cancellare il muscolo scelto, bisogna cancellare gli accompiamenti con i vari esercizi in cui è presente
 	deleteQuery := "DELETE FROM exercise_muscles WHERE muscleid = ?"
-	_, err = tx.Exec(deleteQuery, muscle_id)
+	result, err := tx.Exec(deleteQuery, muscle_id)
 	if err != nil {
 		log.Println(err)
+		done <- false
+		tx.Rollback()
+		return
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		log.Println(err)
+		done <- false
+		tx.Rollback()
+		return
+	}
+
+	if rowsAffected == 0 {
+		log.Println("Query failed: " + deleteQuery)
 		done <- false
 		tx.Rollback()
 		return
 	}
 
 	deleteQuery = "DELETE FROM preferred_muscles WHERE muscleid = ?"
-	_, err = tx.Exec(deleteQuery, muscle_id)
+	result, err = tx.Exec(deleteQuery, muscle_id)
 	if err != nil {
 		log.Println(err)
 		done <- false
@@ -938,10 +1043,40 @@ func DeleteMuscle(name string, done chan<- bool) {
 		return
 	}
 
-	deleteQuery = "DELETE FROM muscles WHERE id = ?"
-	_, err = tx.Exec(deleteQuery, muscle_id)
+	rowsAffected, err = result.RowsAffected()
 	if err != nil {
 		log.Println(err)
+		done <- false
+		tx.Rollback()
+		return
+	}
+
+	if rowsAffected == 0 {
+		log.Println("Query failed: " + deleteQuery)
+		done <- false
+		tx.Rollback()
+		return
+	}
+
+	deleteQuery = "DELETE FROM muscles WHERE id = ?"
+	result, err = tx.Exec(deleteQuery, muscle_id)
+	if err != nil {
+		log.Println(err)
+		done <- false
+		tx.Rollback()
+		return
+	}
+
+	rowsAffected, err = result.RowsAffected()
+	if err != nil {
+		log.Println(err)
+		done <- false
+		tx.Rollback()
+		return
+	}
+
+	if rowsAffected == 0 {
+		log.Println("Query failed: " + deleteQuery)
 		done <- false
 		tx.Rollback()
 		return
@@ -1058,9 +1193,22 @@ func DeleteMuscleExercise(ex_name, muscle_name string, done chan<- bool) {
 	}
 
 	deleteQuery := "DELETE FROM exercise_muscles WHERE exerciseid = ? AND muscleid = ?"
-	_, err = db.Exec(deleteQuery, ex_id, muscle_id)
+	result, err := db.Exec(deleteQuery, ex_id, muscle_id)
 	if err != nil {
 		log.Println(err)
+		done <- false
+		return
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		log.Println(err)
+		done <- false
+		return
+	}
+
+	if rowsAffected == 0 {
+		log.Println("Query failed: " + deleteQuery)
 		done <- false
 		return
 	}
@@ -1125,9 +1273,22 @@ func DeletePreferredMuscle(user_email, muscle_name string, done chan<- bool) {
 	}
 
 	deleteQuery := "DELETE FROM preferred_muscles WHERE userid = ? AND muscleid = ?"
-	_, err = db.Exec(deleteQuery, uid, muscle_id)
+	result, err := db.Exec(deleteQuery, uid, muscle_id)
 	if err != nil {
 		log.Println(err)
+		done <- false
+		return
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		log.Println(err)
+		done <- false
+		return
+	}
+
+	if rowsAffected == 0 {
+		log.Println("Query failed: " + deleteQuery)
 		done <- false
 		return
 	}
@@ -1144,8 +1305,8 @@ func UpdateUserWorkoutName(user_email, wp_name string, done chan<- bool) {
 	}
 	defer db.Close()
 
-	addQuery := "UPDATE users SET workout_name = ? WHERE email = ?"
-	result, err := db.Exec(addQuery, wp_name, user_email)
+	editQuery := "UPDATE users SET workout_name = ? WHERE email = ?"
+	result, err := db.Exec(editQuery, wp_name, user_email)
 	if err != nil {
 		log.Println(err)
 		done <- false
@@ -1160,7 +1321,7 @@ func UpdateUserWorkoutName(user_email, wp_name string, done chan<- bool) {
 	}
 
 	if rowsAffected == 0 {
-		log.Println(err)
+		log.Println("Query failed: " + editQuery)
 		done <- false
 		return
 	}
@@ -1192,7 +1353,7 @@ func UpdateUserWorkoutDescription(user_email, wp_desc string, done chan<- bool) 
 	}
 
 	if rowsAffected == 0 {
-		log.Println(err)
+		log.Println("Query failed: " + editQuery)
 		done <- false
 		return
 	}
@@ -1221,17 +1382,7 @@ func DeleteUserWorkout(user_email string, done chan<- bool) {
 	}
 
 	deleteQuery := "DELETE FROM user_exercises WHERE userid = ?"
-	_, err = tx.Exec(deleteQuery, uid)
-	if err != nil {
-		log.Println(err)
-		done <- false
-		tx.Rollback()
-		return
-	}
-
-	// Reset delle informazioni della scheda dell'utente (nome e descrizione a NULL)
-	updateQuery := "UPDATE users SET workout_name = NULL, workout_description = NULL WHERE id = ?"
-	result, err := tx.Exec(updateQuery, uid)
+	result, err := tx.Exec(deleteQuery, uid)
 	if err != nil {
 		log.Println(err)
 		done <- false
@@ -1248,7 +1399,32 @@ func DeleteUserWorkout(user_email string, done chan<- bool) {
 	}
 
 	if rowsAffected == 0 {
+		log.Println("Query failed: " + deleteQuery)
+		done <- false
+		tx.Rollback()
+		return
+	}
+
+	// Reset delle informazioni della scheda dell'utente (nome e descrizione a NULL)
+	editQuery := "UPDATE users SET workout_name = NULL, workout_description = NULL WHERE id = ?"
+	result, err = tx.Exec(editQuery, uid)
+	if err != nil {
 		log.Println(err)
+		done <- false
+		tx.Rollback()
+		return
+	}
+
+	rowsAffected, err = result.RowsAffected()
+	if err != nil {
+		log.Println(err)
+		done <- false
+		tx.Rollback()
+		return
+	}
+
+	if rowsAffected == 0 {
+		log.Println("Query failed: " + editQuery)
 		done <- false
 		tx.Rollback()
 		return
@@ -1320,7 +1496,7 @@ func AddExerciseWorkoutplan(user_email, ex_name string, done chan<- bool) {
 	}
 
 	if rowsAffected == 0 {
-		log.Println(err)
+		log.Println("Query failed: " + editQuery)
 		done <- false
 		return
 	}
@@ -1363,16 +1539,7 @@ func DeleteExerciseWorkoutplan(user_email, ex_name string, done chan<- bool) {
 	}
 
 	deleteQuery := "DELETE FROM user_exercises WHERE userid = ? AND exerciseid = ?"
-	_, err = tx.Exec(deleteQuery, uid, ex_id)
-	if err != nil {
-		log.Println(err)
-		done <- false
-		tx.Rollback()
-		return
-	}
-
-	editQuery := "UPDATE exercises SET popularity_score = popularity_score-1 WHERE id = ?"
-	result, err := tx.Exec(editQuery, ex_id)
+	result, err := tx.Exec(deleteQuery, uid, ex_id)
 	if err != nil {
 		log.Println(err)
 		done <- false
@@ -1389,7 +1556,31 @@ func DeleteExerciseWorkoutplan(user_email, ex_name string, done chan<- bool) {
 	}
 
 	if rowsAffected == 0 {
+		log.Println("Query failed: " + deleteQuery)
+		done <- false
+		tx.Rollback()
+		return
+	}
+
+	editQuery := "UPDATE exercises SET popularity_score = popularity_score-1 WHERE id = ?"
+	result, err = tx.Exec(editQuery, ex_id)
+	if err != nil {
 		log.Println(err)
+		done <- false
+		tx.Rollback()
+		return
+	}
+
+	rowsAffected, err = result.RowsAffected()
+	if err != nil {
+		log.Println(err)
+		done <- false
+		tx.Rollback()
+		return
+	}
+
+	if rowsAffected == 0 {
+		log.Println("Query failed: " + editQuery)
 		done <- false
 		tx.Rollback()
 		return
@@ -1583,9 +1774,24 @@ func ModifyPreferredMuscles(user_email string, new_preferred_muscles []string, u
 				return
 			}
 			deleteQuery := "DELETE FROM preferred_muscles WHERE userid = ? AND muscleid = ?"
-			_, err = tx.Exec(deleteQuery, uid, mid)
+			result, err := tx.Exec(deleteQuery, uid, mid)
 			if err != nil {
 				log.Println(err)
+				usr <- "failure"
+				tx.Rollback()
+				return
+			}
+
+			rowsAffected, err := result.RowsAffected()
+			if err != nil {
+				log.Println(err)
+				usr <- "failure"
+				tx.Rollback()
+				return
+			}
+
+			if rowsAffected == 0 {
+				log.Println("Query failed: " + deleteQuery)
 				usr <- "failure"
 				tx.Rollback()
 				return
