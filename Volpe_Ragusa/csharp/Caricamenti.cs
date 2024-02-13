@@ -297,32 +297,32 @@ public class Caricamenti{
                     byte[] responseBytes = client.UploadData(url, "POST", requestData);
                     string responseBody = System.Text.Encoding.UTF8.GetString(responseBytes);
                     // Deserializza il JSON ricevuto
-                    List<ExerciseData> exerciseList = JsonConvert.DeserializeObject<List<ExerciseData>>(responseBody);
+                    List<Exercise> exerciseList = JsonConvert.DeserializeObject<List<Exercise>>(responseBody);
                     if(exerciseList!=null){
-                        foreach (ExerciseData exerciseData in exerciseList)
+                        foreach (Exercise exerciseData in exerciseList)
                         {   
                             FlowLayoutPanel panel= new FlowLayoutPanel();
                             panel.FlowDirection=FlowDirection.TopDown;
                             panel.AutoSize=true;
 
                             Label labelName = new Label();
-                            labelName.Text=exerciseData.Exercise.Name;
+                            labelName.Text=exerciseData.Name;
                             labelName.Name="nome";
                             panel.Controls.Add(labelName);
 
                             Label labelDescription = new Label();
-                            labelDescription.Text=exerciseData.Exercise.Description;
+                            labelDescription.Text=exerciseData.Description;
                             panel.Controls.Add(labelDescription);
 
-                            Label labelMuscles = new Label();
+                            /*Label labelMuscles = new Label();
                             foreach(string muscle in exerciseData.Muscles){
                                 labelMuscles.Text=muscle +", ";
                             }
-                            panel.Controls.Add(labelMuscles);
+                            panel.Controls.Add(labelMuscles);*/
                             
                             Button button = new Button();
                             button.Size= new System.Drawing.Size(95,32);
-                            bool esiste=checkExist(exerciseData.Exercise.Name,listaEsercizi);
+                            bool esiste=checkExist(exerciseData.Name,listaEsercizi);
                             if(esiste==false){
                                 button.Text="aggiungi";
                                 button.Click += aggiungiEsercizio;
@@ -363,33 +363,34 @@ public class Caricamenti{
                     // Effettuare la richiesta POST con i dati JSON
                     byte[] responseBytes = client.UploadData(url, "POST", requestData);
                     string responseBody = System.Text.Encoding.UTF8.GetString(responseBytes);
+                    //Console.WriteLine(responseBody);
                     // Deserializza il JSON ricevuto
-                    List<ExerciseData> exerciseList = JsonConvert.DeserializeObject<List<ExerciseData>>(responseBody);
+                    List<Exercise> exerciseList = JsonConvert.DeserializeObject<List<Exercise>>(responseBody);
                     if(exerciseList!=null){
-                        foreach (ExerciseData exerciseData in exerciseList)
+                        foreach (Exercise exerciseData in exerciseList)
                         {   
                             FlowLayoutPanel panel= new FlowLayoutPanel();
                             panel.FlowDirection=FlowDirection.TopDown;
                             panel.AutoSize=true;
 
                             Label labelName = new Label();
-                            labelName.Text=exerciseData.Exercise.Name;
+                            labelName.Text=exerciseData.Name;
                             labelName.Name="nome";
                             panel.Controls.Add(labelName);
 
                             Label labelDescription = new Label();
-                            labelDescription.Text=exerciseData.Exercise.Description;
+                            labelDescription.Text=exerciseData.Description;
                             panel.Controls.Add(labelDescription);
 
-                            Label labelMuscles = new Label();
+                            /*Label labelMuscles = new Label();
                             foreach(string muscle in exerciseData.Muscles){
                                 labelMuscles.Text=muscle +", ";
                             }
-                            panel.Controls.Add(labelMuscles);
+                            panel.Controls.Add(labelMuscles);*/
                             
                             Button button = new Button();
                             button.Size= new System.Drawing.Size(95,32);
-                            bool esiste=checkExist(exerciseData.Exercise.Name,listaEsercizi);
+                            bool esiste=checkExist(exerciseData.Name,listaEsercizi);
                             if(esiste==false){
                                 button.Text="aggiungi";
                                 button.Click += aggiungiEsercizio;
