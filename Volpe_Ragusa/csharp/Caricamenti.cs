@@ -50,6 +50,8 @@ public class Caricamenti{
                             FlowLayoutPanel panel= new FlowLayoutPanel();
                             panel.FlowDirection=FlowDirection.TopDown;
                             panel.AutoSize=true;
+                            panel.Margin = new Padding(0, 20, 0, 0);
+                            panel.BorderStyle = BorderStyle.FixedSingle;
 
                             Label labelName = new Label();
                             labelName.AutoSize=true;
@@ -190,6 +192,8 @@ public class Caricamenti{
                             FlowLayoutPanel panel= new FlowLayoutPanel();
                             panel.FlowDirection=FlowDirection.TopDown;
                             panel.AutoSize=true;
+                            panel.Margin = new Padding(0, 20, 0, 0);
+                            panel.BorderStyle = BorderStyle.FixedSingle; 
 
                             Label labelName = new Label();
                             labelName.AutoSize=true;
@@ -280,6 +284,8 @@ public class Caricamenti{
                             FlowLayoutPanel panel= new FlowLayoutPanel();
                             panel.FlowDirection=FlowDirection.TopDown;
                             panel.AutoSize=true;
+                            panel.Margin = new Padding(0, 20, 0, 0);
+                            panel.BorderStyle = BorderStyle.FixedSingle; 
 
                             Label labelName = new Label();
                             labelName.AutoSize=true;
@@ -367,6 +373,8 @@ public class Caricamenti{
                             FlowLayoutPanel panel= new FlowLayoutPanel();
                             panel.FlowDirection=FlowDirection.TopDown;
                             panel.AutoSize=true;
+                            panel.Margin = new Padding(0, 20, 0, 0);
+                            panel.BorderStyle = BorderStyle.FixedSingle; 
 
                             Label labelName = new Label();
                             labelName.AutoSize=true;
@@ -446,6 +454,8 @@ public class Caricamenti{
                             FlowLayoutPanel panel= new FlowLayoutPanel();
                             panel.FlowDirection=FlowDirection.TopDown;
                             panel.AutoSize=true;
+                            panel.Margin = new Padding(0, 20, 0, 0);
+                            panel.BorderStyle = BorderStyle.FixedSingle; 
 
                             Label labelName = new Label();
                             labelName.AutoSize=true;
@@ -525,6 +535,8 @@ public class Caricamenti{
                             FlowLayoutPanel panel= new FlowLayoutPanel();
                             panel.FlowDirection=FlowDirection.LeftToRight;
                             panel.AutoSize=true;
+                            panel.Margin = new Padding(0, 20, 0, 0);
+                            panel.BorderStyle = BorderStyle.FixedSingle; 
 
                             Label labelName = new Label();
                             labelName.AutoSize=true;
