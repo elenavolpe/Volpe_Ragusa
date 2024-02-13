@@ -43,7 +43,6 @@ def get_consigliati(email):
                 break
     print(consigliati)
     return json.dumps(consigliati)
-# sistemare questa e get trascurati con un eccezione per il caso in cui non ci siano muscoli preferiti e nel caso in cui non ci siano muscoli allenati
 
 #ritorna la lista di tutti i muscoli allenabili
 def getAllMuscles():
@@ -71,8 +70,6 @@ def get_muscoli_allenati_con_ripetuti(email):
     for esercizio in eserciziScheda:
         for muscolo in esercizio['muscles']:
             muscoli.append(muscolo)
-    if not muscoli:
-        raise ValueError("Non ci sono muscoli allenati")
     return muscoli
 
 #ritorna gli esercizi consigliati in base ai muscoli che stanno venendo trascurati
