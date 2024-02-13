@@ -100,7 +100,7 @@ def get_trascurati(email):
 
 #aggiunge un esercizio alla lista degli esercizi (admin)
 def add_exercise_admin(esercizio):
-    isAdmin = user_manager.authenticate_admin(esercizio['email'], esercizio['password']) #TO_DO fede da dove la prendi la password?
+    isAdmin = user_manager.authenticate_admin(esercizio['email'])
     if isAdmin:
         try:
             r = connect_go_server('addExercise',esercizio)

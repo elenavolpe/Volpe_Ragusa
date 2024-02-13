@@ -180,8 +180,10 @@ def elimina_esercizio_scheda(data):
 
 #Verifica admin
 def authenticate_admin(email):
+    data={}
+    data['email']=email
     try:
-         r = connect_go_server('verifyadmin',email)
+         r = connect_go_server('verifyadmin',data)
     except Exception as e:
         return f"Errore: {e}"
     return r
