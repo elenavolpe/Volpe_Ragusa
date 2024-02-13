@@ -70,6 +70,8 @@ def get_muscoli_allenati_con_ripetuti(email):
     for esercizio in eserciziScheda:
         for muscolo in esercizio['muscles']:
             muscoli.append(muscolo)
+    if not muscoli:
+        raise ValueError("Non ci sono muscoli allenati")
     return muscoli
 
 #ritorna gli esercizi consigliati in base ai muscoli che stanno venendo trascurati
