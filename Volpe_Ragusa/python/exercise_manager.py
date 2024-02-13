@@ -101,20 +101,13 @@ def add_exercise_admin(esercizio):
     isAdmin = user_manager.authenticate_admin(esercizio['email'])
     if isAdmin:
         try:
-            r = connect_go_server('addExercise',esercizio)
-            if r!="success":
-                return "Errore nell'aggiunta dell'esercizio!"
             dict={}
             dict['esercizio']=esercizio['nome']
-            # dict['descrizione']=esercizio['descrizione'] # Inviare la descrizione dell'esercizio al server python
-            for muscolo in esercizio['muscoli']:
-                dict['muscolo']=muscolo
-                try:
-                    r = connect_go_server('addExercise',dict)
-                    if r != "success":
-                        return f"Errore nell'aggiunta del muscolo {dict['muscolo']}!"
-                except Exception as e:
-                    return f"Errore: {e}"
+            dict['muscoli']=esercizio['muscoli']
+            # esercizio['descrizione'] # Inviare la descrizione dell'esercizio al server python
+            r = connect_go_server('addExercise',dict)
+            if r != "success":
+                return f"Errore nell'aggiunta dell'esercizio {dict['esercizio']}!"
         except Exception as e:
             return f"Errore: {e}"
         return "ok"
