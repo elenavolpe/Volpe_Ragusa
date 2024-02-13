@@ -31,7 +31,7 @@ namespace Volpe_Ragusa.csharp
             flowLayoutPanelAggiungi.AutoSize=true;
             flowLayoutPanelAggiungi.FlowDirection=FlowDirection.TopDown;
             //da cambiare in base all'email che decidiamo per l'admin
-            if(this.email=="admin@mail.it"){
+            if(this.email=="Admin@mail.it"){
                 labelBenvenuto.Text="Benvenuto nel tuo profilo "+utente.name + ", qui puoi aggiungere o eliminare esercizi dalla lista ";
                 buttonScheda.Hide();
                 buttonImpostazioni.Hide();

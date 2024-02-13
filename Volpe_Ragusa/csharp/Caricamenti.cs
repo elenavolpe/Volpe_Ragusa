@@ -196,7 +196,7 @@ public class Caricamenti{
 
         public void carica_esercizi(string email, FlowLayoutPanel contenitore)
         {
-            if(this.email=="admin@mail.it"){ //TO_DO sistemare l'email
+            if(this.email=="Admin@mail.it"){ //TO_DO sistemare l'email
                 Label label=new Label();
                 label.Text="Ciao Admin, qui puoi eliminare o aggiungere esercizi dalla lista ";
                 contenitore.Controls.Add(label);
@@ -248,7 +248,7 @@ public class Caricamenti{
                             
                             Button button = new Button();
                             button.Size= new System.Drawing.Size(95,32);
-                            if(this.email=="admin@mail.it"){
+                            if(this.email=="Admin@mail.it"){
                                 button.Text="elimina";
                                 button.Click += deleteEsercizio;
                             }
