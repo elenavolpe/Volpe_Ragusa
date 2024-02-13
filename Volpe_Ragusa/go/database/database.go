@@ -170,7 +170,7 @@ func Login(email, password string, done chan<- bool) {
 	}
 	defer db.Close()
 
-	loginQuery := "SELECT EXISTS(SELECT 1 FROM users WHERE email = ? AND pass = ?)"
+	loginQuery := "SELECT EXISTS(SELECT 1 FROM users WHERE email = ? AND BINARY pass = ?)"
 	var exists bool
 	err = db.QueryRow(loginQuery, email, password).Scan(&exists)
 	if err == nil {
@@ -1240,9 +1240,9 @@ func GetWorkoutPlan(user_email string, workout_plan chan<- []types.ExerciseWorko
 		}
 		defer rows1.Close()
 
-		for rows.Next() {
+		for rows1.Next() {
 			var muscle_name string
-			err := rows.Scan(&muscle_name)
+			err := rows1.Scan(&muscle_name)
 			if err != nil {
 				log.Println(err)
 				exs := make([]types.ExerciseWorkout, 1)
