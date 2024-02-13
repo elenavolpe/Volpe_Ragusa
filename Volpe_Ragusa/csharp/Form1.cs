@@ -62,8 +62,8 @@ namespace Volpe_Ragusa
                             //Account account = new Account(email);
                             Account account = new Account();
                             //this.Close();
-                            account.ShowDialog();
                             this.Visible=false;
+                            account.ShowDialog();
                         }else{
                             labelErrore.Text="email e/o password errati";
                             labelErrore.Visible=true;
