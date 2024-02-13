@@ -100,22 +100,15 @@ public class Caricamenti{
                     client.Headers.Add("Content-Type", "application/json");
                     // Effettuare la richiesta POST con i dati JSON
                     byte[] responseBytes = client.UploadData(url, "POST", requestData);
-                    //TO_DO dovrebbe tornare un immagine, quindi vediamo
-                    /*string responseBody = System.Text.Encoding.UTF8.GetString(responseBytes);
-                    string[] exercises = JsonConvert.DeserializeObject<string[]>(responseBody);
-                    for (int i = 0; i < exercises.Length; i++)
-                    {
-                        Label label = new Label();
-                        //vediamo cosa mi torna il json, creo label nome e label descrizione
-                        //label.Text = $"Esercizio {i + 1}: {exercises[i]}";
-                        label.Location = new System.Drawing.Point(20, 50 + 30 * i);
-                        label.Size = new System.Drawing.Size(200, 20);
-                        Controls.Add(label);
-                    }*/
+                    Image image = Image.FromStream(new MemoryStream(responseBytes));
+                    
                     Label label=new Label();
                     label.Text="ecco il grafico che rappresenta la % di muscoli che stai allenando in base alla tua scheda ";
                     contenitore.Controls.Add(label);
-                    //flowLayoutPanel1.Controls.Add(grafico); TO_DO
+
+                    PictureBox pictureBox= new PictureBox();
+                    pictureBox.Image=image;
+                    contenitore.Controls.Add(label);
                 }
                 catch (WebException ex)
                 {
