@@ -515,7 +515,7 @@ func EditExerciseName(old_name, new_name string, done chan<- bool) {
 	}
 	defer db.Close()
 
-	editQuery := "UPDATE exercises SET name = ? WHERE name = ?"
+	editQuery := "UPDATE exercises SET name = ? WHERE BINARY name = ?"
 	_, err = db.Exec(editQuery, new_name, old_name)
 	if err != nil {
 		log.Println(err)
