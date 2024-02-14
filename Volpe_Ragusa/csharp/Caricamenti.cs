@@ -310,6 +310,7 @@ public class Caricamenti{
                             panel.Controls.Add(labelName);
 
                             TextBox descrizione = new TextBox();
+                            descrizione.Name="descrizione";
                             descrizione.Multiline = true;
                             //descrizione.ScrollBars = ScrollBars.Vertical;
                             descrizione.ReadOnly = true;
@@ -324,6 +325,7 @@ public class Caricamenti{
                             panel.Controls.Add(labelDescription);*/
 
                             Label labelMuscles = new Label();
+                            labelMuscles.Name="muscoli";
                             labelMuscles.AutoSize=true;
                             string stringaConVirgole = string.Join(", ", exerciseData.Muscles);
                             labelMuscles.Text = stringaConVirgole;
@@ -692,6 +694,12 @@ public class Caricamenti{
             Control contenitore = button.Parent;
             Label label = contenitore.Controls.Find("nome", true).FirstOrDefault() as Label;
             string nomeEsercizio=label.Text;
+            TextBox box = contenitore.Controls.Find("descrizione", true).FirstOrDefault() as TextBox;
+            string descrizioneEsercizio=box.Text;
+            Label label2 = contenitore.Controls.Find("muscoli", true).FirstOrDefault() as Label;
+            string stringamuscoli=label2.Text;
+            List<string> muscoliSelezionati = new List<string>(stringamuscoli.Split(new string[] { ", " }, StringSplitOptions.None));
+            Console.WriteLine(string.Join(", ", muscoliSelezionati));
             using (WebClient client = new WebClient())
             {
                 try
@@ -699,8 +707,10 @@ public class Caricamenti{
                     string url = "http://localhost:5000/add_exercise";
                     var dataToSend = new
                     {
-                        email = this.email,
-                        exercise=nomeEsercizio
+                        email= this.email,
+                        nome= nomeEsercizio,
+                        descrizione = descrizioneEsercizio,
+                        muscoli = muscoliSelezionati
                     };
                     // Serializzare l'oggetto in formato JSON
                     string jsonData = JsonConvert.SerializeObject(dataToSend);
@@ -711,7 +721,8 @@ public class Caricamenti{
                     // Effettuare la richiesta POST con i dati JSON
                     byte[] responseBytes = client.UploadData(url, "POST", requestData);
                     string responseBody = System.Text.Encoding.UTF8.GetString(responseBytes);
-                    if(responseBody=="success"){
+                    Console.WriteLine(responseBody);
+                    if(responseBody=="ok"){
                         button.Text="elimina";
                         button.Click -= addEsercizio;
                         button.Click += deleteEsercizio;
