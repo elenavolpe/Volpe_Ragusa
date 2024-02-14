@@ -89,10 +89,6 @@ namespace Volpe_Ragusa.csharp
                     Console.WriteLine($"Errore durante la richiesta HTTP: {ex.Message}");
                 }
             }
-
-            Account account= new Account();
-            this.Close();
-            account.Show();
         }
 
         private List<string> getMuscoliSelezionati()

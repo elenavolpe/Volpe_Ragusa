@@ -92,7 +92,9 @@ namespace Volpe_Ragusa.csharp
                 panel.Controls.Add(labelmuscoli);
                 flowLayoutPanel1.Controls.Add(panel);
                 caricamenti.get_grafico(this.email,flowLayoutPanel1);
-                caricamenti.carica_esercizi_consigliati(this.email,flowLayoutPanel1);
+                if(utente.muscoli!=null){
+                    caricamenti.carica_esercizi_consigliati(this.email,flowLayoutPanel1);
+                }
                 caricamenti.carica_muscoli_trascurati(this.email,flowLayoutPanel1);
             }
             this.AutoScroll=true;
