@@ -35,7 +35,7 @@ services:
       - ./mysql-init-scripts:/docker-entrypoint-initdb.d
     restart: always
 
-# questo lo teniamo per testare il nostro database con phpmyadmin, poi lo togliamo
+# questo lo teniamo per testare il nostro database con phpmyadmin
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:latest
     container_name: phpmyadmin

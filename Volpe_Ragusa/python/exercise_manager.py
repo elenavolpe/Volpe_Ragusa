@@ -18,7 +18,7 @@ def get_preferred():
         return f"Errore: {e}"
     return json.dumps(r)
 
-#ritorna gli esercizi aggiunti più di recente (i primi 3?) Si ho messo limit 3 nella query di default, stessa cosa per getMostPopularExercises
+#ritorna gli esercizi aggiunti più di recente (i primi 3)
 def get_recent():
     try:
          r = connect_go_server('getMostRecentExercises')
@@ -104,7 +104,7 @@ def add_exercise_admin(esercizio):
             dict={}
             dict['esercizio']=esercizio['nome']
             dict['muscoli']=esercizio['muscoli']
-            dict['descrizione']=esercizio['descrizione'] # Inviare la descrizione dell'esercizio al server python
+            dict['descrizione']=esercizio['descrizione']
             r = connect_go_server('addExercise',dict)
             if r != "success":
                 return f"Errore nell'aggiunta dell'esercizio {dict['esercizio']}!"
@@ -119,10 +119,8 @@ def delete_exercise_admin(data):
     isAdmin = user_manager.authenticate_admin(data['email'])
     if isAdmin:
         dati={}
-        #dict['email']=email
         dati['name']=data['name']
         try:
-            #TO_DO data è di tipo email,exercise
             r = connect_go_server('deleteExercise',dati)
             if r != "success":
                 return "Errore nell'eliminazione dell'esercizio!"

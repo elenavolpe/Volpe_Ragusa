@@ -3,14 +3,6 @@ import user_manager
 import exercise_manager
 from generate_muscle_stats import generate_muscle_stats
 
-# Temporaneo: dati di esempio per test
-data = {
-    'Muscoli': [['Petto', 'Tricipiti'], ['Spalle'], ['Petto', 'Spalle', 'Tricipiti'], ['Spalle', 'Tricipiti', 'Petto'], 
-                ['Quadricipiti', 'Glutei'], ['Glutei', 'Lombari'], ['Quadricipiti'], ['Bicipiti Femorali', 'Glutei'], 
-                ['Schiena', 'Bicipiti'], ['Schiena', 'Bicipiti'], ['Schiena', 'Bicipiti', 'Dorsali'], ['Bicipiti', 'Avambracci']] # Muscoli coinvolti accoppiati in sequenza ad ogni esercizio della scheda
-    #12 esercizi di esempio
-}
-
 app = Flask(__name__)
 
 # Route per la registrazione di un nuovo utente
@@ -33,8 +25,7 @@ def get_image():
     data=request.get_json()
     #prendo i muscoli allenati
     allenati=exercise_manager.get_muscoli_allenati_con_ripetuti(data)
-    #TO_DO sistemare questa funzione, passargli anche allenati
-    image = generate_muscle_stats(allenati) # rimane da testare se funziona
+    image = generate_muscle_stats(allenati)
     return send_file(image, mimetype='image/png')
 
 #modifica profilo utente
@@ -63,7 +54,7 @@ def get_preferiti():
     if request.method == 'POST':
         return exercise_manager.get_preferred()
     
-#ritorna, se ci sono, esercizi aggiunti di recente (potremmo fare negli ultimi 2 giorni?) Fatta la modifica
+#ritorna, se ci sono, esercizi aggiunti di recente (negli ultimi 2 giorni)
 @app.route('/get_esercizi_recenti', methods=['POST'])
 def get_recenti():
     if request.method == 'POST':
@@ -102,9 +93,6 @@ def get_esercizi_trascurati():
 def aggiungi_esercizio():
     if request.method == 'POST':
         data=request.get_json()
-        #email = request.form.get('email') # Perchè non usi request.get_json() come in tutti gli altri casi? Qua non invii un json da C#?
-        #esercizio = request.form.get('nomeEsercizio')
-        #return  user_manager.aggiungi_esercizio_scheda(email,esercizio)
         return  user_manager.aggiungi_esercizio_scheda(data)
 
 #elimina esercizio dalla scheda del cliente
@@ -112,26 +100,20 @@ def aggiungi_esercizio():
 def elimina_esercizio():
     if request.method == 'POST':
         data=request.get_json()
-        #email = request.form.get('email') # Perchè non usi request.get_json() come in tutti gli altri casi? Qua non invii un json da C#?
-        #esercizio = request.form.get('nomeEsercizio')
-        #return  user_manager.elimina_esercizio_scheda(email,esercizio)
         return  user_manager.elimina_esercizio_scheda(data)
     
 #aggiunge esercizio alla lista di esercizi (admin)
 @app.route('/add_exercise', methods=['POST'])
 def add_exercise():
     if request.method == 'POST':
-        esercizio=request.get_json() #TO_DO da modificare come la delete_exercise successiva
+        esercizio=request.get_json()
         return  exercise_manager.add_exercise_admin(esercizio)
     
 #aggiunge esercizio alla lista di esercizi (admin)
 @app.route('/delete_exercise', methods=['POST'])
 def delete_exercise():
     if request.method == 'POST':
-        #email = request.get_json()
-        #esercizio = request.form.get('exercise')
         data=request.get_json()
-        #return  exercise_manager.delete_exercise_admin(email,esercizio)
         return  exercise_manager.delete_exercise_admin(data)
     
 #ritorna i preferred muscles dell'utente

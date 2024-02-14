@@ -1,7 +1,6 @@
 from utils import connect_go_server, is_valid_email, is_valid_password
 import json
 
-# (account) deve essere dizionario con i campi 'email' e 'password'
 def login(account):
     if not isinstance(account, dict):
         return f"Errore login: account deve essere un dizionario, invece è di tipo {type(account)}"
@@ -15,7 +14,6 @@ def login(account):
     else:
         return "Errore formato email e/o password non validi"
 
-# In questo caso account deve essere un dizionario con i campi 'email', 'password', 'name', 'surname'
 def signin(account):
     if not isinstance(account, dict):
         return f"Errore signin: account deve essere un dizionario, invece è di tipo {type(account)}"
@@ -33,6 +31,7 @@ def modifica_profilo(account):
     if not isinstance(account, dict):
         return f"Errore signin: account deve essere un dizionario, invece è di tipo {type(account)}"    
     flag=False
+    #Si verificano i campi che si vogliono modificare
     #nel caso in cui si vuole cambiare la password
     if account['newpassword']!='':
         if 'password' not in account or account['password']=='':
@@ -64,6 +63,7 @@ def modifica_profilo(account):
     #in questo caso non c'è la necessità di verificare la password
     if account['nome']!="":
         try:
+            #preparo il dizionario da inviare al server
             modify={}
             modify['email']=account['email']
             modify['newname']=account['nome']
@@ -122,31 +122,22 @@ def getInfo(email):
 
 #ritorna un json con la scheda dell'utente        
 def get_exercise(account):
-    #if is_valid_email(account):
-        try:
-            r = connect_go_server('getWorkoutPlan', account)
-            return json.dumps(r)
-        except Exception as e:
-            return f"Errore: {e}"
-    #else:
-    #    return "email utente non valida"
+    try:
+        r = connect_go_server('getWorkoutPlan', account)
+        return json.dumps(r)
+    except Exception as e:
+        return f"Errore: {e}"
 
 #ritorna un json con i muscoli preferiti dell'utente    
 def get_muscoli_preferiti(email):
-    #if is_valid_email(email):
-        try:
-            r = connect_go_server('getPreferredMuscles', email)
-        except Exception as e:
-            return f"Errore: {e}"
-        return json.dumps(r)
-    #else:
-    #    return "email utente non valida"
+    try:
+        r = connect_go_server('getPreferredMuscles', email)
+    except Exception as e:
+        return f"Errore: {e}"
+    return json.dumps(r)
 
 #aggiunge alla scheda di email l'esercizio
 def aggiungi_esercizio_scheda(data):
-    #dict={}
-    #dict['email']=email
-    #dict['exercise']=esercizio
     try:
         r = connect_go_server('addExerciseWorkout', data)
         return r
@@ -155,9 +146,6 @@ def aggiungi_esercizio_scheda(data):
 
 #elimina dalla scheda di email l'esercizio
 def elimina_esercizio_scheda(data):
-    #dict={}
-    #dict['email']=email
-    #dict['exercise']=esercizio
     try:
         r = connect_go_server('deleteExerciseWorkout', data)
         return r

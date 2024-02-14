@@ -10,7 +10,7 @@ def generate_muscle_stats(data):
     # Calcolo del conteggio dei muscoli allenati
     muscle_count = muscle_series.value_counts()
 
-    # Calcolo delle percentuali dei muscoli allenati rispetto al totale degli esercizi (len(df))
+    # Calcolo delle percentuali dei muscoli allenati rispetto al totale degli esercizi (len(muscle_series))
     muscle_percentage = (muscle_count / len(muscle_series)) * 100
 
     # Creazione di un grafico a torta per visualizzare le percentuali dei muscoli allenati
@@ -21,7 +21,7 @@ def generate_muscle_stats(data):
     plt.axis('equal')  # Garantisce un grafico dall'aspetto circolare, non ellittico
     plt.tight_layout()
 
-    # Se invece vogliamo che il file lo trasmetta tramite Restful APIs, python è un server e usiamo Flask con la Route /get_muscle_stats
+    # Poiché vogliamo che il file lo trasmetta tramite richiesta HTTP, python è un server e usiamo la send_file() di Flask con la Route /get_muscle_stats
     image_stream = BytesIO()
     plt.savefig(image_stream, format='png')
     image_stream.seek(0)
