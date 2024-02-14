@@ -35,6 +35,12 @@ namespace Volpe_Ragusa.csharp
                 labelBenvenuto.Text="Benvenuto nel tuo profilo "+utente.name + ", qui puoi aggiungere o eliminare esercizi dalla lista ";
                 buttonScheda.Hide();
                 buttonImpostazioni.Hide();
+                /*Label label2=new Label();
+                label2.Text = "nome:";
+                label2.AutoSize=true;
+                Label labelAggiungi= new Label();
+                labelAggiungi.Text = "Aggiungi esercizio";
+                labelAggiungi.AutoSize=true;*/
                 flowLayoutPanel1.Controls.Add(label2);
                 flowLayoutPanel1.Controls.Add(labelAggiungi);
                 flowLayoutPanel1.Controls.Add(textBox1);
