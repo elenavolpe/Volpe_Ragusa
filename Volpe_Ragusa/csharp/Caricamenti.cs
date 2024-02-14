@@ -468,6 +468,7 @@ public class Caricamenti{
 
         public void get_scheda(string email, FlowLayoutPanel contenitore)
         {
+            contenitore.Controls.Clear();
             using (WebClient client = new WebClient())
             {
                 try
