@@ -29,11 +29,6 @@
         private void InitializeComponent()
         {
             labelBenvenuto = new Label();
-            /*labelNome = new Label();
-            labelEmail = new Label();
-            labelCognome = new Label();
-            labelEta = new Label();
-            labelMuscoli = new Label();*/
             buttonHome = new Button();
             buttonScheda = new Button();
             buttonLogout = new Button();
@@ -51,67 +46,19 @@
             // labelBenvenuto
             // 
             labelBenvenuto.AutoSize = true;
-            labelBenvenuto.Location = new Point(40, 21);
+            labelBenvenuto.Location = new Point(28, 13);
+            labelBenvenuto.Margin = new Padding(2, 0, 2, 0);
             labelBenvenuto.Name = "labelBenvenuto";
-            labelBenvenuto.Size = new Size(265, 25);
+            labelBenvenuto.Size = new Size(176, 15);
             labelBenvenuto.TabIndex = 0;
             labelBenvenuto.Text = "Benvenuto nel tuo profilo nome";
             // 
-            // labelNome
-            // 
-            /*labelNome.AutoSize = true;
-            labelNome.Location = new Point(272, 143);
-            labelNome.Name = "labelNome";
-            labelNome.Size = new Size(113, 25);
-            labelNome.TabIndex = 1;
-            labelNome.Text = "nome: nome";
-            labelNome.Visible = false;
-            // 
-            // labelEmail
-            // 
-            labelEmail.AutoSize = true;
-            labelEmail.Location = new Point(272, 106);
-            labelEmail.Name = "labelEmail";
-            labelEmail.Size = new Size(105, 25);
-            labelEmail.TabIndex = 2;
-            labelEmail.Text = "email: email";
-            labelEmail.Visible = false;
-            // 
-            // labelCognome
-            // 
-            labelCognome.AutoSize = true;
-            labelCognome.Location = new Point(272, 186);
-            labelCognome.Name = "labelCognome";
-            labelCognome.Size = new Size(173, 25);
-            labelCognome.TabIndex = 3;
-            labelCognome.Text = "cognome: cognome";
-            labelCognome.Visible = false;
-            // 
-            // labelEta
-            // 
-            labelEta.AutoSize = true;
-            labelEta.Location = new Point(272, 231);
-            labelEta.Name = "labelEta";
-            labelEta.Size = new Size(69, 25);
-            labelEta.TabIndex = 4;
-            labelEta.Text = "età: età";
-            labelEta.Visible = false;
-            // 
-            // labelMuscoli
-            // 
-            labelMuscoli.AutoSize = true;
-            labelMuscoli.Location = new Point(272, 276);
-            labelMuscoli.Name = "labelMuscoli";
-            labelMuscoli.Size = new Size(209, 25);
-            labelMuscoli.TabIndex = 5;
-            labelMuscoli.Text = "muscoli preferiti: muscoli";
-            labelMuscoli.Visible = false;*/
-            // 
             // buttonHome
             // 
-            buttonHome.Location = new Point(644, 119);
+            buttonHome.Location = new Point(650, 71);
+            buttonHome.Margin = new Padding(2);
             buttonHome.Name = "buttonHome";
-            buttonHome.Size = new Size(144, 34);
+            buttonHome.Size = new Size(101, 20);
             buttonHome.TabIndex = 6;
             buttonHome.Text = "Home";
             buttonHome.UseVisualStyleBackColor = true;
@@ -119,9 +66,10 @@
             // 
             // buttonScheda
             // 
-            buttonScheda.Location = new Point(644, 175);
+            buttonScheda.Location = new Point(650, 105);
+            buttonScheda.Margin = new Padding(2);
             buttonScheda.Name = "buttonScheda";
-            buttonScheda.Size = new Size(144, 34);
+            buttonScheda.Size = new Size(101, 20);
             buttonScheda.TabIndex = 7;
             buttonScheda.Text = "La tua scheda";
             buttonScheda.UseVisualStyleBackColor = true;
@@ -129,9 +77,10 @@
             // 
             // buttonLogout
             // 
-            buttonLogout.Location = new Point(644, 285);
+            buttonLogout.Location = new Point(650, 171);
+            buttonLogout.Margin = new Padding(2);
             buttonLogout.Name = "buttonLogout";
-            buttonLogout.Size = new Size(144, 34);
+            buttonLogout.Size = new Size(101, 20);
             buttonLogout.TabIndex = 8;
             buttonLogout.Text = "Logout";
             buttonLogout.UseVisualStyleBackColor = true;
@@ -139,9 +88,10 @@
             // 
             // buttonImpostazioni
             // 
-            buttonImpostazioni.Location = new Point(644, 231);
+            buttonImpostazioni.Location = new Point(650, 139);
+            buttonImpostazioni.Margin = new Padding(2);
             buttonImpostazioni.Name = "buttonImpostazioni";
-            buttonImpostazioni.Size = new Size(144, 34);
+            buttonImpostazioni.Size = new Size(101, 20);
             buttonImpostazioni.TabIndex = 9;
             buttonImpostazioni.Text = "Impostazioni";
             buttonImpostazioni.UseVisualStyleBackColor = true;
@@ -169,7 +119,7 @@
             // 
             textBox1.Location = new Point(4, 78);
             textBox1.Name = "textBox1";
-            textBox1.Size = new Size(241, 31);
+            textBox1.Size = new Size(241, 23);
             textBox1.TabIndex = 2;
             // 
             // label3
@@ -185,7 +135,7 @@
             // 
             textBox2.Location = new Point(-1, 148);
             textBox2.Name = "textBox2";
-            textBox2.Size = new Size(529, 31);
+            textBox2.Size = new Size(529, 23);
             textBox2.TabIndex = 4;
             // 
             // label4
@@ -208,22 +158,24 @@
             // 
             // flowLayoutPanel1
             // 
-            flowLayoutPanel1.Location = new Point(23, 62);
+            flowLayoutPanel1.Location = new Point(16, 37);
+            flowLayoutPanel1.Margin = new Padding(2);
             flowLayoutPanel1.Name = "flowLayoutPanel1";
-            flowLayoutPanel1.Size = new Size(615, 424);
+            flowLayoutPanel1.Size = new Size(430, 254);
             flowLayoutPanel1.TabIndex = 10;
             // 
             // Account
             // 
-            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 495);
+            ClientSize = new Size(872, 297);
             Controls.Add(flowLayoutPanel1);
             Controls.Add(buttonImpostazioni);
             Controls.Add(buttonLogout);
             Controls.Add(buttonScheda);
             Controls.Add(buttonHome);
             Controls.Add(labelBenvenuto);
+            Margin = new Padding(2);
             Name = "Account";
             Text = "Account";
             ResumeLayout(false);

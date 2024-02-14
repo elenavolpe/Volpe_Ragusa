@@ -37,18 +37,20 @@
             // labelHeader
             // 
             labelHeader.AutoSize = true;
-            labelHeader.Location = new Point(88, 22);
+            labelHeader.Location = new Point(62, 13);
+            labelHeader.Margin = new Padding(2, 0, 2, 0);
             labelHeader.Name = "labelHeader";
-            labelHeader.Size = new Size(207, 25);
+            labelHeader.Size = new Size(138, 15);
             labelHeader.TabIndex = 0;
             labelHeader.Text = "Ecco la tua scheda nome";
             labelHeader.Click += labelHeader_Click;
             // 
             // buttonAccount
             // 
-            buttonAccount.Location = new Point(676, 141);
+            buttonAccount.Location = new Point(628, 85);
+            buttonAccount.Margin = new Padding(2, 2, 2, 2);
             buttonAccount.Name = "buttonAccount";
-            buttonAccount.Size = new Size(112, 34);
+            buttonAccount.Size = new Size(78, 20);
             buttonAccount.TabIndex = 1;
             buttonAccount.Text = "Account";
             buttonAccount.UseVisualStyleBackColor = true;
@@ -56,9 +58,10 @@
             // 
             // buttonHome
             // 
-            buttonHome.Location = new Point(676, 193);
+            buttonHome.Location = new Point(628, 116);
+            buttonHome.Margin = new Padding(2, 2, 2, 2);
             buttonHome.Name = "buttonHome";
-            buttonHome.Size = new Size(112, 34);
+            buttonHome.Size = new Size(78, 20);
             buttonHome.TabIndex = 2;
             buttonHome.Text = "Home";
             buttonHome.UseVisualStyleBackColor = true;
@@ -66,20 +69,22 @@
             // 
             // PanelEsercizi
             // 
-            PanelEsercizi.Location = new Point(47, 70);
+            PanelEsercizi.Location = new Point(33, 42);
+            PanelEsercizi.Margin = new Padding(2, 2, 2, 2);
             PanelEsercizi.Name = "PanelEsercizi";
-            PanelEsercizi.Size = new Size(582, 368);
+            PanelEsercizi.Size = new Size(407, 221);
             PanelEsercizi.TabIndex = 3;
             // 
             // Scheda
             // 
-            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(871, 270);
             Controls.Add(PanelEsercizi);
             Controls.Add(buttonHome);
             Controls.Add(buttonAccount);
             Controls.Add(labelHeader);
+            Margin = new Padding(2, 2, 2, 2);
             Name = "Scheda";
             Text = "Scheda";
             ResumeLayout(false);
