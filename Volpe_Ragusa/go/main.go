@@ -41,27 +41,28 @@ func main() {
 		}
 	})
 
-	mux.HandleFunc("/deleteAccount", func(w http.ResponseWriter, r *http.Request) {
-		if r.Method == http.MethodPost {
-			var deleteReq types.EmailReq
-			err := json.NewDecoder(r.Body).Decode(&deleteReq)
-			if err != nil {
-				http.Error(w, "Errore durante la decodifica del JSON: "+err.Error(), http.StatusBadRequest)
-				return
-			}
-			done := make(chan bool)
-			var s string
-			go database.DeleteAccount(deleteReq.Email, done)
-			if <-done {
-				s = "success"
-			} else {
-				s = "failure"
-			}
-			w.Write([]byte(s))
-		} else {
-			http.Error(w, "Metodo di richiesta non valido!", http.StatusMethodNotAllowed)
-		}
-	})
+	// D
+	// mux.HandleFunc("/deleteAccount", func(w http.ResponseWriter, r *http.Request) {
+	// 	if r.Method == http.MethodPost {
+	// 		var deleteReq types.EmailReq
+	// 		err := json.NewDecoder(r.Body).Decode(&deleteReq)
+	// 		if err != nil {
+	// 			http.Error(w, "Errore durante la decodifica del JSON: "+err.Error(), http.StatusBadRequest)
+	// 			return
+	// 		}
+	// 		done := make(chan bool)
+	// 		var s string
+	// 		go database.DeleteAccount(deleteReq.Email, done)
+	// 		if <-done {
+	// 			s = "success"
+	// 		} else {
+	// 			s = "failure"
+	// 		}
+	// 		w.Write([]byte(s))
+	// 	} else {
+	// 		http.Error(w, "Metodo di richiesta non valido!", http.StatusMethodNotAllowed)
+	// 	}
+	// })
 
 	// mux.HandleFunc("/modifyprofile", func(w http.ResponseWriter, r *http.Request) {
 	// 	//TO_DO, riceve in input un dizionario con key e dato da modificare
@@ -426,75 +427,76 @@ func main() {
 
 	// Endpoints per le funzionalità di gestione dei dati relativi ai muscoli
 
-	mux.HandleFunc("/addMuscle", func(w http.ResponseWriter, r *http.Request) {
-		if r.Method == http.MethodPost {
-			var muscleReq types.Muscle
-			err := json.NewDecoder(r.Body).Decode(&muscleReq)
-			if err != nil {
-				http.Error(w, "Errore durante la decodifica del JSON: "+err.Error(), http.StatusBadRequest)
-				return
-			}
-			done := make(chan bool)
-			var s string
-			go database.AddMuscle(muscleReq.Name, done)
-			if <-done {
-				s = "success"
-			} else {
-				s = "failure"
-			}
-			w.Write([]byte(s))
-		} else {
-			http.Error(w, "Metodo di richiesta non valido!", http.StatusMethodNotAllowed)
-		}
-	})
+	// D
+	// mux.HandleFunc("/addMuscle", func(w http.ResponseWriter, r *http.Request) {
+	// 	if r.Method == http.MethodPost {
+	// 		var muscleReq types.Muscle
+	// 		err := json.NewDecoder(r.Body).Decode(&muscleReq)
+	// 		if err != nil {
+	// 			http.Error(w, "Errore durante la decodifica del JSON: "+err.Error(), http.StatusBadRequest)
+	// 			return
+	// 		}
+	// 		done := make(chan bool)
+	// 		var s string
+	// 		go database.AddMuscle(muscleReq.Name, done)
+	// 		if <-done {
+	// 			s = "success"
+	// 		} else {
+	// 			s = "failure"
+	// 		}
+	// 		w.Write([]byte(s))
+	// 	} else {
+	// 		http.Error(w, "Metodo di richiesta non valido!", http.StatusMethodNotAllowed)
+	// 	}
+	// })
 
-	mux.HandleFunc("/editMuscleName", func(w http.ResponseWriter, r *http.Request) {
-		if r.Method == http.MethodPost {
-			type MuscleReq struct {
-				OldMuscle string `json:"old_muscle"`
-				NewMuscle string `json:"new_muscle"`
-			}
-			var muscleReq MuscleReq
-			err := json.NewDecoder(r.Body).Decode(&muscleReq)
-			if err != nil {
-				http.Error(w, "Errore durante la decodifica del JSON: "+err.Error(), http.StatusBadRequest)
-				return
-			}
-			done := make(chan bool)
-			var s string
-			go database.EditMuscleName(muscleReq.OldMuscle, muscleReq.NewMuscle, done)
-			if <-done {
-				s = "success"
-			} else {
-				s = "failure"
-			}
-			w.Write([]byte(s))
-		} else {
-			http.Error(w, "Metodo di richiesta non valido!", http.StatusMethodNotAllowed)
-		}
-	})
+	// mux.HandleFunc("/editMuscleName", func(w http.ResponseWriter, r *http.Request) {
+	// 	if r.Method == http.MethodPost {
+	// 		type MuscleReq struct {
+	// 			OldMuscle string `json:"old_muscle"`
+	// 			NewMuscle string `json:"new_muscle"`
+	// 		}
+	// 		var muscleReq MuscleReq
+	// 		err := json.NewDecoder(r.Body).Decode(&muscleReq)
+	// 		if err != nil {
+	// 			http.Error(w, "Errore durante la decodifica del JSON: "+err.Error(), http.StatusBadRequest)
+	// 			return
+	// 		}
+	// 		done := make(chan bool)
+	// 		var s string
+	// 		go database.EditMuscleName(muscleReq.OldMuscle, muscleReq.NewMuscle, done)
+	// 		if <-done {
+	// 			s = "success"
+	// 		} else {
+	// 			s = "failure"
+	// 		}
+	// 		w.Write([]byte(s))
+	// 	} else {
+	// 		http.Error(w, "Metodo di richiesta non valido!", http.StatusMethodNotAllowed)
+	// 	}
+	// })
 
-	mux.HandleFunc("/deleteMuscle", func(w http.ResponseWriter, r *http.Request) {
-		if r.Method == http.MethodPost {
-			var muscleReq types.Muscle
-			err := json.NewDecoder(r.Body).Decode(&muscleReq)
-			if err != nil {
-				http.Error(w, "Errore durante la decodifica del JSON: "+err.Error(), http.StatusBadRequest)
-				return
-			}
-			done := make(chan bool)
-			var s string
-			go database.DeleteMuscle(muscleReq.Name, done)
-			if <-done {
-				s = "success"
-			} else {
-				s = "failure"
-			}
-			w.Write([]byte(s))
-		} else {
-			http.Error(w, "Metodo di richiesta non valido!", http.StatusMethodNotAllowed)
-		}
-	})
+	// mux.HandleFunc("/deleteMuscle", func(w http.ResponseWriter, r *http.Request) {
+	// 	if r.Method == http.MethodPost {
+	// 		var muscleReq types.Muscle
+	// 		err := json.NewDecoder(r.Body).Decode(&muscleReq)
+	// 		if err != nil {
+	// 			http.Error(w, "Errore durante la decodifica del JSON: "+err.Error(), http.StatusBadRequest)
+	// 			return
+	// 		}
+	// 		done := make(chan bool)
+	// 		var s string
+	// 		go database.DeleteMuscle(muscleReq.Name, done)
+	// 		if <-done {
+	// 			s = "success"
+	// 		} else {
+	// 			s = "failure"
+	// 		}
+	// 		w.Write([]byte(s))
+	// 	} else {
+	// 		http.Error(w, "Metodo di richiesta non valido!", http.StatusMethodNotAllowed)
+	// 	}
+	// })
 
 	mux.HandleFunc("/getMuscles", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == http.MethodPost {
@@ -511,51 +513,53 @@ func main() {
 	})
 
 	// Endpoints per le funzionalità di gestione dei muscoli relativi agli esercizi associati
-	mux.HandleFunc("/addMuscleExercise", func(w http.ResponseWriter, r *http.Request) {
-		if r.Method == http.MethodPost {
-			var muscleExercise types.MuscleExercise
-			err := json.NewDecoder(r.Body).Decode(&muscleExercise)
-			if err != nil {
-				http.Error(w, "Errore durante la decodifica del JSON: "+err.Error(), http.StatusBadRequest)
-				return
-			}
-			done := make(chan bool)
-			var s string
-			go database.AddMuscleExercise(muscleExercise.Exercise, muscleExercise.Muscle, done)
-			if <-done {
-				s = "success"
-			} else {
-				s = "failure"
-			}
-			w.Write([]byte(s))
-		} else {
-			http.Error(w, "Metodo di richiesta non valido!", http.StatusMethodNotAllowed)
-		}
-	})
+	// D
+	// mux.HandleFunc("/addMuscleExercise", func(w http.ResponseWriter, r *http.Request) {
+	// 	if r.Method == http.MethodPost {
+	// 		var muscleExercise types.MuscleExercise
+	// 		err := json.NewDecoder(r.Body).Decode(&muscleExercise)
+	// 		if err != nil {
+	// 			http.Error(w, "Errore durante la decodifica del JSON: "+err.Error(), http.StatusBadRequest)
+	// 			return
+	// 		}
+	// 		done := make(chan bool)
+	// 		var s string
+	// 		go database.AddMuscleExercise(muscleExercise.Exercise, muscleExercise.Muscle, done)
+	// 		if <-done {
+	// 			s = "success"
+	// 		} else {
+	// 			s = "failure"
+	// 		}
+	// 		w.Write([]byte(s))
+	// 	} else {
+	// 		http.Error(w, "Metodo di richiesta non valido!", http.StatusMethodNotAllowed)
+	// 	}
+	// })
 
-	mux.HandleFunc("/deleteMuscleExercise", func(w http.ResponseWriter, r *http.Request) {
-		if r.Method == http.MethodPost {
-			var muscleExercise types.MuscleExercise
-			err := json.NewDecoder(r.Body).Decode(&muscleExercise)
-			if err != nil {
-				http.Error(w, "Errore durante la decodifica del JSON: "+err.Error(), http.StatusBadRequest)
-				return
-			}
-			done := make(chan bool)
-			var s string
-			go database.DeleteMuscleExercise(muscleExercise.Exercise, muscleExercise.Muscle, done)
-			if <-done {
-				s = "success"
-			} else {
-				s = "failure"
-			}
-			w.Write([]byte(s))
-		} else {
-			http.Error(w, "Metodo di richiesta non valido!", http.StatusMethodNotAllowed)
-		}
-	})
+	// mux.HandleFunc("/deleteMuscleExercise", func(w http.ResponseWriter, r *http.Request) {
+	// 	if r.Method == http.MethodPost {
+	// 		var muscleExercise types.MuscleExercise
+	// 		err := json.NewDecoder(r.Body).Decode(&muscleExercise)
+	// 		if err != nil {
+	// 			http.Error(w, "Errore durante la decodifica del JSON: "+err.Error(), http.StatusBadRequest)
+	// 			return
+	// 		}
+	// 		done := make(chan bool)
+	// 		var s string
+	// 		go database.DeleteMuscleExercise(muscleExercise.Exercise, muscleExercise.Muscle, done)
+	// 		if <-done {
+	// 			s = "success"
+	// 		} else {
+	// 			s = "failure"
+	// 		}
+	// 		w.Write([]byte(s))
+	// 	} else {
+	// 		http.Error(w, "Metodo di richiesta non valido!", http.StatusMethodNotAllowed)
+	// 	}
+	// })
 
 	// Endpoints per le funzionalità di gestione dei muscoli preferiti dell'utente
+	// DA CONTROLLARE QUESTE 2 a seguire
 	mux.HandleFunc("/addPreferredMuscle", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == http.MethodPost {
 			var muscleReq types.MuscleReq
@@ -623,79 +627,80 @@ func main() {
 	})
 
 	// Endpoints per le funzionalità di gestione delle schede degli utenti
-	mux.HandleFunc("/updateWorkoutName", func(w http.ResponseWriter, r *http.Request) {
-		if r.Method == http.MethodPost {
-			type ModifyReq struct {
-				Email       string `json:"email"`
-				WorkoutName string `json:"workout_name"`
-			}
-			var modifyReq ModifyReq
-			err := json.NewDecoder(r.Body).Decode(&modifyReq)
-			if err != nil {
-				http.Error(w, "Errore durante la decodifica del JSON: "+err.Error(), http.StatusBadRequest)
-				return
-			}
-			done := make(chan bool)
-			var s string
-			go database.UpdateUserWorkoutName(modifyReq.Email, modifyReq.WorkoutName, done)
-			if <-done {
-				s = "success"
-			} else {
-				s = "failure"
-			}
-			w.Write([]byte(s))
-		} else {
-			http.Error(w, "Metodo di richiesta non valido!", http.StatusMethodNotAllowed)
-		}
-	})
+	// D
+	// mux.HandleFunc("/updateWorkoutName", func(w http.ResponseWriter, r *http.Request) {
+	// 	if r.Method == http.MethodPost {
+	// 		type ModifyReq struct {
+	// 			Email       string `json:"email"`
+	// 			WorkoutName string `json:"workout_name"`
+	// 		}
+	// 		var modifyReq ModifyReq
+	// 		err := json.NewDecoder(r.Body).Decode(&modifyReq)
+	// 		if err != nil {
+	// 			http.Error(w, "Errore durante la decodifica del JSON: "+err.Error(), http.StatusBadRequest)
+	// 			return
+	// 		}
+	// 		done := make(chan bool)
+	// 		var s string
+	// 		go database.UpdateUserWorkoutName(modifyReq.Email, modifyReq.WorkoutName, done)
+	// 		if <-done {
+	// 			s = "success"
+	// 		} else {
+	// 			s = "failure"
+	// 		}
+	// 		w.Write([]byte(s))
+	// 	} else {
+	// 		http.Error(w, "Metodo di richiesta non valido!", http.StatusMethodNotAllowed)
+	// 	}
+	// })
 
-	mux.HandleFunc("/updateWorkoutDesc", func(w http.ResponseWriter, r *http.Request) {
-		if r.Method == http.MethodPost {
-			type ModifyReq struct {
-				Email       string `json:"email"`
-				WorkoutDesc string `json:"workout_desc"`
-			}
-			var modifyReq ModifyReq
-			err := json.NewDecoder(r.Body).Decode(&modifyReq)
-			if err != nil {
-				http.Error(w, "Errore durante la decodifica del JSON: "+err.Error(), http.StatusBadRequest)
-				return
-			}
-			done := make(chan bool)
-			var s string
-			go database.UpdateUserWorkoutDescription(modifyReq.Email, modifyReq.WorkoutDesc, done)
-			if <-done {
-				s = "success"
-			} else {
-				s = "failure"
-			}
-			w.Write([]byte(s))
-		} else {
-			http.Error(w, "Metodo di richiesta non valido!", http.StatusMethodNotAllowed)
-		}
-	})
+	// mux.HandleFunc("/updateWorkoutDesc", func(w http.ResponseWriter, r *http.Request) {
+	// 	if r.Method == http.MethodPost {
+	// 		type ModifyReq struct {
+	// 			Email       string `json:"email"`
+	// 			WorkoutDesc string `json:"workout_desc"`
+	// 		}
+	// 		var modifyReq ModifyReq
+	// 		err := json.NewDecoder(r.Body).Decode(&modifyReq)
+	// 		if err != nil {
+	// 			http.Error(w, "Errore durante la decodifica del JSON: "+err.Error(), http.StatusBadRequest)
+	// 			return
+	// 		}
+	// 		done := make(chan bool)
+	// 		var s string
+	// 		go database.UpdateUserWorkoutDescription(modifyReq.Email, modifyReq.WorkoutDesc, done)
+	// 		if <-done {
+	// 			s = "success"
+	// 		} else {
+	// 			s = "failure"
+	// 		}
+	// 		w.Write([]byte(s))
+	// 	} else {
+	// 		http.Error(w, "Metodo di richiesta non valido!", http.StatusMethodNotAllowed)
+	// 	}
+	// })
 
-	mux.HandleFunc("/deleteUserWorkout", func(w http.ResponseWriter, r *http.Request) {
-		if r.Method == http.MethodPost {
-			var deleteReq types.EmailReq
-			err := json.NewDecoder(r.Body).Decode(&deleteReq)
-			if err != nil {
-				http.Error(w, "Errore durante la decodifica del JSON: "+err.Error(), http.StatusBadRequest)
-				return
-			}
-			done := make(chan bool)
-			var s string
-			go database.DeleteUserWorkout(deleteReq.Email, done)
-			if <-done {
-				s = "success"
-			} else {
-				s = "failure"
-			}
-			w.Write([]byte(s))
-		} else {
-			http.Error(w, "Metodo di richiesta non valido!", http.StatusMethodNotAllowed)
-		}
-	})
+	// mux.HandleFunc("/deleteUserWorkout", func(w http.ResponseWriter, r *http.Request) {
+	// 	if r.Method == http.MethodPost {
+	// 		var deleteReq types.EmailReq
+	// 		err := json.NewDecoder(r.Body).Decode(&deleteReq)
+	// 		if err != nil {
+	// 			http.Error(w, "Errore durante la decodifica del JSON: "+err.Error(), http.StatusBadRequest)
+	// 			return
+	// 		}
+	// 		done := make(chan bool)
+	// 		var s string
+	// 		go database.DeleteUserWorkout(deleteReq.Email, done)
+	// 		if <-done {
+	// 			s = "success"
+	// 		} else {
+	// 			s = "failure"
+	// 		}
+	// 		w.Write([]byte(s))
+	// 	} else {
+	// 		http.Error(w, "Metodo di richiesta non valido!", http.StatusMethodNotAllowed)
+	// 	}
+	// })
 
 	// Endpoints per le funzionalità di gestione degli esercizi nelle schede di allenamento
 	mux.HandleFunc("/addExerciseWorkout", func(w http.ResponseWriter, r *http.Request) {
