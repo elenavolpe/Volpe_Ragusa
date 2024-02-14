@@ -265,58 +265,6 @@ func main() {
 		}
 	})
 
-	mux.HandleFunc("/editExerciseName", func(w http.ResponseWriter, r *http.Request) {
-		if r.Method == http.MethodPost {
-			type EditReq struct {
-				OldName string `json:"oldName"`
-				NewName string `json:"newName"`
-			}
-			var editReq EditReq
-			err := json.NewDecoder(r.Body).Decode(&editReq)
-			if err != nil {
-				http.Error(w, "Errore durante la decodifica del JSON: "+err.Error(), http.StatusBadRequest)
-				return
-			}
-			done := make(chan bool)
-			var s string
-			go database.EditExerciseName(editReq.OldName, editReq.NewName, done)
-			if <-done {
-				s = "success"
-			} else {
-				s = "failure"
-			}
-			w.Write([]byte(s))
-		} else {
-			http.Error(w, "Metodo di richiesta non valido!", http.StatusMethodNotAllowed)
-		}
-	})
-
-	mux.HandleFunc("/editExerciseDesc", func(w http.ResponseWriter, r *http.Request) {
-		if r.Method == http.MethodPost {
-			type EditReq struct {
-				Name           string `json:"name"`
-				NewDescription string `json:"newDescription"`
-			}
-			var editReq EditReq
-			err := json.NewDecoder(r.Body).Decode(&editReq)
-			if err != nil {
-				http.Error(w, "Errore durante la decodifica del JSON: "+err.Error(), http.StatusBadRequest)
-				return
-			}
-			done := make(chan bool)
-			var s string
-			go database.EditExerciseDescription(editReq.Name, editReq.NewDescription, done)
-			if <-done {
-				s = "success"
-			} else {
-				s = "failure"
-			}
-			w.Write([]byte(s))
-		} else {
-			http.Error(w, "Metodo di richiesta non valido!", http.StatusMethodNotAllowed)
-		}
-	})
-
 	mux.HandleFunc("/getExercises", func(w http.ResponseWriter, r *http.Request) {
 		exercises := make(chan []types.ExerciseWorkout)
 		go database.GetExercises(exercises)
