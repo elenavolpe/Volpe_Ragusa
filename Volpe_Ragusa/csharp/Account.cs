@@ -85,8 +85,12 @@ namespace Volpe_Ragusa.csharp
                 panel.Controls.Add(labeleta);
                 Label labelmuscoli= new Label();
                 labelmuscoli.AutoSize=true;
-                string stringaConVirgole = string.Join(", ", utente.muscoli);
-                labelmuscoli.Text="muscoli preferiti: " + stringaConVirgole;
+                if(utente.muscoli!=null){
+                    string stringaConVirgole = string.Join(", ", utente.muscoli);
+                    labelmuscoli.Text="muscoli preferiti: " + stringaConVirgole;
+                }else{
+                    labelmuscoli.Text="muscoli preferiti: nessuno";
+                }
                 panel.Controls.Add(labelmuscoli);
                 flowLayoutPanel1.Controls.Add(panel);
                 //get_grafico();
