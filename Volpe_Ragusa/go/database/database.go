@@ -545,6 +545,15 @@ func DeleteExercise(name string, done chan<- bool) {
 	}
 
 	deleteQuery = "DELETE FROM exercise_muscles WHERE exerciseid = ?"
+	_, err = tx.Exec(deleteQuery, ex_id)
+	if err != nil {
+		log.Println(err)
+		done <- false
+		tx.Rollback()
+		return
+	}
+
+	deleteQuery = "DELETE FROM exercises WHERE id = ?"
 	result, err := tx.Exec(deleteQuery, ex_id)
 	if err != nil {
 		log.Println(err)
@@ -554,30 +563,6 @@ func DeleteExercise(name string, done chan<- bool) {
 	}
 
 	rowsAffected, err := result.RowsAffected()
-	if err != nil {
-		log.Println(err)
-		done <- false
-		tx.Rollback()
-		return
-	}
-
-	if rowsAffected == 0 {
-		log.Println("Query failed: " + deleteQuery)
-		done <- false
-		tx.Rollback()
-		return
-	}
-
-	deleteQuery = "DELETE FROM exercises WHERE id = ?"
-	result, err = tx.Exec(deleteQuery, ex_id)
-	if err != nil {
-		log.Println(err)
-		done <- false
-		tx.Rollback()
-		return
-	}
-
-	rowsAffected, err = result.RowsAffected()
 	if err != nil {
 		log.Println(err)
 		done <- false
