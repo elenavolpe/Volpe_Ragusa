@@ -1,4 +1,4 @@
-//TO_DO sistemarli esattamente con i label del json
+
 public class ExerciseData
 {
     public Exercise Exercise { get; set; }
