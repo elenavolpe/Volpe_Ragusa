@@ -1,5 +1,7 @@
 package types
 
+// Definizione dei tipi di dati che verranno utilizzati nel progetto
+
 type Exercise struct {
 	Name        string `json:"name"` // Struct tag che serve a dire a go come esportare la variabile in formato json
 	Description string `json:"description"`

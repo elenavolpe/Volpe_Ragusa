@@ -1,5 +1,7 @@
 package utility
 
+// FindDifferentStrings ritorna due slice di stringhe, la prima contiene le stringhe presenti in slice1 ma non in slice2, la seconda contiene le stringhe presenti in slice2 ma non in slice1
+
 func FindDifferentStrings(slice1, slice2 []string) (s1Diff, s2Diff []string) {
 	for _, s1 := range slice1 {
 		found := false
