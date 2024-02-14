@@ -1316,6 +1316,7 @@ func DeleteUserWorkout(user_email string, done chan<- bool) {
 	}
 
 	// Reset delle informazioni della scheda dell'utente (nome e descrizione a NULL)
+	//TO_DO: se lascio questa funzione (penso di no), dovrei diminuire il popularity_score degli esercizi presenti nella scheda dell'utente
 	editQuery := "UPDATE users SET workout_name = NULL, workout_description = NULL WHERE id = ?"
 	result, err = tx.Exec(editQuery, uid)
 	if err != nil {
