@@ -14,15 +14,13 @@ public class Caricamenti{
         {
             TextBox textBox = new TextBox();
             textBox.Multiline = true;
-            //textBox.ScrollBars = ScrollBars.Vertical;
+
             textBox.ReadOnly = true;
             textBox.Width = 500;
             textBox.Height = 100;
             textBox.Font = new Font(textBox.Font, FontStyle.Bold);
             textBox.Text = "Ecco gli esercizi che ti consigliamo in base ai tuoi muscoli preferiti ";
-            /*Label label=new Label();
-            label.AutoSize=true;
-            label.Text="Ecco gli esercizi che ti consigliamo in base ai tuoi muscoli preferiti ";*/
+
             contenitore.Controls.Add(textBox);
             using (WebClient client = new WebClient())
             {
@@ -62,26 +60,16 @@ public class Caricamenti{
 
                             TextBox descrizione = new TextBox();
                             descrizione.Multiline = true;
-                            //descrizione.ScrollBars = ScrollBars.Vertical;
                             descrizione.ReadOnly = true;
                             descrizione.Width = 500;
                             descrizione.Height = 100;
                             descrizione.Text = exerciseData.Exercise.Description;
                             panel.Controls.Add(descrizione);
-                            /*Label labelDescription = new Label();
-                            labelDescription.AutoSize=true;
-                            //labelDescription.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-                            labelDescription.Text=exerciseData.Exercise.Description;
-                            panel.Controls.Add(labelDescription);*/
 
                             Label labelMuscles = new Label();
                             labelMuscles.AutoSize=true;
-                            //labelMuscles.Text=exerciseData.Muscles.ToString();
                             string stringaConVirgole = string.Join(", ", exerciseData.Muscles);
                             labelMuscles.Text = stringaConVirgole;
-                            /*foreach(string muscle in exerciseData.Muscles){
-                                labelMuscles.Text=muscle +", ";
-                            }*/
                             panel.Controls.Add(labelMuscles);
                             
                             Button button = new Button();
@@ -95,8 +83,7 @@ public class Caricamenti{
                                 button.Click += eliminaEsercizio;
                             }
                             panel.Controls.Add(button);
-                            //TO_DO sistemare grandezza di questo panel
-                            //PanelNovità.Controls.Add(panel);
+
                             contenitore.Controls.Add(panel);
                         }
                     }
@@ -138,18 +125,12 @@ public class Caricamenti{
 
                     TextBox textBox = new TextBox();
                     textBox.Multiline = true;
-                    //textBox.ScrollBars = ScrollBars.Vertical;
                     textBox.ReadOnly = true;
                     textBox.Width = 500;
                     textBox.Height = 100;
                     textBox.Font = new Font(textBox.Font, FontStyle.Bold);
                     textBox.Text = "ecco il grafico che rappresenta la % di muscoli che stai allenando in base alla tua scheda ";
                     panel.Controls.Add(textBox);
-
-                    /*Label label=new Label();
-                    label.AutoSize=true;
-                    label.Text="ecco il grafico che rappresenta la % di muscoli che stai allenando in base alla tua scheda ";
-                    contenitore.Controls.Add(label);*/
 
                     PictureBox pictureBox= new PictureBox();
                     pictureBox.Size = new Size(500, 400);
@@ -169,17 +150,13 @@ public class Caricamenti{
         {   
             TextBox textBox = new TextBox();
             textBox.Multiline = true;
-            //textBox.ScrollBars = ScrollBars.Vertical;
+
             textBox.ReadOnly = true;
             textBox.Width = 500;
             textBox.Height = 100;
             textBox.Font = new Font(textBox.Font, FontStyle.Bold);
             textBox.Text = "Perchè non aggiungi uno di questi esercizi? Sembrerebbe che stai trascurando qualche gruppo muscolare ";
             contenitore.Controls.Add(textBox);
-            /*Label label=new Label();
-            label.AutoSize=true;
-            label.Text="Perchè non aggiungi uno di questi esercizi? Sembrerebbe che stai trascurando qualche gruppo muscolare ";
-            contenitore.Controls.Add(label);*/
             using (WebClient client = new WebClient())
             {
                 try
@@ -217,25 +194,17 @@ public class Caricamenti{
 
                             TextBox descrizione = new TextBox();
                             descrizione.Multiline = true;
-                            //descrizione.ScrollBars = ScrollBars.Vertical;
                             descrizione.ReadOnly = true;
                             descrizione.Width = 500;
                             descrizione.Height = 100;
                             descrizione.Text = exerciseData.Exercise.Description;
                             panel.Controls.Add(descrizione);
 
-                            /*Label labelDescription = new Label();
-                            labelDescription.AutoSize=true;
-                            labelDescription.Text=exerciseData.Exercise.Description;
-                            panel.Controls.Add(labelDescription);*/
-
                             Label labelMuscles = new Label();
                             labelMuscles.AutoSize=true;
                             string stringaConVirgole = string.Join(", ", exerciseData.Muscles);
                             labelMuscles.Text = stringaConVirgole;
-                            /*foreach(string muscle in exerciseData.Muscles){
-                                labelMuscles.Text=muscle +", ";
-                            }*/
+
                             panel.Controls.Add(labelMuscles);
                             
                             Button button = new Button();
@@ -250,8 +219,6 @@ public class Caricamenti{
                             }
                             panel.Controls.Add(button);
                             contenitore.Controls.Add(panel);
-                            //TO_DO sistemare grandezza di questo panel
-                            //PanelNovità.Controls.Add(panel);
                         }
                     }
                 }
@@ -312,26 +279,18 @@ public class Caricamenti{
                             TextBox descrizione = new TextBox();
                             descrizione.Name="descrizione";
                             descrizione.Multiline = true;
-                            //descrizione.ScrollBars = ScrollBars.Vertical;
                             descrizione.ReadOnly = true;
                             descrizione.Width = 500;
                             descrizione.Height = 100;
                             descrizione.Text = exerciseData.Exercise.Description;
                             panel.Controls.Add(descrizione);
 
-                            /*Label labelDescription = new Label();
-                            labelDescription.AutoSize=true;
-                            labelDescription.Text=exerciseData.Exercise.Description;
-                            panel.Controls.Add(labelDescription);*/
-
                             Label labelMuscles = new Label();
                             labelMuscles.Name="muscoli";
                             labelMuscles.AutoSize=true;
                             string stringaConVirgole = string.Join(", ", exerciseData.Muscles);
                             labelMuscles.Text = stringaConVirgole;
-                            /*foreach(string muscle in exerciseData.Muscles){
-                                labelMuscles.Text=muscle +", ";
-                            }*/
+
                             panel.Controls.Add(labelMuscles);
                             
                             Button button = new Button();
@@ -351,7 +310,7 @@ public class Caricamenti{
                                 }
                             }
                             panel.Controls.Add(button);
-                            //TO_DO sistemare grandezza di questo panel
+
                             contenitore.Controls.Add(panel);
                         }
                     }
@@ -403,23 +362,11 @@ public class Caricamenti{
 
                             TextBox descrizione = new TextBox();
                             descrizione.Multiline = true;
-                            //descrizione.ScrollBars = ScrollBars.Vertical;
                             descrizione.ReadOnly = true;
                             descrizione.Width = 500;
                             descrizione.Height = 100;
                             descrizione.Text = exerciseData.Description;
                             panel.Controls.Add(descrizione);
-
-                            /*Label labelDescription = new Label();
-                            labelDescription.AutoSize=true;
-                            labelDescription.Text=exerciseData.Description;
-                            panel.Controls.Add(labelDescription);*/
-
-                            /*Label labelMuscles = new Label();
-                            foreach(string muscle in exerciseData.Muscles){
-                                labelMuscles.Text=muscle +", ";
-                            }
-                            panel.Controls.Add(labelMuscles);*/
                             
                             Button button = new Button();
                             button.Size= new System.Drawing.Size(95,32);
@@ -467,7 +414,6 @@ public class Caricamenti{
                     // Effettuare la richiesta POST con i dati JSON
                     byte[] responseBytes = client.UploadData(url, "POST", requestData);
                     string responseBody = System.Text.Encoding.UTF8.GetString(responseBytes);
-                    //Console.WriteLine(responseBody);
                     // Deserializza il JSON ricevuto
                     List<Exercise> exerciseList = JsonConvert.DeserializeObject<List<Exercise>>(responseBody);
                     if(exerciseList!=null){
@@ -487,23 +433,11 @@ public class Caricamenti{
 
                             TextBox descrizione = new TextBox();
                             descrizione.Multiline = true;
-                            //descrizione.ScrollBars = ScrollBars.Vertical;
                             descrizione.ReadOnly = true;
                             descrizione.Width = 500;
                             descrizione.Height = 100;
                             descrizione.Text = exerciseData.Description;
                             panel.Controls.Add(descrizione);
-
-                            /*Label labelDescription = new Label();
-                            labelDescription.AutoSize=true;
-                            labelDescription.Text=exerciseData.Description;
-                            panel.Controls.Add(labelDescription);*/
-
-                            /*Label labelMuscles = new Label();
-                            foreach(string muscle in exerciseData.Muscles){
-                                labelMuscles.Text=muscle +", ";
-                            }
-                            panel.Controls.Add(labelMuscles);*/
                             
                             Button button = new Button();
                             button.Size= new System.Drawing.Size(95,32);
@@ -520,7 +454,7 @@ public class Caricamenti{
                                 }
                                 panel.Controls.Add(button);
                             }
-                            //TO_DO sistemare grandezza di questo panel
+
                             contenitore.Controls.Add(panel);
                         }
                     }
@@ -572,24 +506,18 @@ public class Caricamenti{
 
                             TextBox descrizione = new TextBox();
                             descrizione.Multiline = true;
-                            //descrizione.ScrollBars = ScrollBars.Vertical;
                             descrizione.ReadOnly = true;
                             descrizione.Width = 500;
                             descrizione.Height = 100;
                             descrizione.Text = exerciseData.Exercise.Description;
                             panel.Controls.Add(descrizione);
 
-                            /*Label labelDescription = new Label();
-                            labelDescription.AutoSize=true;
-                            labelDescription.Text=exerciseData.Exercise.Description;
-                            panel.Controls.Add(labelDescription);*/
-
                             Button button = new Button();
                             button.Size= new System.Drawing.Size(90,30);
                             button.Text="elimina";
                             button.Click += eliminaEsercizio;
                             panel.Controls.Add(button);
-                            //TO_DO sistemare grandezza di questo panel
+
                             contenitore.Controls.Add(panel);
                         }
                     }
@@ -680,7 +608,7 @@ public class Caricamenti{
                     Console.WriteLine($"Errore durante la richiesta HTTP: {ex.Message}");
                 }
             }
-            if(contenitore1.Name=="Scheda"){ //TO_DO vedere se è giusto
+            if(contenitore1.Name=="Scheda"){
                 //svuota il panel e lo ricarica così che si aggiornino gli esercizi
                 contenitore.Controls.Clear();
                 get_scheda(email,(FlowLayoutPanel)contenitore1);
