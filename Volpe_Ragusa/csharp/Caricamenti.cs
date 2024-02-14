@@ -741,7 +741,7 @@ public class Caricamenti{
                     var dataToSend = new
                     {
                         email = this.email,
-                        exercise=nomeEsercizio
+                        name=nomeEsercizio
                     };
                     // Serializzare l'oggetto in formato JSON
                     string jsonData = JsonConvert.SerializeObject(dataToSend);

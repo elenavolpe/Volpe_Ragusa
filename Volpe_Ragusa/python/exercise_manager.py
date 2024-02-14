@@ -118,12 +118,12 @@ def add_exercise_admin(esercizio):
 def delete_exercise_admin(data):
     isAdmin = user_manager.authenticate_admin(data['email'])
     if isAdmin:
-        #dict={}
+        dati={}
         #dict['email']=email
-        #dict['name']=nomeEsercizio
+        dati['name']=data['name']
         try:
             #TO_DO data è di tipo email,exercise
-            r = connect_go_server('deleteExercise',data)
+            r = connect_go_server('deleteExercise',dati)
             if r != "success":
                 return "Errore nell'eliminazione dell'esercizio!"
         except Exception as e:
