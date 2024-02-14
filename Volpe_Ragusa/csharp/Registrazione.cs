@@ -85,7 +85,6 @@ namespace Volpe_Ragusa.csharp
                                     }
                                     catch (WebException ex)
                                     {
-                                        // Gestisci eventuali errori durante la richiesta HTTP
                                         Console.WriteLine($"Errore durante la richiesta HTTP: {ex.Message}");
                                     }
                                 }
@@ -143,15 +142,12 @@ namespace Volpe_Ragusa.csharp
 
         private void textBoxEta_TextChanged(object sender, EventArgs e)
         {
-            //vedi se è un intero, in caso dai errore
         }
 
         private void textBoxConfermaPassword_TextChanged(object sender, EventArgs e)
         {
-            //vedi se è uguale a password, in caso dai errore
         }
 
-        //studiarlo perchè probabilmente ce lo chiederà
         static bool IsValidEmail(string email)
         {
             // Pattern regex per validare un indirizzo email
@@ -164,7 +160,6 @@ namespace Volpe_Ragusa.csharp
             return regex.IsMatch(email);
         }
 
-        //studiarlo perchè probabilmente lo chiede
         static bool IsOnlyCharacters(string inputString)
         {
             // Verifica se ogni carattere nella stringa è una lettera

@@ -59,9 +59,7 @@ namespace Volpe_Ragusa
                         if(response=="ok"){
                             Utente utente=Utente.Istanza;
                             utente.setAddress(email);
-                            //Account account = new Account(email);
                             Account account = new Account();
-                            //this.Close();
                             this.Visible=false;
                             account.ShowDialog();
                         }else{

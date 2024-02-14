@@ -15,7 +15,6 @@ namespace Volpe_Ragusa.csharp
 {
     public partial class Impostazioni : Form
     {
-        //forse dovrei aggiungere dei modificatori
         string email;
         public Impostazioni()
         {
@@ -52,10 +51,7 @@ namespace Volpe_Ragusa.csharp
             {
                 try
                 {
-                    // URL del server Python
                     string pythonServerUrl = "http://localhost:5000/modifica_profilo";
-                    //lato server se si vuole cambiare una nuova password, devi verificare che
-                    //la vecchia password è giusta
                     var dataToSend = new
                     {
                         nome = newName,
@@ -75,7 +71,6 @@ namespace Volpe_Ragusa.csharp
                     // Leggi la risposta
                     Console.WriteLine($"Risposta dal server Python: {response}");
                     if(response=="ok"){
-                        //se va bene vado ad account
                         Utente utente=Utente.Istanza;
                         utente.setAddress(email);
                         Account account1 = new Account();

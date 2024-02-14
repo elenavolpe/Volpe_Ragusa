@@ -6,7 +6,6 @@ using System.Text.Json;
 public class Utente
 {
     private static Utente _istanza;
-    //private static readonly object _oggettoLock = new object();
 
     public string name;
     public string email;
