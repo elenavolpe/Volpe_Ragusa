@@ -25,7 +25,7 @@ namespace Volpe_Ragusa.csharp
             this.email=utente.email;
             caricamenti= new Caricamenti(this.email);
             flowLayoutPanel1.Controls.Clear(); 
-            flowLayoutPanel1.AutoSize=false;
+            flowLayoutPanel1.AutoSize=true;
             flowLayoutPanel1.Size = new Size(615, 424);
             flowLayoutPanel1.WrapContents = true;
             flowLayoutPanel1.FlowDirection=FlowDirection.TopDown;

@@ -43,8 +43,9 @@ namespace Volpe_Ragusa.csharp
             string newPassword=textBoxNewPassword.Text;
             string password=textBoxPassword.Text;
             //fai un eccezione su questo
-            string eta= textBoxNewEta.Text;
+            int eta;
             List<string> newmuscoli= getMuscoliSelezionati();
+            int.TryParse(textBoxNewEta.Text,out eta);
             //devi vedere se la vecchia password corrisponde
 
             using (WebClient client = new WebClient())
@@ -73,8 +74,8 @@ namespace Volpe_Ragusa.csharp
                     if(response=="ok"){
                         Utente utente=Utente.Istanza;
                         utente.setAddress(email);
-                        Account account1 = new Account();
                         this.Close();
+                        Account account1 = new Account();
                         account1.Show();
                     }else{
                         labelErrore.Text = response;

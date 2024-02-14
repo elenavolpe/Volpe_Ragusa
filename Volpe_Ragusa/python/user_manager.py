@@ -34,9 +34,7 @@ def modifica_profilo(account):
         return f"Errore signin: account deve essere un dizionario, invece è di tipo {type(account)}"    
     flag=False
     #nel caso in cui si vuole cambiare la password
-    if 'newpassword' in account:
-        if account['newpassword']=='':
-            return "inserire la nuova password"
+    if account['newpassword']!='':
         if 'password' not in account or account['password']=='':
             return "inserire la vecchia password"
         #prima si verifica che non sia uguale a quella vecchia
@@ -63,49 +61,37 @@ def modifica_profilo(account):
                     return "verifica password non andata a buon fine "
             except Exception as e:
                 return f"Errore: {e}"
-    else: #in questo caso non c'è la necessità di verificare la password
-        if 'nome' in account:
-            try:
-                modify={}
-                modify['email']=account['email']
-                modify['newname']=account['nome']
-                r = connect_go_server('modifyname', modify)
-                if r=="failure":
-                    flag=True
-            except Exception as e:
-                return f"Errore: {e}"
-        if 'cognome' in account:
-            try:
-                modify={}
-                modify['email']=account['email']
-                modify['newsurname']=account['cognome']
-                r = connect_go_server('modifysurname', modify)
-                if r=="failure":
-                    flag=True
-            except Exception as e:
-                return f"Errore: {e}"
-        if 'eta' in account:
-            try:
-                modify={}
-                modify['email']=account['email']
-                modify['newage']=account['eta']
-                r = connect_go_server('modifyage', modify)
-                if r=="failure":
-                    flag=True
-            except Exception as e:
-                return f"Errore: {e}"
-        if 'muscoli' in account:
-            try:
-                modify={}
-                modify['email']=account['email']
-                modify['newpreferredmuscles']=account['muscoli']
-                r = connect_go_server('modifypreferredmuscles', modify)
-                if r=="failure":
-                    flag=True
-            except Exception as e:
-                return f"Errore: {e}"
-        if not account: #se il dizionario è vuoto
-            return "nessun campo da modificare"
+    #in questo caso non c'è la necessità di verificare la password
+    if account['nome']!="":
+        try:
+            modify={}
+            modify['email']=account['email']
+            modify['newname']=account['nome']
+            r = connect_go_server('modifyname', modify)
+            if r=="failure":
+                flag=True
+        except Exception as e:
+            return f"Errore: {e}"
+    if account['eta']!=0:
+        try:
+            modify={}
+            modify['email']=account['email']
+            modify['newage']=account['eta']
+            r = connect_go_server('modifyage', modify)
+            if r=="failure":
+                flag=True
+        except Exception as e:
+            return f"Errore: {e}"
+    if len(account['muscoli'])!=0:
+        try:
+            modify={}
+            modify['email']=account['email']
+            modify['newpreferredmuscles']=account['muscoli']
+            r = connect_go_server('modifypreferredmuscles', modify)
+            if r=="failure":
+                flag=True
+        except Exception as e:
+            return f"Errore: {e}"
     if flag==True:
         return "qualcosa è andato storto"
     return "ok"
