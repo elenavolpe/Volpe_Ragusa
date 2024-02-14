@@ -1,7 +1,7 @@
 using System.Net;
 using System.Collections.Specialized;
 using Newtonsoft.Json;
-using System.Diagnostics.CodeAnalysis;
+//using System.Diagnostics.CodeAnalysis;
 using System.Text;
 public class Caricamenti{
     string email;
