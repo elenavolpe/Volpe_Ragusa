@@ -104,7 +104,7 @@ def add_exercise_admin(esercizio):
             dict={}
             dict['esercizio']=esercizio['nome']
             dict['muscoli']=esercizio['muscoli']
-            # esercizio['descrizione'] # Inviare la descrizione dell'esercizio al server python
+            dict['descrizione']=esercizio['descrizione'] # Inviare la descrizione dell'esercizio al server python
             r = connect_go_server('addExercise',dict)
             if r != "success":
                 return f"Errore nell'aggiunta dell'esercizio {dict['esercizio']}!"

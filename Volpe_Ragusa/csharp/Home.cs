@@ -24,6 +24,9 @@ namespace Volpe_Ragusa.csharp
             Utente utente=Utente.Istanza;
             this.email = utente.email;
             Caricamenti caricamenti = new Caricamenti(this.email);
+            if(this.email=="admin@mail.it"){
+                button2.Enabled=false;
+            }
             label1.Text="Ciao "+utente.name+", benvenuto in MyFitPlan";
 
             this.AutoScroll=true;

@@ -30,29 +30,33 @@ namespace Volpe_Ragusa.csharp
             flowLayoutPanel1.WrapContents = true;
             flowLayoutPanel1.FlowDirection=FlowDirection.TopDown;
             flowLayoutPanel1.AutoScroll=true;
-            //da cambiare in base all'email che decidiamo per l'admin
-            if(this.email=="Admin@mail.it"){
+            if(this.email=="admin@mail.it"){
                 labelBenvenuto.Text="Benvenuto nel tuo profilo "+utente.name + ", qui puoi aggiungere o eliminare esercizi dalla lista ";
-                buttonScheda.Hide();
-                buttonImpostazioni.Hide();
-                /*Label label2=new Label();
-                label2.Text = "nome:";
-                label2.AutoSize=true;
-                Label labelAggiungi= new Label();
-                labelAggiungi.Text = "Aggiungi esercizio";
-                labelAggiungi.AutoSize=true;*/
-                flowLayoutPanel1.Controls.Add(label2);
+                buttonScheda.Enabled=false;
+                buttonImpostazioni.Enabled=false;
+                FlowLayoutPanel panel= new FlowLayoutPanel();
+                panel.FlowDirection=FlowDirection.TopDown;
+                panel.AutoSize=true;
+                panel.BorderStyle=BorderStyle.FixedSingle;
+                panel.Margin = new Padding(0, 20, 0, 20);
+                labelAggiungi.Font = new Font(labelAggiungi.Font, FontStyle.Bold);
                 flowLayoutPanel1.Controls.Add(labelAggiungi);
-                flowLayoutPanel1.Controls.Add(textBox1);
+                panel.Controls.Add(label2);
                 textBox1.Name="nome"; //vedi
-                flowLayoutPanel1.Controls.Add(label3);
-                flowLayoutPanel1.Controls.Add(textBox2);
+                panel.Controls.Add(textBox1);
+                panel.Controls.Add(label3);
                 textBox2.Name="descrizione"; //vedi
-                flowLayoutPanel1.Controls.Add(label4);
-                flowLayoutPanel1.Controls.Add(checkedListBox1);
+                //textBox2.AutoScroll=true;
+                textBox2.Size = new Size(529, 200);
+                panel.Controls.Add(textBox2);
+                panel.Controls.Add(label4);
+                panel.Controls.Add(checkedListBox1);
                 Button buttonaggiungi= new Button();
+                buttonaggiungi.AutoSize=true;
                 buttonaggiungi.Text="aggiungi";
                 buttonaggiungi.Click+=addEsercizio;
+                panel.Controls.Add(buttonaggiungi);
+                flowLayoutPanel1.Controls.Add(panel);
                 //carica_esercizi();
                 caricamenti.carica_esercizi(this.email,flowLayoutPanel1);
             }
@@ -103,8 +107,10 @@ namespace Volpe_Ragusa.csharp
             Control contenitore = button.Parent;
             TextBox box1 = contenitore.Controls.Find("nome", true).FirstOrDefault() as TextBox;
             string nomeEsercizio=box1.Text;
+            //Console.WriteLine(nomeEsercizio);
             TextBox box2 = contenitore.Controls.Find("descrizione", true).FirstOrDefault() as TextBox;
             string descrizioneEsercizio=box2.Text;
+            //Console.WriteLine(descrizioneEsercizio);
             List<string> muscoliSelezionati = new List<string>();
             for (int i = 0; i < checkedListBox1.Items.Count; i++)
             {

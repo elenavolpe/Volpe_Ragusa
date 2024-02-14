@@ -264,9 +264,10 @@ public class Caricamenti{
 
         public void carica_esercizi(string email, FlowLayoutPanel contenitore)
         {
-            if(this.email=="Admin@mail.it"){
+            if(this.email=="admin@mail.it"){
                 Label label=new Label();
                 label.AutoSize=true;
+                label.Font = new Font(label.Font, FontStyle.Bold);
                 label.Text="Ciao Admin, qui puoi eliminare o aggiungere esercizi dalla lista ";
                 contenitore.Controls.Add(label);
             }
@@ -333,7 +334,7 @@ public class Caricamenti{
                             
                             Button button = new Button();
                             button.Size= new System.Drawing.Size(95,32);
-                            if(this.email=="Admin@mail.it"){
+                            if(this.email=="admin@mail.it"){
                                 button.Text="elimina";
                                 button.Click += deleteEsercizio;
                             }
@@ -420,16 +421,19 @@ public class Caricamenti{
                             
                             Button button = new Button();
                             button.Size= new System.Drawing.Size(95,32);
-                            bool esiste=checkExist(exerciseData.Name,listaEsercizi);
-                            if(esiste==false){
-                                button.Text="aggiungi";
-                                button.Click += aggiungiEsercizio;
+                            if(email=="admin@mail.it"){
+                                
                             }else{
-                                button.Text="elimina";
-                                button.Click += eliminaEsercizio;
+                                bool esiste=checkExist(exerciseData.Name,listaEsercizi);
+                                if(esiste==false){
+                                    button.Text="aggiungi";
+                                    button.Click += aggiungiEsercizio;
+                                }else{
+                                    button.Text="elimina";
+                                    button.Click += eliminaEsercizio;
+                                }
+                                panel.Controls.Add(button);
                             }
-                            panel.Controls.Add(button);
-                            //TO_DO sistemare grandezza di questo panel
                             contenitore.Controls.Add(panel);
                         }
                     }
@@ -501,15 +505,19 @@ public class Caricamenti{
                             
                             Button button = new Button();
                             button.Size= new System.Drawing.Size(95,32);
-                            bool esiste=checkExist(exerciseData.Name,listaEsercizi);
-                            if(esiste==false){
-                                button.Text="aggiungi";
-                                button.Click += aggiungiEsercizio;
+                            if(email=="admin@mail.it"){
+                                
                             }else{
-                                button.Text="elimina";
-                                button.Click += eliminaEsercizio;
+                                bool esiste=checkExist(exerciseData.Name,listaEsercizi);
+                                if(esiste==false){
+                                    button.Text="aggiungi";
+                                    button.Click += aggiungiEsercizio;
+                                }else{
+                                    button.Text="elimina";
+                                    button.Click += eliminaEsercizio;
+                                }
+                                panel.Controls.Add(button);
                             }
-                            panel.Controls.Add(button);
                             //TO_DO sistemare grandezza di questo panel
                             contenitore.Controls.Add(panel);
                         }
