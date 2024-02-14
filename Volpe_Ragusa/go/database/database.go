@@ -296,38 +296,6 @@ func ModifyName(user_email, new_name string, usr chan<- string) {
 	usr <- user_email
 }
 
-func ModifySurname(user_email, new_surname string, usr chan<- string) {
-	db, err := ConnectDB("admin", "admin", "mysql", "3306", "workoutnow")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer db.Close()
-
-	editQuery := "UPDATE users SET surname = ? WHERE email = ?"
-	result, err := db.Exec(editQuery, new_surname, user_email)
-	if err != nil {
-		log.Println(err)
-		usr <- "failure"
-		return
-	}
-
-	rowsAffected, err := result.RowsAffected()
-	if err != nil {
-		log.Println(err)
-		usr <- "failure"
-		return
-	}
-
-	if rowsAffected == 0 {
-		log.Println("Query failed: " + editQuery)
-		usr <- "failure"
-		return
-	}
-	fmt.Println("Surname updated successfully!")
-
-	usr <- user_email
-}
-
 func ModifyAge(user_email string, new_age int, usr chan<- string) {
 	db, err := ConnectDB("admin", "admin", "mysql", "3306", "workoutnow")
 	if err != nil {

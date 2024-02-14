@@ -169,28 +169,6 @@ func main() {
 		}
 	})
 
-	mux.HandleFunc("/modifysurname", func(w http.ResponseWriter, r *http.Request) {
-		if r.Method == http.MethodPost {
-			type ModifyReq struct {
-				Email      string `json:"email"`
-				NewSurname string `json:"newsurname"`
-			}
-			var modifyReq ModifyReq
-			err := json.NewDecoder(r.Body).Decode(&modifyReq)
-			if err != nil {
-				http.Error(w, "Errore durante la decodifica del JSON: "+err.Error(), http.StatusBadRequest)
-				return
-			}
-			usr := make(chan string)
-			var s string
-			go database.ModifySurname(modifyReq.Email, modifyReq.NewSurname, usr)
-			s = <-usr
-			w.Write([]byte(s))
-		} else {
-			http.Error(w, "Metodo di richiesta non valido!", http.StatusMethodNotAllowed)
-		}
-	})
-
 	mux.HandleFunc("/modifyage", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == http.MethodPost {
 			type ModifyReq struct {
