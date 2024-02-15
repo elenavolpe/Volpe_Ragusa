@@ -33,35 +33,36 @@ def modifica_profilo(account):
     flag=False
     #Si verificano i campi che si vogliono modificare
     #nel caso in cui si vuole cambiare la password
-    if account['newpassword']!='' and is_valid_password(account['newpassword']):
-        if 'password' not in account or account['password']=='':
-            return "inserire la vecchia password"
-        #prima si verifica che non sia uguale a quella vecchia
-        if account['newpassword']==account['password']:
-            return "la nuova password non può essere uguale a quella vecchia"
+    if account['newpassword']!='':
+        if is_valid_password(account['newpassword']):
+            if 'password' not in account or account['password']=='':
+                return "inserire la vecchia password"
+            #prima si verifica che non sia uguale a quella vecchia
+            if account['newpassword']==account['password']:
+                return "la nuova password non può essere uguale a quella vecchia"
+            else:
+                #poi si verifica che quella vecchia sia quella giusta
+                dictionary={}
+                dictionary['oldPassword']=account['password']
+                dictionary['email']=account['email']
+                try:
+                    r = connect_go_server('verifypassword',dictionary)
+                    if r=="ok":
+                        try:
+                            modify={}
+                            modify['email']=account['email']
+                            modify['newpassword']=account['newpassword']
+                            r = connect_go_server('modifypassword', modify)
+                            if r=="failure":
+                                flag=True
+                        except Exception as e:
+                            return f"Errore: {e}"
+                    else:
+                        return "verifica password non andata a buon fine "
+                except Exception as e:
+                    return f"Errore: {e}"
         else:
-            #poi si verifica che quella vecchia sia quella giusta
-            dictionary={}
-            dictionary['oldPassword']=account['password']
-            dictionary['email']=account['email']
-            try:
-                r = connect_go_server('verifypassword',dictionary)
-                if r=="ok":
-                    try:
-                        modify={}
-                        modify['email']=account['email']
-                        modify['newpassword']=account['newpassword']
-                        r = connect_go_server('modifypassword', modify)
-                        if r=="failure":
-                            flag=True
-                    except Exception as e:
-                        return f"Errore: {e}"
-                else:
-                    return "verifica password non andata a buon fine "
-            except Exception as e:
-                return f"Errore: {e}"
-    else:
-        return "inserire una nuova password valida"
+            return "inserire una nuova password valida"
     #in questo caso non c'è la necessità di verificare la password
     if account['nome']!="":
         try:
