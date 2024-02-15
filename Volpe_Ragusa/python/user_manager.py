@@ -33,7 +33,7 @@ def modifica_profilo(account):
     flag=False
     #Si verificano i campi che si vogliono modificare
     #nel caso in cui si vuole cambiare la password
-    if account['newpassword']!='':
+    if account['newpassword']!='' and is_valid_password(account['newpassword']):
         if 'password' not in account or account['password']=='':
             return "inserire la vecchia password"
         #prima si verifica che non sia uguale a quella vecchia
