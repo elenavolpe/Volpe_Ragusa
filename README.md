@@ -10,7 +10,7 @@ oppure, se si utilizza Linux e non è stato attivato l'alias docker-compose, uti
    ```bash
    docker compose build 
    ```
-3.Tramite shell raggiungere dalla directory di progetto la subdirectory Volpe_Ragusa/csharp e utilizzare il comando:
+3.Tramite shell raggiungere dalla directory di progetto la subdirectory Volpe_Ragusa e utilizzare il comando:
    ```bash
    dotnet run program.cs
    ```
