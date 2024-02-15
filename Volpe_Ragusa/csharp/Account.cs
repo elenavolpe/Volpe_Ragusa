@@ -137,6 +137,9 @@ namespace Volpe_Ragusa.csharp
                     if(response=="ok"){
                         box1.Text="";
                         box2.Text="";
+                        Account account= new Account();
+                        this.Close();
+                        account.Show();
                     }
                 }
                 catch (WebException ex)
@@ -144,7 +147,7 @@ namespace Volpe_Ragusa.csharp
                     Console.WriteLine($"Errore durante la richiesta HTTP: {ex.Message}");
                 }
             }
-            caricamenti.carica_esercizi(this.email,flowLayoutPanel1);
+            //caricamenti.carica_esercizi(this.email,flowLayoutPanel1);
         }
 
         private void buttonHome_Click(object sender, EventArgs e)
