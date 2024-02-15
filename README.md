@@ -7,8 +7,12 @@
    docker-compose build
    ```
 oppure, se si utilizza Linux e non è stato attivato l'alias docker-compose, utilizzare il comando:
-
    ```bash
    docker compose build 
    ```
-3.Elena, qua scrivi tu, casomai, come avviare il client c# (se esiste un modo carino o meno non lo so)
+[3.Elena, qua scrivi tu, casomai, come avviare il client c# (se esiste un modo carino o meno non lo so, per ora metto questo)]
+3.Tramite shell raggiungere la directory Volpe_Ragusa e utilizzare il comando:
+   ```bash
+   dotnet run Volpe_ragusa.csproj
+   ```
+## Descrizione dell'applicazione
