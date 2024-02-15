@@ -1,15 +1,11 @@
 ﻿using System;
-//using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-//using System.Threading.Tasks;
 using System.Windows.Forms;
-//using static System.Windows.Forms.VisualStyles.VisualStyleElement.Button;
-using Volpe_Ragusa.csharp;
 using Newtonsoft.Json;
 using System.Net;
 
@@ -20,8 +16,6 @@ namespace Volpe_Ragusa.csharp
         public Registrazione()
         {
             InitializeComponent();
-            // Registra l'evento CheckedChanged per la CheckBox
-            checkBoxMuscoli.CheckedChanged += checkBoxMuscoli_CheckedChanged;
             ListBoxMuscoli.Visible = false;
             labelMuscoli.Visible = false;
         }
@@ -55,7 +49,7 @@ namespace Volpe_Ragusa.csharp
                                     {
                                         // URL del server Python
                                         string pythonServerUrl = "http://localhost:5000/signin";
-                                        // Creare un oggetto con i dati da inviare come JSON
+                                        // Creo un oggetto con i dati da inviare come JSON
                                         var dataToSend = new
                                         {
                                             name= nome,
@@ -66,14 +60,10 @@ namespace Volpe_Ragusa.csharp
                                             muscoli= muscoli
                                         };
                                         string jsonData = JsonConvert.SerializeObject(dataToSend);
-                                        // Creare il contenuto della richiesta POST
-                                        StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
-                                        // Impostare l'intestazione Content-Type
+                                        // Imposto l'intestazione Content-Type
                                         client.Headers[HttpRequestHeader.ContentType] = "application/json";
                                         // Invio di una richiesta POST
-                                        string response = client.UploadString($"{pythonServerUrl}", "POST", jsonData);
-                                        
-                                        Console.WriteLine($"Risposta dal server Python: {response}");
+                                        string response = client.UploadString(pythonServerUrl, "POST", jsonData);
                                         if(response==email){
                                             Form1 login= new Form1();
                                             this.Close();
@@ -125,9 +115,6 @@ namespace Volpe_Ragusa.csharp
             // Controlla se la CheckBox è selezionata
             if (checkBoxMuscoli.Checked)
             {
-                // Seleziona l'elemento predefinito nella ListBox
-                ListBoxMuscoli.SelectedIndex = 0;
-
                 // Mostra la ListBox
                 ListBoxMuscoli.Visible = true;
                 labelMuscoli.Visible = true;
@@ -152,11 +139,9 @@ namespace Volpe_Ragusa.csharp
         {
             // Pattern regex per validare un indirizzo email
             string pattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
-
-            // Creare un oggetto Regex sulla base del pattern
+            // Crea un oggetto Regex sulla base del pattern
             Regex regex = new Regex(pattern);
-
-            // Verificare se la stringa dell'email corrisponde al pattern
+            // Verifica se la stringa dell'email corrisponde al pattern
             return regex.IsMatch(email);
         }
 

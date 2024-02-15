@@ -1,14 +1,11 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Net;
-using System.Text;
-//using System.Threading.Tasks;
+//using System.Text;
 using System.Windows.Forms;
 
 namespace Volpe_Ragusa.csharp
@@ -42,12 +39,9 @@ namespace Volpe_Ragusa.csharp
             string newName=textBoxNewNome.Text;
             string newPassword=textBoxNewPassword.Text;
             string password=textBoxPassword.Text;
-            //fai un eccezione su questo
             int eta;
             List<string> newmuscoli= getMuscoliSelezionati();
-            int.TryParse(textBoxNewEta.Text,out eta);
-            //devi vedere se la vecchia password corrisponde
-
+            int.TryParse(textBoxNewEta.Text, out eta); 
             using (WebClient client = new WebClient())
             {
                 try
@@ -63,14 +57,10 @@ namespace Volpe_Ragusa.csharp
                         muscoli = newmuscoli
                     };
                     string jsonData = JsonConvert.SerializeObject(dataToSend);
-                    // Creare il contenuto della richiesta POST
-                    StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
-                    // Impostare l'intestazione Content-Type
+                    // Imposto l'intestazione Content-Type
                     client.Headers[HttpRequestHeader.ContentType] = "application/json";
                     // Invio di una richiesta POST
-                    string response = client.UploadString($"{pythonServerUrl}", "POST", jsonData);
-                    // Leggi la risposta
-                    Console.WriteLine($"Risposta dal server Python: {response}");
+                    string response = client.UploadString(pythonServerUrl, "POST", jsonData);
                     if(response=="ok"){
                         Utente utente=Utente.Istanza;
                         utente.setAddress(email);
@@ -85,7 +75,6 @@ namespace Volpe_Ragusa.csharp
                 }
                 catch (WebException ex)
                 {
-                    // Gestisci eventuali errori durante la richiesta HTTP
                     Console.WriteLine($"Errore durante la richiesta HTTP: {ex.Message}");
                 }
             }
@@ -99,7 +88,7 @@ namespace Volpe_Ragusa.csharp
                 // Verifica se l'elemento è selezionato
                 if (ListBoxNewMuscoli.GetItemChecked(i))
                 {
-                    // Aggiungi l'elemento alla lista degli elementi selezionati
+                    // Aggiunge l'elemento alla lista degli elementi selezionati
                     muscoli.Add(ListBoxNewMuscoli.Items[i].ToString());
                 }
             }

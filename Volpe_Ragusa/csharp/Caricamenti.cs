@@ -1,7 +1,5 @@
 using System.Net;
-using System.Collections.Specialized;
 using Newtonsoft.Json;
-//using System.Diagnostics.CodeAnalysis;
 using System.Text;
 public class Caricamenti{
     string email;
@@ -31,17 +29,13 @@ public class Caricamenti{
                     {
                         email = this.email
                     };
-                    // Serializzare l'oggetto in formato JSON
+                    // Serializzo l'oggetto in formato JSON
                     string jsonData = JsonConvert.SerializeObject(dataToSend);
-                    // Convertire il JSON in un array di byte
-                    byte[] requestData = Encoding.UTF8.GetBytes(jsonData);
                     // Impostare l'intestazione Content-Type sulla richiesta HTTP
                     client.Headers.Add("Content-Type", "application/json");
                     // Effettuare la richiesta POST con i dati JSON
-                    byte[] responseBytes = client.UploadData(url, "POST", requestData);
-                    // Decodificare la risposta
-                    string responseBody = Encoding.UTF8.GetString(responseBytes);
-                    // Deserializza il JSON ricevuto
+                    string responseBody = client.UploadString(url, "POST", jsonData);
+                    // Deserializzo il JSON ricevuto
                     List<ExerciseData> exerciseList = JsonConvert.DeserializeObject<List<ExerciseData>>(responseBody);
                     if(exerciseList!=null){
                         foreach (ExerciseData exerciseData in exerciseList)
@@ -106,15 +100,15 @@ public class Caricamenti{
                     {
                         email = this.email
                     };
-                    // Serializzare l'oggetto in formato JSON
+                    // Serializzo l'oggetto in formato JSON
                     string jsonData = JsonConvert.SerializeObject(dataToSend);
-                    // Convertire il JSON in un array di byte
+                    // Converto il JSON in un array di byte
                     byte[] requestData = Encoding.UTF8.GetBytes(jsonData);
-                    // Impostare l'intestazione Content-Type sulla richiesta HTTP
+                    // Imposto l'intestazione Content-Type sulla richiesta HTTP
                     client.Headers.Add("Content-Type", "application/json");
-                    // Effettuare la richiesta POST con i dati JSON
+                    // Effettuo la richiesta POST con i dati JSON
                     byte[] responseBytes = client.UploadData(url, "POST", requestData);
-                    Console.WriteLine(responseBytes);
+                    //Converte i byte ricevuti in un'immagine
                     Image image = Image.FromStream(new MemoryStream(responseBytes));
                     
                     FlowLayoutPanel panel = new FlowLayoutPanel();
@@ -166,16 +160,13 @@ public class Caricamenti{
                     {
                         email = this.email
                     };
-                    // Serializzare l'oggetto in formato JSON
+                    // Serializzo l'oggetto in formato JSON
                     string jsonData = JsonConvert.SerializeObject(dataToSend);
-                    // Convertire il JSON in un array di byte
-                    byte[] requestData = Encoding.UTF8.GetBytes(jsonData);
-                    // Impostare l'intestazione Content-Type sulla richiesta HTTP
+                    // Imposto l'intestazione Content-Type sulla richiesta HTTP
                     client.Headers.Add("Content-Type", "application/json");
-                    // Effettuare la richiesta POST con i dati JSON
-                    byte[] responseBytes = client.UploadData(url, "POST", requestData);
-                    string responseBody = System.Text.Encoding.UTF8.GetString(responseBytes);
-                    // Deserializza il JSON ricevuto
+                    // Effettuo la richiesta POST con i dati JSON
+                    string responseBody = client.UploadString(url, "POST", jsonData);
+                    // Deserializzo il JSON ricevuto
                     List<ExerciseData> exerciseList = JsonConvert.DeserializeObject<List<ExerciseData>>(responseBody);
                     if(exerciseList!=null){
                         foreach (ExerciseData exerciseData in exerciseList)
@@ -249,16 +240,12 @@ public class Caricamenti{
                     {
                         email = this.email
                     };
-                    // Serializzare l'oggetto in formato JSON
+                    // Serializzo l'oggetto in formato JSON
                     string jsonData = JsonConvert.SerializeObject(dataToSend);
-                    // Convertire il JSON in un array di byte
-                    byte[] requestData = Encoding.UTF8.GetBytes(jsonData);
-                    // Impostare l'intestazione Content-Type sulla richiesta HTTP
+                    // Imposto l'intestazione Content-Type sulla richiesta HTTP
                     client.Headers.Add("Content-Type", "application/json");
-                    // Effettuare la richiesta POST con i dati JSON
-                    byte[] responseBytes = client.UploadData(url, "POST", requestData);
-                    // Converti la risposta in una stringa
-                    string responseBody = System.Text.Encoding.UTF8.GetString(responseBytes);
+                    // Effettuo la richiesta POST con i dati JSON
+                    string responseBody = client.UploadString(url, "POST", jsonData);
                     // Deserializza il JSON ricevuto
                     List<ExerciseData> exerciseList = JsonConvert.DeserializeObject<List<ExerciseData>>(responseBody);
                     if(exerciseList!=null){
@@ -317,7 +304,6 @@ public class Caricamenti{
                 }
                 catch (WebException ex)
                 {
-                    // Gestisci eventuali errori durante la richiesta HTTP
                     Console.WriteLine($"Errore durante la richiesta HTTP: {ex.Message}");
                 }
             }
@@ -334,15 +320,12 @@ public class Caricamenti{
                     {
                         email = this.email
                     };
-                    // Serializzare l'oggetto in formato JSON
+                    // Serializzo l'oggetto in formato JSON
                     string jsonData = JsonConvert.SerializeObject(dataToSend);
-                    // Convertire il JSON in un array di byte
-                    byte[] requestData = Encoding.UTF8.GetBytes(jsonData);
-                    // Impostare l'intestazione Content-Type sulla richiesta HTTP
+                    // Imposto l'intestazione Content-Type sulla richiesta HTTP
                     client.Headers.Add("Content-Type", "application/json");
-                    // Effettuare la richiesta POST con i dati JSON
-                    byte[] responseBytes = client.UploadData(url, "POST", requestData);
-                    string responseBody = System.Text.Encoding.UTF8.GetString(responseBytes);
+                    // Effettuo la richiesta POST con i dati JSON
+                    string responseBody = client.UploadString(url, "POST", jsonData);
                     // Deserializza il JSON ricevuto
                     List<Exercise> exerciseList = JsonConvert.DeserializeObject<List<Exercise>>(responseBody);
                     if(exerciseList!=null){
@@ -405,16 +388,13 @@ public class Caricamenti{
                     {
                         email = this.email
                     };
-                    // Serializzare l'oggetto in formato JSON
+                    // Serializzo l'oggetto in formato JSON
                     string jsonData = JsonConvert.SerializeObject(dataToSend);
-                    // Convertire il JSON in un array di byte
-                    byte[] requestData = Encoding.UTF8.GetBytes(jsonData);
-                    // Impostare l'intestazione Content-Type sulla richiesta HTTP
+                    // Imposto l'intestazione Content-Type sulla richiesta HTTP
                     client.Headers.Add("Content-Type", "application/json");
-                    // Effettuare la richiesta POST con i dati JSON
-                    byte[] responseBytes = client.UploadData(url, "POST", requestData);
-                    string responseBody = System.Text.Encoding.UTF8.GetString(responseBytes);
-                    // Deserializza il JSON ricevuto
+                    // Effettuo la richiesta POST con i dati JSON
+                    string responseBody = client.UploadString(url, "POST", jsonData);
+                    // Deserializzo il JSON ricevuto
                     List<Exercise> exerciseList = JsonConvert.DeserializeObject<List<Exercise>>(responseBody);
                     if(exerciseList!=null){
                         foreach (Exercise exerciseData in exerciseList)
@@ -479,16 +459,13 @@ public class Caricamenti{
                     {
                         email = this.email
                     };
-                    // Serializzare l'oggetto in formato JSON
+                    // Serializzo l'oggetto in formato JSON
                     string jsonData = JsonConvert.SerializeObject(dataToSend);
-                    // Convertire il JSON in un array di byte
-                    byte[] requestData = Encoding.UTF8.GetBytes(jsonData);
-                    // Impostare l'intestazione Content-Type sulla richiesta HTTP
+                    // Imposto l'intestazione Content-Type sulla richiesta HTTP
                     client.Headers.Add("Content-Type", "application/json");
-                    // Effettuare la richiesta POST con i dati JSON
-                    byte[] responseBytes = client.UploadData(url, "POST", requestData);
-                    string responseBody = System.Text.Encoding.UTF8.GetString(responseBytes);
-                    // Deserializza il JSON ricevuto
+                    // Effettuo la richiesta POST con i dati JSON
+                    string responseBody = client.UploadString(url, "POST", jsonData);
+                    // Deserializzo il JSON ricevuto
                     List<ExerciseData> exerciseList = JsonConvert.DeserializeObject<List<ExerciseData>>(responseBody);
                     if(exerciseList!=null){
                         foreach (ExerciseData exerciseData in exerciseList)
@@ -547,15 +524,12 @@ public class Caricamenti{
                         email = this.email,
                         exercise=nomeEsercizio
                     };
-                    // Serializzare l'oggetto in formato JSON
+                    // Serializzo l'oggetto in formato JSON
                     string jsonData = JsonConvert.SerializeObject(dataToSend);
-                    // Convertire il JSON in un array di byte
-                    byte[] requestData = Encoding.UTF8.GetBytes(jsonData);
-                    // Impostare l'intestazione Content-Type sulla richiesta HTTP
+                    // Imposto l'intestazione Content-Type sulla richiesta HTTP
                     client.Headers.Add("Content-Type", "application/json");
-                    // Effettuare la richiesta POST con i dati JSON
-                    byte[] responseBytes = client.UploadData(url, "POST", requestData);
-                    string responseBody = System.Text.Encoding.UTF8.GetString(responseBytes);
+                    // Effettuo la richiesta POST con i dati JSON
+                    string responseBody = client.UploadString(url, "POST", jsonData);
                     if(responseBody=="ok"){
                         button.Text="elimina";
                         button.Click -= aggiungiEsercizio;
@@ -588,15 +562,12 @@ public class Caricamenti{
                         email = this.email,
                         exercise=nomeEsercizio
                     };
-                    // Serializzare l'oggetto in formato JSON
+                    // Serializzo l'oggetto in formato JSON
                     string jsonData = JsonConvert.SerializeObject(dataToSend);
-                    // Convertire il JSON in un array di byte
-                    byte[] requestData = Encoding.UTF8.GetBytes(jsonData);
-                    // Impostare l'intestazione Content-Type sulla richiesta HTTP
+                    // Imposto l'intestazione Content-Type sulla richiesta HTTP
                     client.Headers.Add("Content-Type", "application/json");
-                    // Effettuare la richiesta POST con i dati JSON
-                    byte[] responseBytes = client.UploadData(url, "POST", requestData);
-                    string responseBody = System.Text.Encoding.UTF8.GetString(responseBytes);
+                    // Effettuo la richiesta POST con i dati JSON
+                    string responseBody = client.UploadString(url, "POST", jsonData);
                     if(responseBody=="ok"){
                         button.Text="aggiungi";
                         button.Click -= eliminaEsercizio;
@@ -641,16 +612,12 @@ public class Caricamenti{
                         descrizione = descrizioneEsercizio,
                         muscoli = muscoliSelezionati
                     };
-                    // Serializzare l'oggetto in formato JSON
+                    // Serializzo l'oggetto in formato JSON
                     string jsonData = JsonConvert.SerializeObject(dataToSend);
-                    // Convertire il JSON in un array di byte
-                    byte[] requestData = Encoding.UTF8.GetBytes(jsonData);
-                    // Impostare l'intestazione Content-Type sulla richiesta HTTP
+                    // Imposto l'intestazione Content-Type sulla richiesta HTTP
                     client.Headers.Add("Content-Type", "application/json");
-                    // Effettuare la richiesta POST con i dati JSON
-                    byte[] responseBytes = client.UploadData(url, "POST", requestData);
-                    string responseBody = System.Text.Encoding.UTF8.GetString(responseBytes);
-                    Console.WriteLine(responseBody);
+                    // Effettuo la richiesta POST con i dati JSON
+                    string responseBody = client.UploadString(url, "POST", jsonData);
                     if(responseBody=="ok"){
                         button.Text="elimina";
                         button.Click -= addEsercizio;
@@ -683,15 +650,12 @@ public class Caricamenti{
                         email = this.email,
                         name=nomeEsercizio
                     };
-                    // Serializzare l'oggetto in formato JSON
+                    // Serializzo l'oggetto in formato JSON
                     string jsonData = JsonConvert.SerializeObject(dataToSend);
-                    // Convertire il JSON in un array di byte
-                    byte[] requestData = Encoding.UTF8.GetBytes(jsonData);
-                    // Impostare l'intestazione Content-Type sulla richiesta HTTP
+                    // Imposto l'intestazione Content-Type sulla richiesta HTTP
                     client.Headers.Add("Content-Type", "application/json");
-                    // Effettuare la richiesta POST con i dati JSON
-                    byte[] responseBytes = client.UploadData(url, "POST", requestData);
-                    string responseBody = System.Text.Encoding.UTF8.GetString(responseBytes);
+                    // Effettuo la richiesta POST con i dati JSON
+                    string responseBody = client.UploadString(url, "POST", jsonData);
                     if(responseBody=="success"){
                         button.Text="aggiungi";
                         button.Click -= deleteEsercizio;
@@ -719,16 +683,13 @@ public class Caricamenti{
                     {
                         email = this.email
                     };
-                    // Serializzare l'oggetto in formato JSON
+                    // Serializzo l'oggetto in formato JSON
                     string jsonData = JsonConvert.SerializeObject(dataToSend);
-                    // Convertire il JSON in un array di byte
-                    byte[] requestData = Encoding.UTF8.GetBytes(jsonData);
-                    // Impostare l'intestazione Content-Type sulla richiesta HTTP
+                    // Imposto l'intestazione Content-Type sulla richiesta HTTP
                     client.Headers.Add("Content-Type", "application/json");
-                    // Effettuare la richiesta POST con i dati JSON
-                    byte[] responseBytes = client.UploadData(url, "POST", requestData);
-                    string responseBody = System.Text.Encoding.UTF8.GetString(responseBytes);
-                    // Deserializza il JSON ricevuto
+                    // Effettuo la richiesta POST con i dati JSON
+                    string responseBody = client.UploadString(url, "POST", jsonData);
+                    // Deserializzo il JSON ricevuto
                     List<ExerciseData> exerciseList = JsonConvert.DeserializeObject<List<ExerciseData>>(responseBody);
                     if(exerciseList!=null){
                     foreach (ExerciseData exerciseData in exerciseList)

@@ -1,11 +1,9 @@
 using Newtonsoft.Json;
-using System.Collections.Specialized;
 using System.Net;
 using System.Text;
-using System.Text.Json;
 public class Utente
 {
-    private static Utente _istanza;
+    private static Utente istanza;
 
     public string name;
     public string email;
@@ -22,19 +20,12 @@ public class Utente
     {
         get
         {
-            // Utilizzo del double-check locking per migliorare le prestazioni e evitare problemi di concorrenza
-            if (_istanza == null)
+            if (istanza == null)
             {
-                //lock (_oggettoLock)
-                //{
-                    //if (_istanza == null)
-                    //{
-                        _istanza = new Utente();
-                    //}
-                //}
+                istanza = new Utente();
             }
 
-            return _istanza;
+            return istanza;
         }
     }
 
@@ -48,12 +39,10 @@ public class Utente
                         email= this.email
                     };
                     string jsonData = JsonConvert.SerializeObject(dataToSend);
-                    // Creare il contenuto della richiesta POST
-                    StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
-                    // Impostare l'intestazione Content-Type
+                    // Imposto l'intestazione Content-Type
                     client.Headers[HttpRequestHeader.ContentType] = "application/json";
                     // Invio di una richiesta POST
-                    string responseBody = client.UploadString($"{url}", "POST", jsonData);
+                    string responseBody = client.UploadString(url, "POST", jsonData);
                     if(responseBody!="errore"){
                         Console.WriteLine(responseBody);
                         InfoUtente datiUtente = JsonConvert.DeserializeObject<InfoUtente>(responseBody);
@@ -85,12 +74,10 @@ public class Utente
                         email = this.email
                     };
                     string jsonData = JsonConvert.SerializeObject(dataToSend);
-                    // Creare il contenuto della richiesta POST
-                    StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
-                    // Impostare l'intestazione Content-Type
+                    // Imposto l'intestazione Content-Type
                     client.Headers[HttpRequestHeader.ContentType] = "application/json";
                     // Invio di una richiesta POST
-                    string responseBody = client.UploadString($"{url}", "POST", jsonData);
+                    string responseBody = client.UploadString(url, "POST", jsonData);
                     Console.WriteLine(responseBody);
                     if(responseBody!="errore"){
                         Console.WriteLine(responseBody);
@@ -119,7 +106,7 @@ public class Utente
         }
         else{
             getInfo(email);
-            Console.WriteLine("vediamo");
+            //Console.WriteLine("vediamo");
             muscoli=getMuscles(email);
         }
     }

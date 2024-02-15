@@ -1,15 +1,11 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-//using System.Reflection;
 using System.Net;
 using System.Text;
-//using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Volpe_Ragusa.csharp
@@ -130,12 +126,12 @@ namespace Volpe_Ragusa.csharp
                             descrizione = descrizioneEsercizio,
                             muscoli = muscoliSelezionati
                         };
+                    //converto l'oggetto in json
                     string jsonData = JsonConvert.SerializeObject(dataToSend);
-                    StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
-                    // Impostare l'intestazione Content-Type
+                    // Imposto l'intestazione Content-Type
                     client.Headers[HttpRequestHeader.ContentType] = "application/json";
                     // Invio di una richiesta POST
-                    string response = client.UploadString($"{url}", "POST", jsonData);
+                    string response = client.UploadString(url, "POST", jsonData);
                     // Leggi la risposta
                     Console.WriteLine($"Risposta dal server Python: {response}");
                     if(response=="ok"){

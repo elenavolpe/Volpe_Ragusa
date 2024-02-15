@@ -1,8 +1,6 @@
 using System.Text;
 using System.Xml.Linq;
 using Volpe_Ragusa.csharp;
-using System.Net.Http;
-//using System.Threading.Tasks;
 using System.Windows.Forms;
 using Newtonsoft.Json;
 using System.Net;
@@ -46,16 +44,12 @@ namespace Volpe_Ragusa
                             password = password
                         };
                         string jsonData = JsonConvert.SerializeObject(dataToSend);
-                        // Creare il contenuto della richiesta POST
-                        StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
-                        // Impostare l'intestazione Content-Type
+                        // Imposto l'intestazione Content-Type
                         client.Headers[HttpRequestHeader.ContentType] = "application/json";
                         // Invio di una richiesta POST
-                        string response = client.UploadString($"{pythonServerUrl}", "POST", jsonData);
-                        // Leggi la risposta
-                        Console.WriteLine($"Risposta dal server Python: {response}");
+                        string response = client.UploadString(pythonServerUrl, "POST", jsonData);
                         
-                        //se la risposta � positiva posso passare direttamente a home o account come parametro nome e email
+                        //se la risposta è positiva posso passare direttamente a home o account come parametro nome e email
                         if(response=="ok"){
                             Utente utente=Utente.Istanza;
                             utente.setAddress(email);
@@ -65,12 +59,10 @@ namespace Volpe_Ragusa
                         }else{
                             labelErrore.Text="email e/o password errati";
                             labelErrore.Visible=true;
-                            Console.WriteLine("email e/o password errati");
                         }
                     }
                     catch (WebException ex)
                     {
-                        // Gestisci eventuali errori durante la richiesta HTTP
                         Console.WriteLine($"Errore durante la richiesta HTTP: {ex.Message}");
                     }
                 }
@@ -82,7 +74,6 @@ namespace Volpe_Ragusa
 
         private void linkRegistrazione_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Console.WriteLine("link cliccato");
             Registrazione registrazione = new Registrazione();
             this.Visible=false;
             registrazione.ShowDialog();
