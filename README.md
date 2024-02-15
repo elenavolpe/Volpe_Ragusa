@@ -2,7 +2,7 @@
 
 1.Scaricare [Docker Desktop](https://www.docker.com/products/docker-desktop) dal sito ufficiale.
 
-2.Una volta scaricato il progetto,spostarsi nella cartella del progetto da shell e utilizzare il comando:
+2.Una volta scaricato il progetto, spostarsi nella cartella del progetto da shell e utilizzare il comando:
    ```bash
    docker-compose build
    ```
@@ -11,7 +11,7 @@ oppure, se si utilizza Linux e non è stato attivato l'alias docker-compose, uti
    docker compose build 
    ```
 [3.Elena, qua scrivi tu, casomai, come avviare il client c# (se esiste un modo carino o meno non lo so, per ora metto questo)]
-3.Tramite shell raggiungere la directory Volpe_Ragusa e utilizzare il comando:
+3.Tramite shell raggiungere dalla directory di progetto la subdirectory Volpe_Ragusa e utilizzare il comando:
    ```bash
    dotnet run Volpe_ragusa.csproj
    ```
