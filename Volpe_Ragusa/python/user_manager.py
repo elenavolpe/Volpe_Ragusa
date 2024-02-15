@@ -61,7 +61,7 @@ def modifica_profilo(account):
             except Exception as e:
                 return f"Errore: {e}"
     else:
-        flage=True
+        return "inserire una nuova password valida"
     #in questo caso non c'è la necessità di verificare la password
     if account['nome']!="":
         try:
