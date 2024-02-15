@@ -18,7 +18,7 @@ def get_preferred():
         return f"Errore: {e}"
     return json.dumps(r)
 
-#ritorna gli esercizi aggiunti più di recente (i primi 3)
+#ritorna gli esercizi aggiunti più di recente (negli ultimi 2 giorni)
 def get_recent():
     try:
          r = connect_go_server('getMostRecentExercises')
@@ -52,17 +52,7 @@ def getAllMuscles():
         return f"Errore: {e}"
     return muscoli
 
-#ritorna la lista di muscoli allenati da un determinato utente
-def get_muscoli_allenati(email):
-    muscoliAllenati=[]
-    eserciziScheda=json.loads(user_manager.get_exercise(email))
-    for esercizio in eserciziScheda:
-        for muscolo in esercizio['muscles']:
-            if muscolo not in muscoliAllenati:
-                muscoliAllenati.append(muscolo)
-    return muscoliAllenati
-
-#recupera una lista di muscoli allenati da un determinato utente, ho fatto questa funzione e non ho modificato quella sopra perché la usiamo in get_trascurati e avevo paura a cambiarla senza che tu vedessi questa mia aggiunta.
+#recupera una lista di muscoli allenati da un determinato utente
 # get_muscle_stats necessita in input una lista di muscoli, con tutti i muscoli ripetuti
 def get_muscoli_allenati_con_ripetuti(email):
     muscoli=[]
@@ -75,7 +65,7 @@ def get_muscoli_allenati_con_ripetuti(email):
 #ritorna gli esercizi consigliati in base ai muscoli che stanno venendo trascurati
 def get_trascurati(email):
     #recupera la lista di muscoli allenati dall'utente
-    muscoliAllenati=get_muscoli_allenati(email)
+    muscoliAllenati=get_muscoli_allenati_con_ripetuti(email)
     #recupero la lista di tutti i muscoli
     allMuscles=getAllMuscles()
     #creo una lista dei muscoli trascurati
