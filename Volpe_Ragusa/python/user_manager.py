@@ -60,6 +60,8 @@ def modifica_profilo(account):
                     return "verifica password non andata a buon fine "
             except Exception as e:
                 return f"Errore: {e}"
+    else:
+        flage=True
     #in questo caso non c'è la necessità di verificare la password
     if account['nome']!="":
         try:
