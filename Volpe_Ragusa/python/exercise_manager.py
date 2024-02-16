@@ -91,13 +91,16 @@ def add_exercise_admin(esercizio):
     isAdmin = user_manager.authenticate_admin(esercizio['email'])
     if isAdmin:
         try:
-            dict={}
-            dict['esercizio']=esercizio['nome']
-            dict['muscoli']=esercizio['muscoli']
-            dict['descrizione']=esercizio['descrizione']
-            r = connect_go_server('addExercise',dict)
-            if r != "success":
-                return f"Errore nell'aggiunta dell'esercizio {dict['esercizio']}!"
+            if esercizio['nome']!="" and esercizio['descrizione']!="" and len(esercizio['muscoli'])!=0:
+                dict={}
+                dict['esercizio']=esercizio['nome']
+                dict['muscoli']=esercizio['muscoli']
+                dict['descrizione']=esercizio['descrizione']
+                r = connect_go_server('addExercise',dict)
+                if r != "success":
+                    return f"Errore nell'aggiunta dell'esercizio {dict['esercizio']}!"
+            else:
+                return "non possono esserci campi vuoti"
         except Exception as e:
             return f"Errore: {e}"
         return "ok"
